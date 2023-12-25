@@ -1,0 +1,12 @@
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\bin\Debug\net7.0\BankProject.Data.deps.json
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\bin\Debug\net7.0\BankProject.Data.dll
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\bin\Debug\net7.0\BankProject.Data.pdb
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\obj\Debug\net7.0\BankProject.Data.csproj.AssemblyReference.cache
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\obj\Debug\net7.0\BankProject.Data.GeneratedMSBuildEditorConfig.editorconfig
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\obj\Debug\net7.0\BankProject.Data.AssemblyInfoInputs.cache
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\obj\Debug\net7.0\BankProject.Data.AssemblyInfo.cs
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\obj\Debug\net7.0\BankProject.Data.csproj.CoreCompileInputs.cache
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\obj\Debug\net7.0\BankProject.Data.dll
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\obj\Debug\net7.0\refint\BankProject.Data.dll
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\obj\Debug\net7.0\BankProject.Data.pdb
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\obj\Debug\net7.0\ref\BankProject.Data.dll
