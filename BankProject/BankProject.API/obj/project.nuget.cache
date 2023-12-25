@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "dgSpecHash": "29AusUNDp/XdFQB5Wn0VnKvRS9e/3fZHvw7OkM48Ec8lU6w1xqkn1PiJ6L78pKkcOJ/WSr72ySQ8Qb3mScuVRg==",
+  "success": true,
+  "projectFilePath": "Z:\\Fimple\\Final Case\\Fimple-.Net-Bootcamp-Final-Case\\BankProject\\BankProject.API\\BankProject.API.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Burak\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.14\\microsoft.aspnetcore.openapi.7.0.14.nupkg.sha512",
+    "C:\\Users\\Burak\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "C:\\Users\\Burak\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
+    "C:\\Users\\Burak\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
+    "C:\\Users\\Burak\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
+    "C:\\Users\\Burak\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.5.0\\swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
+    "C:\\Users\\Burak\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.5.0\\swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}
