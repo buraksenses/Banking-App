@@ -10,3 +10,5 @@ Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Dat
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\obj\Debug\net7.0\refint\BankProject.Data.dll
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\obj\Debug\net7.0\BankProject.Data.pdb
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\obj\Debug\net7.0\ref\BankProject.Data.dll
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\bin\Debug\net7.0\BankProject.Data.runtimeconfig.json
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\obj\Debug\net7.0\BankProject.Data.genruntimeconfig.cache
