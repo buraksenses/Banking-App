@@ -30,4 +30,20 @@ public class TransactionsController : ControllerBase
         await _accountService.WithdrawAsync(depositAndWithdrawDto.AccountId, depositAndWithdrawDto.Amount);
         return Ok();
     }
+
+    [HttpPost]
+    [Route("transfer/internal")]
+    public async Task<IActionResult> InternalTransferAsync(InternalTransferDto internalTransferDto)
+    {
+        await _accountService.InternalTransferAsync(internalTransferDto.SenderId, internalTransferDto.ReceiverId, internalTransferDto.Amount);
+        return Ok();
+    }
+    
+    [HttpPost]
+    [Route("transfer/external")]
+    public async Task<IActionResult> ExternalTransferAsync(ExternalTransferDto externalTransferDto)
+    {
+        await _accountService.ExternalTransferAsync(externalTransferDto.SenderId, externalTransferDto.ReceiverId, externalTransferDto.Amount);
+        return Ok();
+    }
 }

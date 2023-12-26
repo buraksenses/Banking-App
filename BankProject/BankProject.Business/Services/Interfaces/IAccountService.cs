@@ -13,4 +13,8 @@ public interface IAccountService
    Task DepositAsync(Guid accountId, float amount);
 
    Task WithdrawAsync(Guid accountId, float amount);
+
+   Task InternalTransferAsync(Guid senderId, Guid receiverId, float amount);
+
+   Task ExternalTransferAsync(Guid senderId, Guid receiverId, float amount);
 }

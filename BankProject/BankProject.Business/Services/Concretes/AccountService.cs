@@ -16,6 +16,7 @@ public class AccountService : IAccountService
     private readonly IUserRepository _userRepository;
     private readonly ITransactionRepository _transactionRepository;
     private readonly IMapper _mapper;
+    private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
 
     public AccountService(IAccountRepository accountRepository,
         IUserRepository userRepository,
@@ -63,24 +64,102 @@ public class AccountService : IAccountService
 
     public async Task DepositAsync(Guid accountId, float amount)
     {
-        using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+        await _semaphoreSlim.WaitAsync();
+        try
         {
-            await UpdateAccountAndCreateTransaction(accountId, amount, TransactionType.Deposit);
-            scope.Complete();
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                await UpdateAccountAndCreateAccountTransaction(accountId, amount, TransactionType.Deposit);
+                scope.Complete();
+            }
+        }
+        finally
+        {
+            _semaphoreSlim.Release();
         }
     }
 
     public async Task WithdrawAsync(Guid accountId, float amount)
     {
-        using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+        await _semaphoreSlim.WaitAsync();
+        try
         {
-            await UpdateAccountAndCreateTransaction(accountId, amount, TransactionType.Withdraw);
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                await UpdateAccountAndCreateAccountTransaction(accountId, amount, TransactionType.Withdraw);
+                scope.Complete();
+            }
+        }
+        finally
+        {
+            _semaphoreSlim.Release();
+        }
+    }
 
-            scope.Complete();
+    public async Task InternalTransferAsync(Guid senderId, Guid receiverId, float amount)
+    {
+        await _semaphoreSlim.WaitAsync();
+        try
+        {
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                await UpdateAccountsAndCreateTransferTransaction(senderId, receiverId, amount, TransactionType.InternalTransfer);
+            
+                scope.Complete();
+            }
+        }
+        finally
+        {
+            _semaphoreSlim.Release();
+        }
+        
+    }
+
+    public async Task ExternalTransferAsync(Guid senderId, Guid receiverId, float amount)
+    {
+        await _semaphoreSlim.WaitAsync();
+        try
+        {
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                await UpdateAccountsAndCreateTransferTransaction(senderId, receiverId, amount, TransactionType.ExternalTransfer);
+            
+                scope.Complete();
+            }
+        }
+        finally
+        {
+            _semaphoreSlim.Release();
         }
     }
     
-    private async Task UpdateAccountAndCreateTransaction(Guid accountId, float amount, TransactionType transactionType)
+    private async Task UpdateAccountsAndCreateTransferTransaction(Guid senderId, Guid receiverId, float amount,
+        TransactionType transactionType)
+    {
+        var senderAccount = await GetAccountOrThrow(senderId);
+        var receiverAccount = await GetAccountOrThrow(receiverId);
+
+        if (senderAccount.Balance < amount)
+            throw new Exception("Insufficient funds");
+
+        senderAccount.Balance -= amount;
+        receiverAccount.Balance += amount;
+
+        await _accountRepository.UpdateBalanceByAccountIdAsync(senderId, senderAccount.Balance);
+        await _accountRepository.UpdateBalanceByAccountIdAsync(receiverId, receiverAccount.Balance);
+
+        var transactionRecord = new Transaction
+        {
+            Amount = amount,
+            TransactionType = transactionType == TransactionType.InternalTransfer ? TransactionType.InternalTransfer : TransactionType.ExternalTransfer,
+            AccountId = senderId,
+            ReceiverAccountId = receiverId
+        };
+
+        await _transactionRepository.CreateAsync(transactionRecord);
+    }
+    
+    private async Task UpdateAccountAndCreateAccountTransaction(Guid accountId, float amount, TransactionType transactionType)
     {
         var account = await GetAccountOrThrow(accountId);
 
@@ -104,9 +183,7 @@ public class AccountService : IAccountService
         };
         await _transactionRepository.CreateAsync(transactionRecord);
     }
-
-
-
+    
     private async Task<Account> GetAccountOrThrow(Guid id)
     {
         var account = await _accountRepository.GetByIdAsync(id);
