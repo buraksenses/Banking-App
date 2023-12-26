@@ -14,14 +14,14 @@ public class AccountRepository : IAccountRepository
         _dbContext = dbContext;
     }
     
-    public async Task<Account?> GetAccountByIdAsync(Guid id)
+    public async Task<Account?> GetByIdAsync(Guid id)
     {
         var account = await _dbContext.Accounts.FindAsync(id);
 
         return account ?? null;
     }
 
-    public async Task CreateAccountAsync(Account account)
+    public async Task CreateAsync(Account account)
     {
         await _dbContext.Accounts.AddAsync(account);
         await _dbContext.SaveChangesAsync();

@@ -1,10 +1,12 @@
-﻿using AutoMapper;
+﻿using System.Transactions;
+using AutoMapper;
 using BankProject.Business.DTOs.Account;
 using BankProject.Business.Services.Interfaces;
 using BankProject.Core.Enums;
 using BankProject.Core.Exceptions;
 using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Interfaces;
+using Transaction = BankProject.Data.Entities.Transaction;
 
 namespace BankProject.Business.Services.Concretes;
 
@@ -12,12 +14,17 @@ public class AccountService : IAccountService
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IUserRepository _userRepository;
+    private readonly ITransactionRepository _transactionRepository;
     private readonly IMapper _mapper;
 
-    public AccountService(IAccountRepository accountRepository,IUserRepository userRepository,IMapper mapper)
+    public AccountService(IAccountRepository accountRepository,
+        IUserRepository userRepository,
+        ITransactionRepository transactionRepository,
+        IMapper mapper)
     {
         _accountRepository = accountRepository;
         _userRepository = userRepository;
+        _transactionRepository = transactionRepository;
         _mapper = mapper;
     }
     
@@ -44,7 +51,7 @@ public class AccountService : IAccountService
         if (user == null)
             throw new NotFoundException("User not found!");
 
-        await _accountRepository.CreateAccountAsync(account);
+        await _accountRepository.CreateAsync(account);
     }
 
     public async Task UpdateBalanceByAccountIdAsync(Guid id, float balance)
@@ -54,9 +61,30 @@ public class AccountService : IAccountService
         await _accountRepository.UpdateBalanceByAccountIdAsync(id, balance);
     }
 
+    public async Task DepositAsync(Guid accountId, float amount)
+    {
+        using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+        {
+            var account = await GetAccountOrThrow(accountId);
+
+            account.Balance += amount;
+            await _accountRepository.UpdateBalanceByAccountIdAsync(accountId,account.Balance);
+
+            var transactionRecord = new Transaction
+            {
+                Amount = amount,
+                TransactionType = TransactionType.Deposit,
+                AccountId = accountId
+            };
+            await _transactionRepository.CreateAsync(transactionRecord);
+
+            scope.Complete();
+        }
+    }
+
     private async Task<Account> GetAccountOrThrow(Guid id)
     {
-        var account = await _accountRepository.GetAccountByIdAsync(id);
+        var account = await _accountRepository.GetByIdAsync(id);
         
         if (account == null)
         {

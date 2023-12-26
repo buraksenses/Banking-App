@@ -31,6 +31,13 @@ public class BankDbContext : DbContext
                 .HasConversion(v => v.ToString(), 
                     v => (RoleType)Enum.Parse(typeof(RoleType), v));
         });
+        
+        modelBuilder.Entity<Transaction>(entity =>
+        {
+            entity.Property(e => e.TransactionType)
+                .HasConversion(v => v.ToString(), 
+                    v => (TransactionType)Enum.Parse(typeof(TransactionType), v));
+        });
     }
 
     public DbSet<Account> Accounts { get; set; }

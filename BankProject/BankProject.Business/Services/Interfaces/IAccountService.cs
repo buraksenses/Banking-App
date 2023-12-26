@@ -4,9 +4,11 @@ namespace BankProject.Business.Services.Interfaces;
 
 public interface IAccountService
 {
-    public Task<float> GetBalanceByAccountIdAsync(Guid id);
+   Task<float> GetBalanceByAccountIdAsync(Guid id);
 
-    public Task CreateAccountAsync(CreateAccountRequestDto requestDto);
+   Task CreateAccountAsync(CreateAccountRequestDto requestDto);
 
-    public Task UpdateBalanceByAccountIdAsync(Guid id, float balance);
+   Task UpdateBalanceByAccountIdAsync(Guid id, float balance);
+
+   Task DepositAsync(Guid accountId, float amount);
 }
