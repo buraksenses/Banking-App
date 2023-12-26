@@ -43,6 +43,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPut]
+    [Route("{id:guid}")]
     public async Task<IActionResult> UpdateAsync(Guid id, UpdateUserRequestDto requestDto)
     {
         await _service.UpdateAsync(id, requestDto);
@@ -51,6 +52,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpDelete]
+    [Route("{id:guid}")]
     public async Task<IActionResult> DeleteByIdAsync(Guid id)
     {
         await _service.DeleteByIdAsync(id);
