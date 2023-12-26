@@ -25,6 +25,8 @@ public static class ApplicationServiceExtensions
 
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IAccountService, AccountService>();
+
+        services.AddScoped<IRolesRepository, RolesRepository>();
         
         return services;
     }
