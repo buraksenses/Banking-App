@@ -1,9 +1,11 @@
 ﻿using BankProject.Business.Mappings;
 using BankProject.Business.Services.Concretes;
 using BankProject.Business.Services.Interfaces;
+using BankProject.Business.Validators.Account;
 using BankProject.Data.Context;
 using BankProject.Data.Repositories.Concretes;
 using BankProject.Data.Repositories.Interfaces;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BankProject.API.Extensions;
@@ -30,6 +32,9 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IRoleService, RoleService>();
 
         services.AddScoped<ITransactionRepository, TransactionRepository>();
+        
+        services.AddFluentValidation(fv => 
+            fv.RegisterValidatorsFromAssemblyContaining<CreateAccountValidator>());
         
         return services;
     }
