@@ -1,4 +1,5 @@
 ﻿using BankProject.API.DTOs.User;
+using BankProject.Business.DTOs.User;
 using BankProject.Business.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
