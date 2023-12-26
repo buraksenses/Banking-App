@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BankProject.Business.DTOs.Account;
 using BankProject.Business.Services.Interfaces;
+using BankProject.Core.Enums;
 using BankProject.Core.Exceptions;
 using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Interfaces;
@@ -29,6 +30,15 @@ public class AccountService : IAccountService
 
     public async Task CreateAccountAsync(CreateAccountRequestDto requestDto)
     {
+        // AccountType string değerini enum'a dönüştürme denemesi
+        if (!Enum.TryParse(requestDto.AccountType, true, out AccountType accountType))
+        {
+            throw new ArgumentException("Invalid account type.");
+        }
+
+        // Dönüştürülen enum değerini DTO'ya ekle
+        requestDto.AccountType = accountType.ToString();
+        
         var account = _mapper.Map<Account>(requestDto);
 
         var user = await _userRepository.GetByIdAsync(account.UserId);

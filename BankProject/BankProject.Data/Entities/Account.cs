@@ -1,4 +1,6 @@
-﻿namespace BankProject.Data.Entities;
+﻿using BankProject.Core.Enums;
+
+namespace BankProject.Data.Entities;
 
 public class Account
 {
@@ -6,7 +8,7 @@ public class Account
 
     public float Balance { get; set; }
 
-    public string AccountType { get; set; }
+    public AccountType AccountType { get; set; }
     public DateTime CreatedDate { get; set; }
 
     public Guid UserId { get; set; }
