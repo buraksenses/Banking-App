@@ -1,37 +1,28 @@
-﻿using BankProject.Data.Entities;
+﻿using BankProject.Data.Context;
+using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankProject.Data.Repositories.Concretes;
 
 public class TransactionRepository : ITransactionRepository
 {
-    public Task DepositAsync(Transaction transaction)
+    private readonly BankDbContext _dbContext;
+
+    public TransactionRepository(BankDbContext dbContext)
     {
-        return null;
+        _dbContext = dbContext;
     }
 
-    public Task WithdrawAsync(Transaction transaction)
+
+    public async Task CreateAsync(Transaction transaction)
     {
-        return null;
+        await _dbContext.Transactions.AddAsync(transaction);
+        await _dbContext.SaveChangesAsync();
     }
 
-    public Task<Transaction> GetTransactionDetailByAccountIdAsync(Guid accountId)
+    public async Task<List<Transaction>> GetByAccountIdAsync(Guid accountId)
     {
-        return null;
-    }
-
-    public Task InternalTransferAsync(Transaction transaction)
-    {
-        return null;
-    }
-
-    public Task ExternalTransfer(Transaction transaction)
-    {
-        return null;
-    }
-
-    public Task<Transaction> GetTransferDetailByAccountId(Guid accountId)
-    {
-        return null;
+        return await _dbContext.Transactions.Where(t => t.AccountId == accountId).ToListAsync();
     }
 }

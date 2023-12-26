@@ -13,7 +13,11 @@ public class Transaction
     public DateTime Timestamp { get; set; }
 
     public Guid AccountId { get; set; }
+
+    public Guid? ReceiverAccountId { get; set; }
     
     //Navigation Properties
     public Account Account { get; set; }
+
+    public Account ReceiverAccount { get; set; }
 }
