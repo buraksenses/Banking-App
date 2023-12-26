@@ -52,18 +52,18 @@ public class UserService : IUserService
         await _repository.DeleteAsync(deletingUser);
     }
 
-    public async Task AssignRoleAsync(Guid id, CreateRoleRequestDto requestDto)
+    public async Task AssignRoleAsync(Guid id, RoleDto dto)
     {
         var user = await GetUserOrThrow(id);
         
-        if (!Enum.TryParse(requestDto.Name, true, out RoleType roleType))
+        if (!Enum.TryParse(dto.Name, true, out RoleType roleType))
         {
             throw new ArgumentException("Invalid role type.");
         }
         
-        requestDto.Name = roleType.ToString();
+        dto.Name = roleType.ToString();
 
-        var role = _mapper.Map<Role>(requestDto);
+        var role = _mapper.Map<Role>(dto);
 
         await _repository.AssignRoleAsync(user, role);
     }

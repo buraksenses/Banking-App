@@ -4,11 +4,11 @@ using BankProject.Data.Repositories.Interfaces;
 
 namespace BankProject.Data.Repositories.Concretes;
 
-public class RolesRepository : IRolesRepository
+public class RoleRepository : IRoleRepository
 {
     private readonly BankDbContext _dbContext;
 
-    public RolesRepository(BankDbContext dbContext)
+    public RoleRepository(BankDbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -16,12 +16,6 @@ public class RolesRepository : IRolesRepository
     public async Task<Role?> GetByIdAsync(Guid id)
     {
         return await _dbContext.Roles.FindAsync(id);
-    }
-
-    public async Task CreateAsync(Role role)
-    {
-        await _dbContext.Roles.AddAsync(role);
-        await _dbContext.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(Role role)

@@ -29,7 +29,7 @@ public class MappingProfiles : Profile
 
         #region Role Mappings
 
-        CreateMap<Role, CreateRoleRequestDto>().ReverseMap();
+        CreateMap<Role, RoleDto>().ReverseMap();
 
         #endregion
     }

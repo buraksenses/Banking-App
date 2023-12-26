@@ -10,6 +10,6 @@ public interface IUserService
     public Task CreateAsync(CreateUserRequestDto requestDto);
     public Task UpdateAsync(Guid id, UpdateUserRequestDto requestDto);
     public Task DeleteByIdAsync(Guid id);
-    public Task AssignRoleAsync(Guid id, CreateRoleRequestDto requestDto);
+    public Task AssignRoleAsync(Guid id, RoleDto dto);
     public Task<List<GetUserRequestDto>> GetAllAsync();
 }

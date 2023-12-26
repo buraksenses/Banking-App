@@ -1,6 +1,6 @@
 ﻿namespace BankProject.Business.DTOs.Role;
 
-public class CreateRoleRequestDto
+public class RoleDto
 {
     public string Name { get; set; }
 }

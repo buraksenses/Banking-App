@@ -14,6 +14,8 @@ public class BankDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        
+       modelBuilder.Seed();
 
         modelBuilder.Entity<Account>(entity =>
         {
