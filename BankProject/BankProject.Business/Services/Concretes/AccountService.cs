@@ -30,13 +30,11 @@ public class AccountService : IAccountService
 
     public async Task CreateAccountAsync(CreateAccountRequestDto requestDto)
     {
-        // AccountType string değerini enum'a dönüştürme denemesi
         if (!Enum.TryParse(requestDto.AccountType, true, out AccountType accountType))
         {
             throw new ArgumentException("Invalid account type.");
         }
-
-        // Dönüştürülen enum değerini DTO'ya ekle
+        
         requestDto.AccountType = accountType.ToString();
         
         var account = _mapper.Map<Account>(requestDto);

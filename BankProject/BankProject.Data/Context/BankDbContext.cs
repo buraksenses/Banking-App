@@ -22,6 +22,13 @@ public class BankDbContext : DbContext
                     v => v.ToString(),  
                     v => (AccountType)Enum.Parse(typeof(AccountType), v));
         });
+
+        modelBuilder.Entity<Role>(entity =>
+        {
+            entity.Property(e => e.Name)
+                .HasConversion(v => v.ToString(), 
+                    v => (RoleType)Enum.Parse(typeof(RoleType), v));
+        });
     }
 
     public DbSet<Account> Accounts { get; set; }

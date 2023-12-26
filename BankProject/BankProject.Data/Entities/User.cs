@@ -9,4 +9,11 @@ public class User
     public string Password { get; set; }
 
     public string Email { get; set; }
+
+    public Guid RoleId { get; set; }
+    
+    //Navigation Properties
+    public Role Role { get; set; }
+
+    public ICollection<Account> Accounts { get; set; }
 }
