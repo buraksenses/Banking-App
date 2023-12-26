@@ -28,6 +28,8 @@ public static class ApplicationServiceExtensions
 
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IRoleService, RoleService>();
+
+        services.AddScoped<ITransactionRepository, TransactionRepository>();
         
         return services;
     }
