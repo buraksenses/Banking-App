@@ -14,9 +14,9 @@ public class UserRepository : IUserRepository
         _dbContext = dbContext;
     }
     
-    public async Task<User> GetByIdAsync(Guid id)
+    public async Task<User?> GetByIdAsync(Guid id)
     {
-        return await GetUserOrThrowAsync(id);
+        return await _dbContext.Users.FindAsync(id);
     }
 
     public async Task CreateAsync(User user)
@@ -27,34 +27,23 @@ public class UserRepository : IUserRepository
 
     public async Task UpdateAsync(Guid id, User user)
     {
-        var updatingUser = await GetUserOrThrowAsync(id);
-        
-        updatingUser.Email = user.Email;
-        updatingUser.Password = user.Password;
+        var updatingUser = await GetByIdAsync(id);
 
-        _dbContext.Users.Update(updatingUser);
-        await _dbContext.SaveChangesAsync();
-    }
-
-    public async Task DeleteByIdAsync(Guid id)
-    {
-        var deletingUser = await GetUserOrThrowAsync(id);
-
-        _dbContext.Users.Remove(deletingUser);
-        await _dbContext.SaveChangesAsync();
-    }
-    
-    private async Task<User> GetUserOrThrowAsync(Guid id)
-    {
-        var user = await _dbContext.Users.FindAsync(id);
-
-        if (user == null)
+        if (updatingUser != null)
         {
-            throw new NotFoundException("User not found!");
-        }
+            updatingUser.Email = user.Email;
+            updatingUser.Password = user.Password;
 
-        return user;
+            _dbContext.Users.Update(updatingUser);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 
-    
+    public async Task DeleteByIdAsync(User user)
+    {
+        _dbContext.Users.Remove(user);
+        await _dbContext.SaveChangesAsync();
+    }
+
+
 }

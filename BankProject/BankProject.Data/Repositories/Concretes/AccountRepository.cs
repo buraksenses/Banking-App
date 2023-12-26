@@ -14,11 +14,11 @@ public class AccountRepository : IAccountRepository
         _dbContext = dbContext;
     }
     
-    public async Task<float> GetBalanceByAccountIdAsync(Guid id)
+    public async Task<Account?> GetAccountByIdAsync(Guid id)
     {
-        var account = await GetAccountOrThrow(id);
+        var account = await _dbContext.Accounts.FindAsync(id);
 
-        return account.Balance;
+        return account ?? null;
     }
 
     public async Task CreateAccountAsync(Account account)
@@ -27,22 +27,17 @@ public class AccountRepository : IAccountRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task UpdateBalanceByAccountIdAsync(Guid id, float balance)
-    {
-        var account = await GetAccountOrThrow(id);
-
-        account.Balance = balance;
-        
-        _dbContext.Accounts.Update(account);
-        await _dbContext.SaveChangesAsync();
-    }
-
-    private async Task<Account> GetAccountOrThrow(Guid id)
+    public async Task<Account?> UpdateBalanceByAccountIdAsync(Guid id, float balance)
     {
         var account = await _dbContext.Accounts.FindAsync(id);
 
         if (account == null)
-            throw new NotFoundException("Account not found!");
+            return null;
+        
+        account.Balance = balance;
+        
+        _dbContext.Accounts.Update(account);
+        await _dbContext.SaveChangesAsync();
 
         return account;
     }

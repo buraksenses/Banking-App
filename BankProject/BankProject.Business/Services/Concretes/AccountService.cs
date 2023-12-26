@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BankProject.Business.DTOs.Account;
 using BankProject.Business.Services.Interfaces;
+using BankProject.Core.Exceptions;
 using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Interfaces;
 
@@ -8,31 +9,52 @@ namespace BankProject.Business.Services.Concretes;
 
 public class AccountService : IAccountService
 {
-    private readonly IAccountRepository _repository;
+    private readonly IAccountRepository _accountRepository;
+    private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
 
-    public AccountService(IAccountRepository repository,IMapper mapper)
+    public AccountService(IAccountRepository accountRepository,IUserRepository userRepository,IMapper mapper)
     {
-        _repository = repository;
+        _accountRepository = accountRepository;
+        _userRepository = userRepository;
         _mapper = mapper;
     }
     
     public async Task<float> GetBalanceByAccountIdAsync(Guid id)
     {
-        return await _repository.GetBalanceByAccountIdAsync(id);
+        var account = await GetAccountOrThrow(id);
+
+        return account.Balance;
     }
 
     public async Task CreateAccountAsync(CreateAccountRequestDto requestDto)
     {
         var account = _mapper.Map<Account>(requestDto);
-        
-        //User var mi kontrol et.
 
-        await _repository.CreateAccountAsync(account);
+        var user = await _userRepository.GetByIdAsync(account.UserId);
+
+        if (user == null)
+            throw new NotFoundException("User not found!");
+
+        await _accountRepository.CreateAccountAsync(account);
     }
 
     public async Task UpdateBalanceByAccountIdAsync(Guid id, float balance)
     {
-        await _repository.UpdateBalanceByAccountIdAsync(id, balance);
+        await GetAccountOrThrow(id);
+
+        await _accountRepository.UpdateBalanceByAccountIdAsync(id, balance);
+    }
+
+    private async Task<Account> GetAccountOrThrow(Guid id)
+    {
+        var account = await _accountRepository.GetAccountByIdAsync(id);
+        
+        if (account == null)
+        {
+            throw new NotFoundException("Account not found");
+        }
+
+        return account;
     }
 }

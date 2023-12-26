@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BankProject.API.DTOs.User;
 using BankProject.Business.Services.Interfaces;
+using BankProject.Core.Exceptions;
 using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Interfaces;
 
@@ -19,7 +20,7 @@ public class UserService : IUserService
     
     public async Task<GetUserRequestDto> GetByIdAsync(Guid id)
     {
-        var user = await _repository.GetByIdAsync(id);
+        var user = await GetUserOrThrow(id);
 
         var userDto = _mapper.Map<GetUserRequestDto>(user);
 
@@ -35,7 +36,7 @@ public class UserService : IUserService
 
     public async Task UpdateAsync(Guid id, UpdateUserRequestDto requestDto)
     {
-        var user = await _repository.GetByIdAsync(id);
+        var user = await GetUserOrThrow(id);
 
         user = _mapper.Map<User>(requestDto);
 
@@ -44,7 +45,18 @@ public class UserService : IUserService
 
     public async Task DeleteByIdAsync(Guid id)
     {
-        await _repository.DeleteByIdAsync(id);
+        var deletingUser = await GetUserOrThrow(id);
+        await _repository.DeleteByIdAsync(deletingUser);
     }
-    
+
+    private async Task<User> GetUserOrThrow(Guid id)
+    {
+        var user = await _repository.GetByIdAsync(id);
+
+        if (user == null)
+            throw new NotFoundException("User not found!");
+        
+        return user;
+    }
+
 }
