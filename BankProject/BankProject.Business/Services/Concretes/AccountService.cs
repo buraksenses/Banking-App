@@ -25,6 +25,8 @@ public class AccountService : IAccountService
     public async Task CreateAccountAsync(CreateAccountRequestDto requestDto)
     {
         var account = _mapper.Map<Account>(requestDto);
+        
+        //User var mi kontrol et.
 
         await _repository.CreateAccountAsync(account);
     }
