@@ -1041,6 +1041,16 @@
             "rid": "win"
           }
         }
+      },
+      "BankProject.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/BankProject.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BankProject.Core.dll": {}
+        }
       }
     }
   },
@@ -2838,10 +2848,16 @@
         "system.windows.extensions.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "BankProject.Core/1.0.0": {
+      "type": "project",
+      "path": "../BankProject.Core/BankProject.Core.csproj",
+      "msbuildProject": "../BankProject.Core/BankProject.Core.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
+      "BankProject.Core >= 1.0.0",
       "Microsoft.EntityFrameworkCore >= 7.0.14",
       "Microsoft.EntityFrameworkCore.Design >= 7.0.14",
       "Microsoft.EntityFrameworkCore.Relational >= 7.0.14",
@@ -2872,7 +2888,11 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "Z:\\Fimple\\Final Case\\Fimple-.Net-Bootcamp-Final-Case\\BankProject\\BankProject.Core\\BankProject.Core.csproj": {
+              "projectPath": "Z:\\Fimple\\Final Case\\Fimple-.Net-Bootcamp-Final-Case\\BankProject\\BankProject.Core\\BankProject.Core.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

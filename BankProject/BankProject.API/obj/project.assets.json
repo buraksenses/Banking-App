@@ -1160,10 +1160,21 @@
           }
         }
       },
+      "BankProject.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/BankProject.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BankProject.Core.dll": {}
+        }
+      },
       "BankProject.Data/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
         "dependencies": {
+          "BankProject.Core": "1.0.0",
           "Microsoft.EntityFrameworkCore": "7.0.14",
           "Microsoft.EntityFrameworkCore.Relational": "7.0.14",
           "Microsoft.EntityFrameworkCore.SqlServer": "7.0.14"
@@ -3346,6 +3357,11 @@
         "system.windows.extensions.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "BankProject.Core/1.0.0": {
+      "type": "project",
+      "path": "../BankProject.Core/BankProject.Core.csproj",
+      "msbuildProject": "../BankProject.Core/BankProject.Core.csproj"
     },
     "BankProject.Data/1.0.0": {
       "type": "project",
