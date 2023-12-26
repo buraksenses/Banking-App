@@ -14,21 +14,21 @@ public class UserRepository : IUserRepository
         _dbContext = dbContext;
     }
     
-    public async Task<User?> GetByIdAsync(Guid id)
+    public async Task<User> GetByIdAsync(Guid id)
     {
-        return await _dbContext.Users.FindAsync(id);
+        return await GetUserOrThrowAsync(id);
     }
 
     public async Task CreateAsync(User user)
     {
         await _dbContext.Users.AddAsync(user);
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(Guid id, User user)
     {
         var updatingUser = await GetUserOrThrowAsync(id);
-
-        updatingUser.Name = user.Name;
+        
         updatingUser.Email = user.Email;
         updatingUser.Password = user.Password;
 
@@ -36,16 +36,17 @@ public class UserRepository : IUserRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteByIdAsync(Guid id)
     {
         var deletingUser = await GetUserOrThrowAsync(id);
 
         _dbContext.Users.Remove(deletingUser);
         await _dbContext.SaveChangesAsync();
     }
+    
     private async Task<User> GetUserOrThrowAsync(Guid id)
     {
-        var user = await GetByIdAsync(id);
+        var user = await _dbContext.Users.FindAsync(id);
 
         if (user == null)
         {

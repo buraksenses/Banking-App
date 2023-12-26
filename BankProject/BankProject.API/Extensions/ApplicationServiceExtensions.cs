@@ -1,4 +1,9 @@
-﻿using BankProject.Data.Context;
+﻿using BankProject.Business.Mappings;
+using BankProject.Business.Services.Concretes;
+using BankProject.Business.Services.Interfaces;
+using BankProject.Data.Context;
+using BankProject.Data.Repositories.Concretes;
+using BankProject.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace BankProject.API.Extensions;
@@ -12,6 +17,11 @@ public static class ApplicationServiceExtensions
 
         services.AddDbContext<BankDbContext>(options =>
             options.UseSqlServer(config.GetConnectionString("BankConnectionString")));
+
+        services.AddAutoMapper(typeof(MappingProfiles));
+
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserService, UserService>();
         
         return services;
     }

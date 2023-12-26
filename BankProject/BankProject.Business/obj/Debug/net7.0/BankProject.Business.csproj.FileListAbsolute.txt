@@ -1,0 +1,17 @@
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\bin\Debug\net7.0\BankProject.Business.deps.json
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\bin\Debug\net7.0\BankProject.Business.dll
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\bin\Debug\net7.0\BankProject.Business.pdb
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\bin\Debug\net7.0\BankProject.Core.dll
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\bin\Debug\net7.0\BankProject.Data.dll
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\bin\Debug\net7.0\BankProject.Data.pdb
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\bin\Debug\net7.0\BankProject.Core.pdb
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\obj\Debug\net7.0\BankProject.Business.csproj.AssemblyReference.cache
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\obj\Debug\net7.0\BankProject.Business.GeneratedMSBuildEditorConfig.editorconfig
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\obj\Debug\net7.0\BankProject.Business.AssemblyInfoInputs.cache
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\obj\Debug\net7.0\BankProject.Business.AssemblyInfo.cs
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\obj\Debug\net7.0\BankProject.Business.csproj.CoreCompileInputs.cache
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\obj\Debug\net7.0\BankProject.Business.csproj.CopyComplete
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\obj\Debug\net7.0\BankProject.Business.dll
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\obj\Debug\net7.0\refint\BankProject.Business.dll
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\obj\Debug\net7.0\BankProject.Business.pdb
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\obj\Debug\net7.0\ref\BankProject.Business.dll
