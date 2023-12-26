@@ -11,4 +11,6 @@ public interface IAccountService
    Task UpdateBalanceByAccountIdAsync(Guid id, float balance);
 
    Task DepositAsync(Guid accountId, float amount);
+
+   Task WithdrawAsync(Guid accountId, float amount);
 }

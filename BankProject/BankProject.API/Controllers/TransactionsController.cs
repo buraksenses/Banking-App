@@ -17,9 +17,17 @@ public class TransactionsController : ControllerBase
 
     [HttpPost]
     [Route("deposit")]
-    public async Task<IActionResult> DepositAsync(DepositDto depositDto)
+    public async Task<IActionResult> DepositAsync(DepositAndWithdrawDto depositAndWithdrawDto)
     {
-        await _accountService.DepositAsync(depositDto.AccountId, depositDto.Amount);
+        await _accountService.DepositAsync(depositAndWithdrawDto.AccountId, depositAndWithdrawDto.Amount);
+        return Ok();
+    }
+
+    [HttpPost]
+    [Route("withdraw")]
+    public async Task<IActionResult> WithdrawAsync(DepositAndWithdrawDto depositAndWithdrawDto)
+    {
+        await _accountService.WithdrawAsync(depositAndWithdrawDto.AccountId, depositAndWithdrawDto.Amount);
         return Ok();
     }
 }

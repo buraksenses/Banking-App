@@ -1,6 +1,6 @@
 ﻿namespace BankProject.Business.DTOs.Account;
 
-public class DepositDto
+public class DepositAndWithdrawDto
 {
     public Guid AccountId { get; set; }
 

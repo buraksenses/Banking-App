@@ -65,22 +65,47 @@ public class AccountService : IAccountService
     {
         using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
         {
-            var account = await GetAccountOrThrow(accountId);
+            await UpdateAccountAndCreateTransaction(accountId, amount, TransactionType.Deposit);
+            scope.Complete();
+        }
+    }
 
-            account.Balance += amount;
-            await _accountRepository.UpdateBalanceByAccountIdAsync(accountId,account.Balance);
-
-            var transactionRecord = new Transaction
-            {
-                Amount = amount,
-                TransactionType = TransactionType.Deposit,
-                AccountId = accountId
-            };
-            await _transactionRepository.CreateAsync(transactionRecord);
+    public async Task WithdrawAsync(Guid accountId, float amount)
+    {
+        using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+        {
+            await UpdateAccountAndCreateTransaction(accountId, amount, TransactionType.Withdraw);
 
             scope.Complete();
         }
     }
+    
+    private async Task UpdateAccountAndCreateTransaction(Guid accountId, float amount, TransactionType transactionType)
+    {
+        var account = await GetAccountOrThrow(accountId);
+
+        switch (transactionType)
+        {
+            case TransactionType.Deposit:
+                account.Balance += amount;
+                break;
+            case TransactionType.Withdraw:
+                account.Balance -= amount; 
+                break;
+        }
+
+        await _accountRepository.UpdateBalanceByAccountIdAsync(accountId, account.Balance);
+
+        var transactionRecord = new Transaction
+        {
+            Amount = amount,
+            TransactionType = transactionType,
+            AccountId = accountId
+        };
+        await _transactionRepository.CreateAsync(transactionRecord);
+    }
+
+
 
     private async Task<Account> GetAccountOrThrow(Guid id)
     {
