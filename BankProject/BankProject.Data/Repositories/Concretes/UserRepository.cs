@@ -42,6 +42,10 @@ public class UserRepository : IUserRepository
 
     public async Task AssignRoleAsync(User user, Role role)
     {
+        var dbRole = await _dbContext.Roles
+            .AsNoTracking() 
+            .SingleAsync(r => r.Name == role.Name);
+        role.Id = dbRole.Id;
         user.Role = role;
         _dbContext.Users.Update(user);
         await _dbContext.SaveChangesAsync();

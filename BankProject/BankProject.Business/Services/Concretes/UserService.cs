@@ -52,7 +52,7 @@ public class UserService : IUserService
         await _repository.DeleteAsync(deletingUser);
     }
 
-    public async Task AssignRoleAsync(Guid id, RoleDto dto)
+    public async Task AssignRoleByIdAsync(Guid id, RoleDto dto)
     {
         var user = await GetUserOrThrow(id);
         

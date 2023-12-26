@@ -1,4 +1,5 @@
 ﻿using BankProject.API.DTOs.User;
+using BankProject.Business.DTOs.Role;
 using BankProject.Business.DTOs.User;
 using BankProject.Business.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,14 @@ public class UsersController : ControllerBase
     public UsersController(IUserService service)
     {
         _service = service;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllAsync()
+    {
+        var users = await _service.GetAllAsync();
+
+        return Ok(users);
     }
 
     [HttpGet]
@@ -45,6 +54,15 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> DeleteByIdAsync(Guid id)
     {
         await _service.DeleteByIdAsync(id);
+
+        return Ok();
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/roles")]
+    public async Task<IActionResult> AssignRoleByIdAsync(Guid id, RoleDto roleDto)
+    {
+        await _service.AssignRoleByIdAsync(id, roleDto);
 
         return Ok();
     }
