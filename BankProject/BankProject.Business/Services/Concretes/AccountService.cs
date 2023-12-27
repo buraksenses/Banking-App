@@ -6,6 +6,7 @@ using BankProject.Core.Enums;
 using BankProject.Core.Exceptions;
 using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Transaction = BankProject.Data.Entities.Transaction;
 
 namespace BankProject.Business.Services.Concretes;
@@ -14,15 +15,18 @@ public class AccountService : IAccountService
 {
     private readonly IAccountRepository _accountRepository;
     private readonly ITransactionRepository _transactionRepository;
+    private readonly UserManager<IdentityUser> _userManager;
     private readonly IMapper _mapper;
-    private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
+    private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
 
     public AccountService(IAccountRepository accountRepository,
         ITransactionRepository transactionRepository,
+        UserManager<IdentityUser> userManager,
         IMapper mapper)
     {
         _accountRepository = accountRepository;
         _transactionRepository = transactionRepository;
+        _userManager = userManager;
         _mapper = mapper;
     }
     
@@ -33,24 +37,24 @@ public class AccountService : IAccountService
         return account.Balance;
     }
 
-    // public async Task CreateAccountAsync(CreateAccountRequestDto requestDto)
-    // {
-    //     if (!Enum.TryParse(requestDto.AccountType, true, out AccountType accountType))
-    //     {
-    //         throw new ArgumentException("Invalid account type.");
-    //     }
-    //     
-    //     requestDto.AccountType = accountType.ToString();
-    //     
-    //     var account = _mapper.Map<Account>(requestDto);
-    //
-    //     var user = await _userRepository.GetByIdAsync(account.UserId);
-    //
-    //     if (user == null)
-    //         throw new NotFoundException("User not found!");
-    //
-    //     await _accountRepository.CreateAsync(account);
-    // }
+    public async Task CreateAccountAsync(CreateAccountRequestDto requestDto)
+    {
+        if (!Enum.TryParse(requestDto.AccountType, true, out AccountType accountType))
+        {
+            throw new ArgumentException("Invalid account type.");
+        }
+        
+        requestDto.AccountType = accountType.ToString();
+        
+        var account = _mapper.Map<Account>(requestDto);
+
+        var user = await _userManager.FindByIdAsync(account.UserId.ToString());
+
+        if (user == null)
+            throw new NotFoundException("User not found!");
+
+        await _accountRepository.CreateAsync(account);
+    }
 
     public async Task UpdateBalanceByAccountIdAsync(Guid id, float balance)
     {

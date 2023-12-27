@@ -6,7 +6,7 @@ public interface IAccountService
 {
    Task<float> GetBalanceByAccountIdAsync(Guid id);
 
-   //Task CreateAccountAsync(CreateAccountRequestDto requestDto);
+   Task CreateAccountAsync(CreateAccountRequestDto requestDto);
 
    Task UpdateBalanceByAccountIdAsync(Guid id, float balance);
 

@@ -15,10 +15,9 @@ public class CreateAccountValidator : AbstractValidator<CreateAccountRequestDto>
             .NotEmpty().WithMessage("Account type is required.")
             .Must(BeAValidType).WithMessage("Invalid account type.");
 
-        
+
         RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("User ID is required.")
-            .Must(BeAValidGuid).WithMessage("Invalid or incorrect length User ID.");
+            .NotEmpty().WithMessage("User ID is required.");
     }
     
     private static bool BeAValidType(string accountType)
@@ -26,10 +25,5 @@ public class CreateAccountValidator : AbstractValidator<CreateAccountRequestDto>
         
         var validTypes = new[] { "Checking", "Savings", "Deposit", "Investment", "Retirement", "Joint", "Student" };
         return validTypes.Contains(accountType);
-    }
-
-    private static bool BeAValidGuid(Guid userId)
-    {
-        return userId != Guid.Empty && userId.ToString().Length == 36;
     }
 }

@@ -1,5 +1,4 @@
-﻿using BankProject.Core.Exceptions;
-using BankProject.Data.Context;
+﻿using BankProject.Data.Context;
 using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Interfaces;
 
