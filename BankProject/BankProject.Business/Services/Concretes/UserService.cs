@@ -2,6 +2,7 @@
 using BankProject.API.DTOs.User;
 using BankProject.Business.DTOs.Role;
 using BankProject.Business.DTOs.User;
+using BankProject.Business.Security.Interface;
 using BankProject.Business.Services.Interfaces;
 using BankProject.Core.Enums;
 using BankProject.Core.Exceptions;
@@ -14,11 +15,13 @@ public class UserService : IUserService
 {
     private readonly IUserRepository _repository;
     private readonly IMapper _mapper;
+    private readonly IPasswordHasher _passwordHasher;
 
-    public UserService(IUserRepository repository,IMapper mapper)
+    public UserService(IUserRepository repository,IMapper mapper,IPasswordHasher passwordHasher)
     {
         _repository = repository;
         _mapper = mapper;
+        _passwordHasher = passwordHasher;
     }
     
     public async Task<GetUserRequestDto> GetByIdAsync(Guid id)
@@ -32,6 +35,10 @@ public class UserService : IUserService
 
     public async Task CreateAsync(CreateUserRequestDto requestDto)
     {
+        var hashedPassword = _passwordHasher.HashPassword(requestDto.Password);
+
+        requestDto.Password = hashedPassword;
+        
         var user = _mapper.Map<User>(requestDto);
 
         await _repository.CreateAsync(user);

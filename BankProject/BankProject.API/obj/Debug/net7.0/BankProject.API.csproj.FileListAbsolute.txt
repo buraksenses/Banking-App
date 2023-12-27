@@ -85,3 +85,4 @@ Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.API
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.API\bin\Debug\net7.0\FluentValidation.dll
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.API\bin\Debug\net7.0\FluentValidation.AspNetCore.dll
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.API\bin\Debug\net7.0\FluentValidation.DependencyInjectionExtensions.dll
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.API\bin\Debug\net7.0\BCrypt.Net-Next.dll

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "XkXpl6a63RZXT6p+i67gmr8/vRgFO1CJcJCU41cswubp5AcsuQUQmRREYbbDCHR4jnB9S3r4JoW0RvkrD/bAIQ==",
+  "dgSpecHash": "8B9h5KxhoXRictumF4AcHeFGk1CPPQhtCUvBCl6IWkZg06ixR9ndajcY7Ew7EYojAE3yLEGIBgpkUKT9eSdOCg==",
   "success": true,
   "projectFilePath": "Z:\\Fimple\\Final Case\\Fimple-.Net-Bootcamp-Final-Case\\BankProject\\BankProject.API\\BankProject.API.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\Burak\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\Burak\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\Burak\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
+    "C:\\Users\\Burak\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\Burak\\.nuget\\packages\\fluentvalidation\\11.9.0\\fluentvalidation.11.9.0.nupkg.sha512",
     "C:\\Users\\Burak\\.nuget\\packages\\fluentvalidation.aspnetcore\\11.3.0\\fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
     "C:\\Users\\Burak\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\11.9.0\\fluentvalidation.dependencyinjectionextensions.11.9.0.nupkg.sha512",
