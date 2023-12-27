@@ -1,4 +1,5 @@
 ﻿using BankProject.Core.Enums;
+using Microsoft.AspNetCore.Identity;
 
 namespace BankProject.Data.Entities;
 
@@ -14,7 +15,7 @@ public class Account
     public Guid UserId { get; set; }
     
     //Navigation Properties
-    public User User { get; set; }
+    public IdentityUser User { get; set; }
 
     public Account()
     {

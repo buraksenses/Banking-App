@@ -41,58 +41,14 @@ namespace BankProject.Data.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("UserId1")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Accounts");
-                });
-
-            modelBuilder.Entity("BankProject.Data.Entities.Role", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("a578a025-7018-4568-a545-7a1fa074af98"),
-                            Name = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = new Guid("8eeea181-0379-457e-b393-035176f0d9af"),
-                            Name = "CUSTOMER"
-                        },
-                        new
-                        {
-                            Id = new Guid("9cbde1d9-61c1-473e-8bab-a0491ea59b1b"),
-                            Name = "BANK_OFFICER"
-                        },
-                        new
-                        {
-                            Id = new Guid("06db8d44-0bfc-4af5-b2da-11f62c89b58d"),
-                            Name = "ADVISOR"
-                        },
-                        new
-                        {
-                            Id = new Guid("24def9d6-e203-4cea-97a7-eb5d5c833392"),
-                            Name = "LOAN_OFFICER"
-                        },
-                        new
-                        {
-                            Id = new Guid("506c0808-b82b-4f02-b7ac-80e9c945b506"),
-                            Name = "AUDITOR"
-                        });
                 });
 
             modelBuilder.Entity("BankProject.Data.Entities.Transaction", b =>
@@ -126,41 +82,63 @@ namespace BankProject.Data.Migrations
                     b.ToTable("Transactions");
                 });
 
-            modelBuilder.Entity("BankProject.Data.Entities.User", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
+                    b.Property<string>("NormalizedUserName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("Users");
+                    b.ToTable("IdentityUser");
                 });
 
             modelBuilder.Entity("BankProject.Data.Entities.Account", b =>
                 {
-                    b.HasOne("BankProject.Data.Entities.User", "User")
-                        .WithMany("Accounts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("User");
                 });
@@ -180,27 +158,6 @@ namespace BankProject.Data.Migrations
                     b.Navigation("Account");
 
                     b.Navigation("ReceiverAccount");
-                });
-
-            modelBuilder.Entity("BankProject.Data.Entities.User", b =>
-                {
-                    b.HasOne("BankProject.Data.Entities.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("BankProject.Data.Entities.Role", b =>
-                {
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("BankProject.Data.Entities.User", b =>
-                {
-                    b.Navigation("Accounts");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,6 +1,4 @@
-﻿using BankProject.Business.DTOs.Account;
-using BankProject.Business.Services.Interfaces;
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using BankProject.Business.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BankProject.API.Controllers;
@@ -25,13 +23,13 @@ public class AccountsController : ControllerBase
         return Ok(balance);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateAccountAsync(CreateAccountRequestDto requestDto)
-    {
-        await _service.CreateAccountAsync(requestDto);
-
-        return StatusCode(StatusCodes.Status201Created);
-    }
+    // [HttpPost]
+    // public async Task<IActionResult> CreateAccountAsync(CreateAccountRequestDto requestDto)
+    // {
+    //     await _service.CreateAccountAsync(requestDto);
+    //
+    //     return StatusCode(StatusCodes.Status201Created);
+    // }
 
     [HttpPut]
     public async Task<IActionResult> UpdateBalanceByAccountIdAsync(Guid id, float balance)
