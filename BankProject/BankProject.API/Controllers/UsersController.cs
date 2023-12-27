@@ -1,5 +1,4 @@
 ﻿using BankProject.API.DTOs.User;
-using BankProject.Business.DTOs.Role;
 using BankProject.Business.DTOs.User;
 using BankProject.Business.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -60,12 +59,12 @@ public class UsersController : ControllerBase
         return Ok();
     }
 
-    [HttpPut]
-    [Route("{id:guid}/roles")]
-    public async Task<IActionResult> AssignRoleByIdAsync(Guid id, RoleDto roleDto)
-    {
-        await _service.AssignRoleByIdAsync(id, roleDto);
-
-        return Ok();
-    }
+    // [HttpPut]
+    // [Route("{id:guid}/roles")]
+    // public async Task<IActionResult> AssignRoleByIdAsync(Guid id, RoleDto roleDto)
+    // {
+    //     await _service.AssignRoleByIdAsync(id, roleDto);
+    //
+    //     return Ok();
+    // }
 }

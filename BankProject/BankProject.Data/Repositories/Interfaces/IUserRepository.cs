@@ -8,6 +8,6 @@ public interface IUserRepository
     public Task CreateAsync(User user);
     public Task UpdateAsync(User updatingUser, User newUser);
     public Task DeleteAsync(User user);
-    public Task AssignRoleAsync(User user, Role role);
+    //public Task AssignRoleAsync(User user, Role role);
     public Task<List<User>> GetAllAsync();
 }

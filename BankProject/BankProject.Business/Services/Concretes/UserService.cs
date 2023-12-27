@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using BankProject.API.DTOs.User;
-using BankProject.Business.DTOs.Role;
 using BankProject.Business.DTOs.User;
 using BankProject.Business.Security.Interface;
 using BankProject.Business.Services.Interfaces;
-using BankProject.Core.Enums;
 using BankProject.Core.Exceptions;
 using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Interfaces;
@@ -59,21 +57,21 @@ public class UserService : IUserService
         await _repository.DeleteAsync(deletingUser);
     }
 
-    public async Task AssignRoleByIdAsync(Guid id, RoleDto dto)
-    {
-        var user = await GetUserOrThrow(id);
-        
-        if (!Enum.TryParse(dto.Name, true, out RoleType roleType))
-        {
-            throw new ArgumentException("Invalid role type.");
-        }
-        
-        dto.Name = roleType.ToString();
-
-        var role = _mapper.Map<Role>(dto);
-
-        await _repository.AssignRoleAsync(user, role);
-    }
+    // public async Task AssignRoleByIdAsync(Guid id, RoleDto dto)
+    // {
+    //     var user = await GetUserOrThrow(id);
+    //     
+    //     if (!Enum.TryParse(dto.Name, true, out RoleType roleType))
+    //     {
+    //         throw new ArgumentException("Invalid role type.");
+    //     }
+    //     
+    //     dto.Name = roleType.ToString();
+    //
+    //     var role = _mapper.Map<Role>(dto);
+    //
+    //     await _repository.AssignRoleAsync(user, role);
+    // }
 
     public async Task<List<GetUserRequestDto>> GetAllAsync()
     {

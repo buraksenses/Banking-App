@@ -31,9 +31,6 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IAccountService, AccountService>();
 
-        services.AddScoped<IRoleRepository, RoleRepository>();
-        services.AddScoped<IRoleService, RoleService>();
-
         services.AddScoped<ITransactionRepository, TransactionRepository>();
 
         services.AddScoped<IPasswordHasher, PasswordHasher>();

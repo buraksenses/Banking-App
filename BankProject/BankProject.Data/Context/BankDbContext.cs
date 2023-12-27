@@ -25,13 +25,6 @@ public class BankDbContext : DbContext
                     v => (AccountType)Enum.Parse(typeof(AccountType), v));
         });
 
-        modelBuilder.Entity<Role>(entity =>
-        {
-            entity.Property(e => e.Name)
-                .HasConversion(v => v.ToString(), 
-                    v => (RoleType)Enum.Parse(typeof(RoleType), v));
-        });
-        
         modelBuilder.Entity<Transaction>(entity =>
         {
             entity.Property(e => e.TransactionType)
@@ -42,8 +35,6 @@ public class BankDbContext : DbContext
 
     public DbSet<Account> Accounts { get; set; }
 
-    public DbSet<Role> Roles { get; set; }
-    
     public DbSet<User> Users { get; set; }
 
     public DbSet<Transaction> Transactions { get; set; }
