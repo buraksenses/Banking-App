@@ -35,7 +35,6 @@ public class AccountRepository : IAccountRepository
         
         account.Balance = balance;
         
-        _dbContext.Accounts.Update(account);
         await _dbContext.SaveChangesAsync();
 
         return account;

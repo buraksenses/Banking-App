@@ -9,9 +9,7 @@ public class User : IdentityUser
     public float AnnualIncome { get; set; }
     
     public float TotalAssets { get; set; }
-    
-    public string CreditHistory { get; set; }
-    
+
     public string Address { get; set; }
     
     public string City { get; set; }
