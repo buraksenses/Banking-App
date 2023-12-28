@@ -48,7 +48,7 @@ public class AccountService : IAccountService
         
         var account = _mapper.Map<Account>(requestDto);
 
-        var user = await _userManager.FindByIdAsync(account.UserId.ToString());
+        var user = await _userManager.FindByIdAsync(account.UserId);
 
         if (user == null)
             throw new NotFoundException("User not found!");
@@ -190,10 +190,8 @@ public class AccountService : IAccountService
         var account = await _accountRepository.GetByIdAsync(id);
         
         if (account == null)
-        {
             throw new NotFoundException("Account not found");
-        }
-
+        
         return account;
     }
 }

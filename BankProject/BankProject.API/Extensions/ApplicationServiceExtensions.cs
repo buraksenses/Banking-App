@@ -1,7 +1,5 @@
 ﻿using System.Text;
 using BankProject.Business.Mappings;
-using BankProject.Business.Security.Concrete;
-using BankProject.Business.Security.Interface;
 using BankProject.Business.Services.Concretes;
 using BankProject.Business.Services.Interfaces;
 using BankProject.Business.Validators.Account;
@@ -65,6 +63,8 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ITransactionRepository, TransactionRepository>();
 
         services.AddScoped<ITokenRepository, TokenRepository>();
+
+        services.AddScoped<IUserService, UserService>();
         
         services.AddFluentValidation(fv => 
             fv.RegisterValidatorsFromAssemblyContaining<CreateAccountValidator>());
