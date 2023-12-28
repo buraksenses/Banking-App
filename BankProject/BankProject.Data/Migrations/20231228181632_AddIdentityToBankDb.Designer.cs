@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BankProject.Data.Migrations.BankAuthDb
+namespace BankProject.Data.Migrations
 {
-    [DbContext(typeof(BankAuthDbContext))]
-    [Migration("20231228010359_UserTableDecimalPropertiesChangedToFloat")]
-    partial class UserTableDecimalPropertiesChangedToFloat
+    [DbContext(typeof(BankDbContext))]
+    [Migration("20231228181632_AddIdentityToBankDb")]
+    partial class AddIdentityToBankDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,62 @@ namespace BankProject.Data.Migrations.BankAuthDb
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("BankProject.Data.Entities.Account", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AccountType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("Balance")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Accounts");
+                });
+
+            modelBuilder.Entity("BankProject.Data.Entities.Transaction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<float>("Amount")
+                        .HasColumnType("real");
+
+                    b.Property<Guid?>("ReceiverAccountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TransactionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("ReceiverAccountId");
+
+                    b.ToTable("Transactions");
+                });
 
             modelBuilder.Entity("BankProject.Data.Entities.User", b =>
                 {
@@ -306,6 +362,23 @@ namespace BankProject.Data.Migrations.BankAuthDb
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("BankProject.Data.Entities.Transaction", b =>
+                {
+                    b.HasOne("BankProject.Data.Entities.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BankProject.Data.Entities.Account", "ReceiverAccount")
+                        .WithMany()
+                        .HasForeignKey("ReceiverAccountId");
+
+                    b.Navigation("Account");
+
+                    b.Navigation("ReceiverAccount");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

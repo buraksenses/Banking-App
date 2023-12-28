@@ -1,10 +1,11 @@
 ﻿using BankProject.Core.Enums;
 using BankProject.Data.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BankProject.Data.Context;
 
-public class BankDbContext : DbContext
+public class BankDbContext : IdentityDbContext<User>
 {
     public BankDbContext(DbContextOptions<BankDbContext> options) : base(options)
     {
@@ -14,6 +15,8 @@ public class BankDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        
+        modelBuilder.Seed();
 
         modelBuilder.Entity<Account>(entity =>
         {

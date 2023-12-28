@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace BankProject.Data.Migrations.BankAuthDb
+namespace BankProject.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class UserEdit : Migration
+    public partial class AuthDbTablesMoved : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

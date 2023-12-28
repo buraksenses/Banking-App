@@ -23,7 +23,7 @@ public static class ApplicationServiceExtensions
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
         {
-            options.SwaggerDoc("v1",new OpenApiInfo{Title = "NZ Walks API", Version = "v1"});
+            options.SwaggerDoc("v1",new OpenApiInfo{Title = "Bank API", Version = "v1"});
             options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
             {
                 Name = "Authorization",
@@ -53,8 +53,6 @@ public static class ApplicationServiceExtensions
 
         services.AddDbContext<BankDbContext>(options =>
             options.UseSqlServer(config.GetConnectionString("BankConnectionString")));
-        services.AddDbContext<BankAuthDbContext>(options =>
-            options.UseSqlServer(config.GetConnectionString("BankAuthConnectionString")));
 
         services.AddAutoMapper(typeof(MappingProfiles));
 
@@ -73,7 +71,7 @@ public static class ApplicationServiceExtensions
         services.AddIdentityCore<User>()
             .AddRoles<IdentityRole>()
             .AddTokenProvider<DataProtectorTokenProvider<User>>("Bank")
-            .AddEntityFrameworkStores<BankAuthDbContext>()
+            .AddEntityFrameworkStores<BankDbContext>()
             .AddDefaultTokenProviders();
         
         services.Configure<IdentityOptions>(options =>
