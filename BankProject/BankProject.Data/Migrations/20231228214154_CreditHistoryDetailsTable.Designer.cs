@@ -4,6 +4,7 @@ using BankProject.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankProject.Data.Migrations
 {
     [DbContext(typeof(BankDbContext))]
-    partial class BankDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231228214154_CreditHistoryDetailsTable")]
+    partial class CreditHistoryDetailsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,30 +50,23 @@ namespace BankProject.Data.Migrations
                     b.ToTable("Accounts");
                 });
 
-            modelBuilder.Entity("BankProject.Data.Entities.Loan", b =>
+            modelBuilder.Entity("BankProject.Data.Entities.CreditHistoryDetail", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<float>("LoanAmount")
-                        .HasColumnType("real");
+                    b.Property<bool>("HasLatePayments")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("LoanAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("LoanDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("LoanTerm")
+                    b.Property<int>("NumberOfLatePayments")
                         .HasColumnType("int");
-
-                    b.Property<string>("LoanType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("NumberOfMissedPayments")
-                        .HasColumnType("int");
-
-                    b.Property<float>("RemainingDebt")
-                        .HasColumnType("real");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -80,7 +76,7 @@ namespace BankProject.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Loans");
+                    b.ToTable("CreditHistoryDetails");
                 });
 
             modelBuilder.Entity("BankProject.Data.Entities.Transaction", b =>
@@ -136,6 +132,9 @@ namespace BankProject.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("CreditScore")
+                        .HasColumnType("real");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
@@ -390,10 +389,10 @@ namespace BankProject.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("BankProject.Data.Entities.Loan", b =>
+            modelBuilder.Entity("BankProject.Data.Entities.CreditHistoryDetail", b =>
                 {
                     b.HasOne("BankProject.Data.Entities.User", "User")
-                        .WithMany("CreditHistoryDetails")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -467,11 +466,6 @@ namespace BankProject.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("BankProject.Data.Entities.User", b =>
-                {
-                    b.Navigation("CreditHistoryDetails");
                 });
 #pragma warning restore 612, 618
         }

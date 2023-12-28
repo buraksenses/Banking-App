@@ -6,9 +6,7 @@ public class CreateUserRequestDto
 
     public string Email { get; set; }
     public string Password { get; set; }
-    
-    public float CreditScore { get; set; }
-    
+
     public float AnnualIncome { get; set; }
     
     public float TotalAssets { get; set; }

@@ -4,8 +4,6 @@ namespace BankProject.Data.Entities;
 
 public class User : IdentityUser
 {
-    public float CreditScore { get; set; }
-    
     public float AnnualIncome { get; set; }
     
     public float TotalAssets { get; set; }
@@ -25,4 +23,6 @@ public class User : IdentityUser
     public string EmploymentPosition { get; set; }
     
     public string PhoneNumber { get; set; }
+
+    public ICollection<Loan> CreditHistoryDetails { get; set; }
 }

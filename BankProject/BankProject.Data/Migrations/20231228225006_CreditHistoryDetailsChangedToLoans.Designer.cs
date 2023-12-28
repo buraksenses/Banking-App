@@ -4,6 +4,7 @@ using BankProject.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankProject.Data.Migrations
 {
     [DbContext(typeof(BankDbContext))]
-    partial class BankDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231228225006_CreditHistoryDetailsChangedToLoans")]
+    partial class CreditHistoryDetailsChangedToLoans
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,11 +65,7 @@ namespace BankProject.Data.Migrations
                     b.Property<int>("LoanTerm")
                         .HasColumnType("int");
 
-                    b.Property<string>("LoanType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("NumberOfMissedPayments")
+                    b.Property<int>("NumberOfLatePayments")
                         .HasColumnType("int");
 
                     b.Property<float>("RemainingDebt")
