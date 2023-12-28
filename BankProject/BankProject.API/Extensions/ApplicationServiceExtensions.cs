@@ -4,6 +4,7 @@ using BankProject.Business.Services.Concretes;
 using BankProject.Business.Services.Interfaces;
 using BankProject.Business.Validators.Account;
 using BankProject.Data.Context;
+using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Concretes;
 using BankProject.Data.Repositories.Interfaces;
 using FluentValidation.AspNetCore;
@@ -69,7 +70,7 @@ public static class ApplicationServiceExtensions
         services.AddFluentValidation(fv => 
             fv.RegisterValidatorsFromAssemblyContaining<CreateAccountValidator>());
         
-        services.AddIdentityCore<IdentityUser>()
+        services.AddIdentityCore<User>()
             .AddRoles<IdentityRole>()
             .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("Bank")
             .AddEntityFrameworkStores<BankAuthDbContext>()

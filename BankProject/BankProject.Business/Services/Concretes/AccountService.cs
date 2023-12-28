@@ -15,13 +15,13 @@ public class AccountService : IAccountService
 {
     private readonly IAccountRepository _accountRepository;
     private readonly ITransactionRepository _transactionRepository;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<User> _userManager;
     private readonly IMapper _mapper;
     private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
 
     public AccountService(IAccountRepository accountRepository,
         ITransactionRepository transactionRepository,
-        UserManager<IdentityUser> userManager,
+        UserManager<User> userManager,
         IMapper mapper)
     {
         _accountRepository = accountRepository;

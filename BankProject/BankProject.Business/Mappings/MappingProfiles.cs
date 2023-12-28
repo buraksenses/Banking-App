@@ -18,7 +18,7 @@ public class MappingProfiles : Profile
 
         #region User Mappings
 
-        CreateMap<IdentityUser, CreateUserRequestDto>().ReverseMap();
+        CreateMap<User, CreateUserRequestDto>().ReverseMap();
 
         #endregion
     }
