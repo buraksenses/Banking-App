@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using BankProject.Data.Entities;
 
 namespace BankProject.Data.Repositories.Interfaces;
 
 public interface ITokenRepository
 {
-    string CreateJwtToken(IdentityUser user, List<string> roles);
+    string CreateJwtToken(User user, List<string> roles);
 }

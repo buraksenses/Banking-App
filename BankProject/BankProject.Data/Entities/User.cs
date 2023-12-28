@@ -4,11 +4,11 @@ namespace BankProject.Data.Entities;
 
 public class User : IdentityUser
 {
-    public decimal CreditScore { get; set; }
+    public float CreditScore { get; set; }
     
-    public decimal AnnualIncome { get; set; }
+    public float AnnualIncome { get; set; }
     
-    public decimal TotalAssets { get; set; }
+    public float TotalAssets { get; set; }
     
     public string CreditHistory { get; set; }
     

@@ -1,8 +1,8 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Interfaces;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -16,7 +16,7 @@ public class TokenRepository : ITokenRepository
     {
         _configuration = configuration;
     }
-    public string CreateJwtToken(IdentityUser user, List<string> roles)
+    public string CreateJwtToken(User user, List<string> roles)
     {
         //Create claims
         var claims = new List<Claim>();

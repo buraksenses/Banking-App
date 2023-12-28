@@ -72,7 +72,7 @@ public static class ApplicationServiceExtensions
         
         services.AddIdentityCore<User>()
             .AddRoles<IdentityRole>()
-            .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("Bank")
+            .AddTokenProvider<DataProtectorTokenProvider<User>>("Bank")
             .AddEntityFrameworkStores<BankAuthDbContext>()
             .AddDefaultTokenProviders();
         

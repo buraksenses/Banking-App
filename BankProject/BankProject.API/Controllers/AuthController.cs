@@ -1,4 +1,5 @@
 ﻿using BankProject.Business.DTOs.Auth;
+using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +10,10 @@ namespace BankProject.API.Controllers;
 [Route("api/auth")]
 public class AuthController : ControllerBase
 {
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<User> _userManager;
     private readonly ITokenRepository _tokenRepository;
 
-    public AuthController(UserManager<IdentityUser> userManager, ITokenRepository tokenRepository)
+    public AuthController(UserManager<User> userManager, ITokenRepository tokenRepository)
     {
         _userManager = userManager;
         _tokenRepository = tokenRepository;
@@ -23,7 +24,7 @@ public class AuthController : ControllerBase
     [Route("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequestDto registerRequestDto)
     {
-        var identityUser = new IdentityUser
+        var identityUser = new User
         {
             UserName = registerRequestDto.Username,
             Email = registerRequestDto.Username

@@ -140,6 +140,7 @@ public class AccountService : IAccountService
         var senderAccount = await GetAccountOrThrow(senderId);
         var receiverAccount = await GetAccountOrThrow(receiverId);
 
+        //Where koy db yapsin
         if (senderAccount.Balance < amount)
             throw new Exception("Insufficient funds");
 

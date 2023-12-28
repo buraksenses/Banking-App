@@ -4,6 +4,7 @@ using BankProject.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankProject.Data.Migrations.BankAuthDb
 {
     [DbContext(typeof(BankAuthDbContext))]
-    partial class BankAuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231228010359_UserTableDecimalPropertiesChangedToFloat")]
+    partial class UserTableDecimalPropertiesChangedToFloat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

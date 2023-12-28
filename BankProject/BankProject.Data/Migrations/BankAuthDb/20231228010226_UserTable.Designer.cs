@@ -4,6 +4,7 @@ using BankProject.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankProject.Data.Migrations.BankAuthDb
 {
     [DbContext(typeof(BankAuthDbContext))]
-    partial class BankAuthDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231228010226_UserTable")]
+    partial class UserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,8 +37,8 @@ namespace BankProject.Data.Migrations.BankAuthDb
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("AnnualIncome")
-                        .HasColumnType("real");
+                    b.Property<decimal>("AnnualIncome")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -49,8 +52,8 @@ namespace BankProject.Data.Migrations.BankAuthDb
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("CreditScore")
-                        .HasColumnType("real");
+                    b.Property<decimal>("CreditScore")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
@@ -105,8 +108,8 @@ namespace BankProject.Data.Migrations.BankAuthDb
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("TotalAssets")
-                        .HasColumnType("real");
+                    b.Property<decimal>("TotalAssets")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
