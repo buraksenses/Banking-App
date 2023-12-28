@@ -40,10 +40,25 @@ public class BankDbContext : IdentityDbContext<User>
                     v => (LoanType)Enum.Parse(typeof(LoanType), v));
         });
         
+        modelBuilder.Entity<LoanApplication>(entity =>
+        {
+            entity.Property(e => e.LoanType)
+                .HasConversion(v => v.ToString(), 
+                    v => (LoanType)Enum.Parse(typeof(LoanType), v));
+        });
+        
+        modelBuilder.Entity<LoanApplication>(entity =>
+        {
+            entity.Property(e => e.LoanApplicationStatus)
+                .HasConversion(v => v.ToString(), 
+                    v => (LoanApplicationStatus)Enum.Parse(typeof(LoanApplicationStatus), v));
+        });
+        
     }
 
     public DbSet<Account> Accounts { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
-
     public DbSet<Loan> Loans { get; set; }
+
+    public DbSet<LoanApplication> LoanApplications { get; set; }
 }
