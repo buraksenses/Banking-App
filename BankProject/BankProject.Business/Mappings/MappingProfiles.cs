@@ -27,6 +27,8 @@ public class MappingProfiles : Profile
 
         CreateMap<LoanApplication, CreateLoanApplicationRequestDto>().ReverseMap();
 
+        CreateMap<LoanApplication, GetLoanApplicationRequestDto>().ReverseMap();
+
         #endregion
     }
 }

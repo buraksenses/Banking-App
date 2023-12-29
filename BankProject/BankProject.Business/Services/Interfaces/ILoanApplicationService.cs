@@ -2,7 +2,9 @@
 
 namespace BankProject.Business.Services.Interfaces;
 
-public interface ILoanService
+public interface ILoanApplicationService
 {
     Task CreateLoanApplicationAsync(CreateLoanApplicationRequestDto requestDto);
+
+    Task<GetLoanApplicationRequestDto> GetLoanApplicationByIdAsync(Guid id);
 }

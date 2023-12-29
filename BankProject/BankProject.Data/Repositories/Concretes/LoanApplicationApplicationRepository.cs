@@ -4,11 +4,11 @@ using BankProject.Data.Repositories.Interfaces;
 
 namespace BankProject.Data.Repositories.Concretes;
 
-public class LoanRepository : ILoanRepository
+public class LoanApplicationApplicationRepository : ILoanApplicationRepository
 {
     private readonly BankDbContext _dbContext;
 
-    public LoanRepository(BankDbContext dbContext)
+    public LoanApplicationApplicationRepository(BankDbContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -17,5 +17,10 @@ public class LoanRepository : ILoanRepository
     {
         await _dbContext.LoanApplications.AddAsync(loanApplication);
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<LoanApplication?> GetLoanApplicationByIdAsync(Guid id)
+    {
+        return await _dbContext.LoanApplications.FindAsync(id);
     }
 }
