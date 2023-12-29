@@ -4,11 +4,11 @@ using BankProject.Data.Repositories.Interfaces;
 
 namespace BankProject.Data.Repositories.Concretes;
 
-public class LoanApplicationApplicationRepository : ILoanApplicationRepository
+public class LoanApplicationRepository : ILoanApplicationRepository
 {
     private readonly BankDbContext _dbContext;
 
-    public LoanApplicationApplicationRepository(BankDbContext dbContext)
+    public LoanApplicationRepository(BankDbContext dbContext)
     {
         _dbContext = dbContext;
     }

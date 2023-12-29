@@ -12,6 +12,8 @@ public class Loan
     
     public float LoanAmount { get; set; }
 
+    public int NumberOfTotalPayments { get; set; }
+
     public float MonthlyPayment => RemainingDebt / LoanTerm;
     public int LoanTerm { get; set; }
     public float RemainingDebt { get; set; }
@@ -19,7 +21,7 @@ public class Loan
     [NotMapped]
     public bool IsPaid => RemainingDebt == 0;
     
-    public int NumberOfMissedPayments { get; set; }
+    public int NumberOfTimelyPayments { get; set; }
     
     public string UserId { get; set; }
     

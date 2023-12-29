@@ -8,12 +8,12 @@ using BankProject.Data.Repositories.Interfaces;
 
 namespace BankProject.Business.Services.Concretes;
 
-public class LoanApplicationApplicationService : ILoanApplicationService
+public class LoanApplicationService : ILoanApplicationService
 {
     private readonly ILoanApplicationRepository _applicationRepository;
     private readonly IMapper _mapper;
 
-    public LoanApplicationApplicationService(ILoanApplicationRepository applicationRepository,IMapper mapper)
+    public LoanApplicationService(ILoanApplicationRepository applicationRepository,IMapper mapper)
     {
         _applicationRepository = applicationRepository;
         _mapper = mapper;

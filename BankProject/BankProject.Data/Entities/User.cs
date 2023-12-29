@@ -24,5 +24,5 @@ public class User : IdentityUser
     
     public string PhoneNumber { get; set; }
 
-    public ICollection<Loan> CreditHistoryDetails { get; set; }
+    public ICollection<Loan> Loans { get; set; }
 }
