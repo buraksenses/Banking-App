@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BankProject.Business.DTOs.Account;
+using BankProject.Business.DTOs.Loan;
 using BankProject.Business.DTOs.User;
 using BankProject.Data.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -19,6 +20,12 @@ public class MappingProfiles : Profile
         #region User Mappings
 
         CreateMap<User, CreateUserRequestDto>().ReverseMap();
+
+        #endregion
+
+        #region Loan Mappings
+
+        CreateMap<LoanApplication, CreateLoanApplicationRequestDto>().ReverseMap();
 
         #endregion
     }

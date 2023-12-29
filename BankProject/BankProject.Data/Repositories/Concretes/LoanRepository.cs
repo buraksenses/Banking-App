@@ -13,7 +13,7 @@ public class LoanRepository : ILoanRepository
         _dbContext = dbContext;
     }
     
-    public async Task CreateLoanApplication(LoanApplication loanApplication)
+    public async Task CreateLoanApplicationAsync(LoanApplication loanApplication)
     {
         await _dbContext.LoanApplications.AddAsync(loanApplication);
         await _dbContext.SaveChangesAsync();

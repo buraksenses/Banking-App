@@ -64,6 +64,9 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ITokenRepository, TokenRepository>();
 
         services.AddScoped<IUserService, UserService>();
+
+        services.AddScoped<ILoanRepository, LoanRepository>();
+        services.AddScoped<ILoanService, LoanService>();
         
         services.AddFluentValidation(fv => 
             fv.RegisterValidatorsFromAssemblyContaining<CreateAccountValidator>());

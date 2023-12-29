@@ -4,5 +4,5 @@ namespace BankProject.Data.Repositories.Interfaces;
 
 public interface ILoanRepository
 {
-    Task CreateLoanApplication(LoanApplication loanApplication);
+    Task CreateLoanApplicationAsync(LoanApplication loanApplication);
 }
