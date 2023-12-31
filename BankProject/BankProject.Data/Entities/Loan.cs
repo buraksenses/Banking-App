@@ -27,4 +27,9 @@ public class Loan
     
     //Navigation Properties
     public User User { get; set; }
+
+    public Loan()
+    {
+        LoanDate = DateTime.UtcNow;
+    }
 }

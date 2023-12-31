@@ -7,4 +7,6 @@ public interface ILoanApplicationService
     Task CreateLoanApplicationAsync(CreateLoanApplicationRequestDto requestDto);
 
     Task<GetLoanApplicationRequestDto> GetLoanApplicationByIdAsync(Guid id);
+
+    Task ProcessLoanApplicationStatusAsync(Guid applicationId);
 }

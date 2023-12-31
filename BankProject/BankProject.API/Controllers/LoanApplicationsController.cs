@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BankProject.API.Controllers;
 
 [ApiController]
-[Route("api/loans")]
+[Route("api/loanapplications")]
 public class LoanApplicationsController : ControllerBase
 {
     private readonly ILoanApplicationService _applicationService;
@@ -16,7 +16,6 @@ public class LoanApplicationsController : ControllerBase
     }
 
     [HttpPost]
-    [Route("apply")]
     public async Task<IActionResult> CreateLoanApplicationAsync(CreateLoanApplicationRequestDto requestDto)
     {
         await _applicationService.CreateLoanApplicationAsync(requestDto);
@@ -31,5 +30,14 @@ public class LoanApplicationsController : ControllerBase
         var loanApplication = await _applicationService.GetLoanApplicationByIdAsync(id);
 
         return Ok(loanApplication);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/process")]
+    public async Task<IActionResult> ProcessApplicationAsync(Guid id)
+    {
+        await _applicationService.ProcessLoanApplicationStatusAsync(id);
+
+        return Ok();
     }
 }

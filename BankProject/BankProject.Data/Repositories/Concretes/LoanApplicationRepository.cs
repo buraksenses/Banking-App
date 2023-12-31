@@ -1,4 +1,5 @@
-﻿using BankProject.Data.Context;
+﻿using BankProject.Core.Enums;
+using BankProject.Data.Context;
 using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Interfaces;
 
@@ -22,5 +23,11 @@ public class LoanApplicationRepository : ILoanApplicationRepository
     public async Task<LoanApplication?> GetLoanApplicationByIdAsync(Guid id)
     {
         return await _dbContext.LoanApplications.FindAsync(id);
+    }
+
+    public async Task UpdateLoanApplicationStatusAsync(LoanApplication application, LoanApplicationStatus status)
+    {
+        application.LoanApplicationStatus = status;
+        await _dbContext.SaveChangesAsync();
     }
 }

@@ -3,7 +3,6 @@ using BankProject.Business.DTOs.Account;
 using BankProject.Business.DTOs.Loan;
 using BankProject.Business.DTOs.User;
 using BankProject.Data.Entities;
-using Microsoft.AspNetCore.Identity;
 
 namespace BankProject.Business.Mappings;
 
@@ -28,6 +27,14 @@ public class MappingProfiles : Profile
         CreateMap<LoanApplication, CreateLoanApplicationRequestDto>().ReverseMap();
 
         CreateMap<LoanApplication, GetLoanApplicationRequestDto>().ReverseMap();
+
+        CreateMap<Loan, LoanApplication>()
+            .ForMember(dest => dest.LoanTerm, opt => opt.MapFrom(src => src.LoanTerm))
+            .ForMember(dest => dest.LoanType, opt => opt.MapFrom(src => src.LoanType))
+            .ForMember(dest => dest.LoanAmount, opt => opt.MapFrom(src => src.LoanAmount))
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
+            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
+            .ReverseMap();
 
         #endregion
     }

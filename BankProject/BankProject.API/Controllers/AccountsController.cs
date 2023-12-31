@@ -1,12 +1,11 @@
 ﻿using BankProject.Business.DTOs.Account;
 using BankProject.Business.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BankProject.API.Controllers;
 
-[ApiController]
-[Route("api/accounts")]
-public class AccountsController : ControllerBase
+public class AccountsController : CustomControllerBase
 {
     private readonly IAccountService _service;
 

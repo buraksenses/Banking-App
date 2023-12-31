@@ -60,4 +60,36 @@ public class CreditScoreService : ICreditScoreService
         return Math.Clamp(score, 0, 100);
     }
 
+    public int CalculateMinimumRequiredCreditScoreForLoanApplication(LoanApplication loanApplication)
+    {
+        var score = 0;
+
+        switch (loanApplication.LoanType)
+        {
+            case LoanType.Mortgage:
+                score += 30;
+                break;
+            case LoanType.Education:
+                score += 25;
+                break;
+            case LoanType.Personal:
+                score += 15;
+                break;
+            case LoanType.Vehicle:
+                score += 20;
+                break;
+            case LoanType.SmallBusiness:
+                score += 35;
+                break;
+        }
+
+        //5 points added for each $10.000
+        score += (int)loanApplication.LoanAmount / 10000 * 5;
+
+        //10 points added for each 12 month term
+        score += loanApplication.LoanTerm / 12 * 10;
+
+        return score;
+    }
+
 }

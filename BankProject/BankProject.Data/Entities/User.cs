@@ -25,4 +25,9 @@ public class User : IdentityUser
     public string PhoneNumber { get; set; }
 
     public ICollection<Loan> Loans { get; set; }
+
+    public User()
+    {
+        Loans = new List<Loan>();
+    }
 }
