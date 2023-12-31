@@ -17,17 +17,20 @@ public class AccountService : IAccountService
     private readonly ITransactionRepository _transactionRepository;
     private readonly UserManager<User> _userManager;
     private readonly IMapper _mapper;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
 
     public AccountService(IAccountRepository accountRepository,
         ITransactionRepository transactionRepository,
         UserManager<User> userManager,
-        IMapper mapper)
+        IMapper mapper,
+        IUnitOfWork unitOfWork)
     {
         _accountRepository = accountRepository;
         _transactionRepository = transactionRepository;
         _userManager = userManager;
         _mapper = mapper;
+        _unitOfWork = unitOfWork;
     }
     
     public async Task<float> GetBalanceByAccountIdAsync(Guid id)
@@ -53,7 +56,7 @@ public class AccountService : IAccountService
         if (user == null)
             throw new NotFoundException("User not found!");
 
-        await _accountRepository.CreateAsync(account);
+        await _accountRepository.AddAsync(account);
     }
 
     public async Task UpdateBalanceByAccountIdAsync(Guid id, float balance)
@@ -68,11 +71,7 @@ public class AccountService : IAccountService
         await _semaphoreSlim.WaitAsync();
         try
         {
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-            {
-                await UpdateAccountAndCreateAccountTransaction(accountId, amount, TransactionType.Deposit);
-                scope.Complete();
-            }
+            await UpdateAccountAndCreateAccountTransaction(accountId, amount, TransactionType.Deposit);
         }
         finally
         {
@@ -85,11 +84,7 @@ public class AccountService : IAccountService
         await _semaphoreSlim.WaitAsync();
         try
         {
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-            {
-                await UpdateAccountAndCreateAccountTransaction(accountId, amount, TransactionType.Withdraw);
-                scope.Complete();
-            }
+            await UpdateAccountAndCreateAccountTransaction(accountId, amount, TransactionType.Withdraw);
         }
         finally
         {
@@ -102,12 +97,7 @@ public class AccountService : IAccountService
         await _semaphoreSlim.WaitAsync();
         try
         {
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-            {
-                await UpdateAccountsAndCreateTransferTransaction(senderId, receiverId, amount, TransactionType.InternalTransfer);
-            
-                scope.Complete();
-            }
+            await UpdateAccountsAndCreateTransferTransaction(senderId, receiverId, amount, TransactionType.InternalTransfer);
         }
         finally
         {
@@ -121,12 +111,7 @@ public class AccountService : IAccountService
         await _semaphoreSlim.WaitAsync();
         try
         {
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-            {
-                await UpdateAccountsAndCreateTransferTransaction(senderId, receiverId, amount, TransactionType.ExternalTransfer);
-            
-                scope.Complete();
-            }
+            await UpdateAccountsAndCreateTransferTransaction(senderId, receiverId, amount, TransactionType.ExternalTransfer);
         }
         finally
         {
@@ -138,52 +123,34 @@ public class AccountService : IAccountService
         TransactionType transactionType)
     {
         var senderAccount = await GetAccountOrThrow(senderId);
-        var receiverAccount = await GetAccountOrThrow(receiverId);
-
+        
         //Where koy db yapsin
         if (senderAccount.Balance < amount)
             throw new Exception("Insufficient funds");
+        
+        var receiverAccount = await GetAccountOrThrow(receiverId);
 
-        senderAccount.Balance -= amount;
-        receiverAccount.Balance += amount;
+        await _unitOfWork.BeginTransactionAsync();
 
-        await _accountRepository.UpdateBalanceByAccountIdAsync(senderId, senderAccount.Balance);
-        await _accountRepository.UpdateBalanceByAccountIdAsync(receiverId, receiverAccount.Balance);
+        await UpdateAccountBalance(senderAccount, amount, false);
+        await UpdateAccountBalance(receiverAccount, amount, true);
+        
+        await _unitOfWork.TransactionCommitAsync();
 
-        var transactionRecord = new Transaction
-        {
-            Amount = amount,
-            TransactionType = transactionType == TransactionType.InternalTransfer ? TransactionType.InternalTransfer : TransactionType.ExternalTransfer,
-            AccountId = senderId,
-            ReceiverAccountId = receiverId
-        };
-
-        await _transactionRepository.CreateAsync(transactionRecord);
+        await CreateTransactionRecord(senderId, amount, transactionType, receiverId);
     }
     
     private async Task UpdateAccountAndCreateAccountTransaction(Guid accountId, float amount, TransactionType transactionType)
     {
         var account = await GetAccountOrThrow(accountId);
+    
+        bool isCredit = transactionType == TransactionType.Deposit;
+        
+        await _unitOfWork.BeginTransactionAsync();
+        await UpdateAccountBalance(account, amount, isCredit);
+        await _unitOfWork.TransactionCommitAsync();
 
-        switch (transactionType)
-        {
-            case TransactionType.Deposit:
-                account.Balance += amount;
-                break;
-            case TransactionType.Withdraw:
-                account.Balance -= amount; 
-                break;
-        }
-
-        await _accountRepository.UpdateBalanceByAccountIdAsync(accountId, account.Balance);
-
-        var transactionRecord = new Transaction
-        {
-            Amount = amount,
-            TransactionType = transactionType,
-            AccountId = accountId
-        };
-        await _transactionRepository.CreateAsync(transactionRecord);
+        await CreateTransactionRecord(accountId, amount, transactionType);
     }
     
     private async Task<Account> GetAccountOrThrow(Guid id)
@@ -194,5 +161,23 @@ public class AccountService : IAccountService
             throw new NotFoundException("Account not found");
         
         return account;
+    }
+    
+    private async Task UpdateAccountBalance(Account account, float amount, bool isCredit)
+    {
+        account.Balance += isCredit ? amount : -amount;
+        await _accountRepository.UpdateBalanceByAccountIdAsync(account.Id, account.Balance);
+    }
+    
+    private async Task CreateTransactionRecord(Guid accountId, float amount, TransactionType transactionType, Guid? receiverAccountId = null)
+    {
+        var transactionRecord = new Transaction
+        {
+            Amount = amount,
+            TransactionType = transactionType,
+            AccountId = accountId,
+            ReceiverAccountId = receiverAccountId
+        };
+        await _transactionRepository.CreateAsync(transactionRecord);
     }
 }

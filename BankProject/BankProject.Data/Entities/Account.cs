@@ -1,8 +1,9 @@
 ﻿using BankProject.Core.Enums;
+using BankProject.Data.Entities.Base;
 
 namespace BankProject.Data.Entities;
 
-public class Account
+public class Account : IEntity<Guid>
 {
     public Guid Id { get; set; }
     public float Balance { get; set; }

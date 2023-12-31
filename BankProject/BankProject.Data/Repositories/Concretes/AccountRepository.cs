@@ -1,42 +1,39 @@
-﻿using BankProject.Data.Context;
-using BankProject.Data.Entities;
+﻿using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Interfaces;
 
 namespace BankProject.Data.Repositories.Concretes;
 
 public class AccountRepository : IAccountRepository
 {
-    private readonly BankDbContext _dbContext;
+    private readonly IGenericRepository<Account, Guid> _accountRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public AccountRepository(BankDbContext dbContext)
+    public AccountRepository(IUnitOfWork unitOfWork)
     {
-        _dbContext = dbContext;
+        _accountRepository = unitOfWork.Repository<Account, Guid>();
+        _unitOfWork = unitOfWork;
     }
-    
+
+    public async Task AddAsync(Account entity)
+    {
+        await _accountRepository.AddAsync(entity);
+        await _unitOfWork.CommitAsync();
+    }
+
     public async Task<Account?> GetByIdAsync(Guid id)
     {
-        var account = await _dbContext.Accounts.FindAsync(id);
-
-        return account ?? null;
-    }
-
-    public async Task CreateAsync(Account account)
-    {
-        await _dbContext.Accounts.AddAsync(account);
-        await _dbContext.SaveChangesAsync();
+        return await _accountRepository.GetByIdAsync(id);
     }
 
     public async Task<Account?> UpdateBalanceByAccountIdAsync(Guid id, float balance)
     {
-        var account = await _dbContext.Accounts.FindAsync(id);
-
+        var account = await _accountRepository.GetByIdAsync(id);
         if (account == null)
             return null;
         
         account.Balance = balance;
+        await _unitOfWork.CommitAsync();
         
-        await _dbContext.SaveChangesAsync();
-
         return account;
     }
 }

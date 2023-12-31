@@ -72,7 +72,9 @@ public static class ApplicationServiceExtensions
 
         services.AddScoped<ILoanService, LoanService>();
         services.AddScoped<ILoanRepository, LoanRepository>();
-        
+
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+
         services.AddFluentValidation(fv => 
             fv.RegisterValidatorsFromAssemblyContaining<CreateAccountValidator>());
         
