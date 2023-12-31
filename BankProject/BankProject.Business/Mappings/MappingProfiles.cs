@@ -32,9 +32,12 @@ public class MappingProfiles : Profile
             .ForMember(dest => dest.LoanTerm, opt => opt.MapFrom(src => src.LoanTerm))
             .ForMember(dest => dest.LoanType, opt => opt.MapFrom(src => src.LoanType))
             .ForMember(dest => dest.LoanAmount, opt => opt.MapFrom(src => src.LoanAmount))
+            .ForMember(dest => dest.LoanAmount, opt => opt.MapFrom(src => src.RemainingDebt))
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
             .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
             .ReverseMap();
+
+        CreateMap<Loan, CreateLoanRequestDto>().ReverseMap();
 
         #endregion
     }

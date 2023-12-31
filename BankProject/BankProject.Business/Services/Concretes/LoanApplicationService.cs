@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BankProject.Business.DTOs.Loan;
 using BankProject.Business.Services.Interfaces;
+using BankProject.Core.Constants;
 using BankProject.Core.Enums;
 using BankProject.Core.Exceptions;
 using BankProject.Data.Entities;
@@ -44,16 +45,16 @@ public class LoanApplicationService : ILoanApplicationService
         await _applicationRepository.CreateLoanApplicationAsync(loanApplication);
     }
 
-    public async Task<GetLoanApplicationRequestDto> GetLoanApplicationByIdAsync(Guid id)
+    public async Task<GetLoanApplicationRequestDto> GetLoanApplicationByIdAsync(Guid applicationId)
     {
-        var application = await GetLoanApplicationOrThrow(id);
+        var application = await GetLoanApplicationOrThrow(applicationId);
 
         var applicationDto = _mapper.Map<GetLoanApplicationRequestDto>(application);
 
         return applicationDto;
     }
 
-    public async Task ProcessLoanApplicationStatusAsync(Guid applicationId)
+    public async Task<LoanApplicationResponseDto> GetRecommendationForApplicationByIdAsync(Guid applicationId)
     {
         var application = await GetLoanApplicationOrThrow(applicationId);
 
@@ -67,21 +68,42 @@ public class LoanApplicationService : ILoanApplicationService
         var minimumRequiredScore =
             _creditScoreService.CalculateMinimumRequiredCreditScoreForLoanApplication(application);
 
-        if (creditScore > minimumRequiredScore)
+        return new LoanApplicationResponseDto
         {
-            var loan = _mapper.Map<Loan>(application);
+            UserCreditScore = creditScore,
+            MinimumRequiredCreditScoreForApplication = minimumRequiredScore,
+            Recommendation = creditScore > minimumRequiredScore
+                ? CreditScoreConstants.PositiveApplicationResponse
+                : CreditScoreConstants.NegativeApplicationResponse
+        };
+    }
 
-            loan.RemainingDebt = application.LoanAmount;
+    public async Task<CreateLoanRequestDto> ApproveLoanApplicationByIdAndCreateLoanAsync(Guid applicationId)
+    {
+        var application = await GetLoanApplicationOrThrow(applicationId);
 
-            await _loanService.CreateLoanAsync(loan);
+        await _applicationRepository.UpdateLoanApplicationStatusAsync(application, LoanApplicationStatus.Approved);
 
-            await _applicationRepository.UpdateLoanApplicationStatusAsync(application, LoanApplicationStatus.Approved);
+        var loan = _mapper.Map<Loan>(application);
+        
+        await _loanService.CreateLoanAsync(loan);
 
-            return;
-        }
+        var loanDto = _mapper.Map<CreateLoanRequestDto>(loan);
+
+        return loanDto;
+    }
+
+    public async Task<GetLoanApplicationRequestDto> RejectLoanApplicationByIdAsync(Guid applicationId)
+    {
+        var application = await GetLoanApplicationOrThrow(applicationId);
 
         await _applicationRepository.UpdateLoanApplicationStatusAsync(application, LoanApplicationStatus.Rejected);
+
+        var applicationDto = _mapper.Map<GetLoanApplicationRequestDto>(application);
+
+        return applicationDto;
     }
+
 
     private async Task<LoanApplication> GetLoanApplicationOrThrow(Guid id)
     {

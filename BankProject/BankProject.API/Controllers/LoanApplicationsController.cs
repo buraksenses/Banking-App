@@ -32,12 +32,30 @@ public class LoanApplicationsController : ControllerBase
         return Ok(loanApplication);
     }
 
-    [HttpPut]
-    [Route("{id:guid}/process")]
+    [HttpGet]
+    [Route("{id:guid}/recommendation")]
     public async Task<IActionResult> ProcessApplicationAsync(Guid id)
-    {
-        await _applicationService.ProcessLoanApplicationStatusAsync(id);
+    { 
+        var response = await _applicationService.GetRecommendationForApplicationByIdAsync(id);
 
-        return Ok();
+        return Ok(response);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/reject")]
+    public async Task<IActionResult> RejectApplicationAsync(Guid id)
+    {
+        var response = await _applicationService.RejectLoanApplicationByIdAsync(id);
+
+        return Ok(response);
+    }
+    
+    [HttpPost]
+    [Route("{id:guid}/approve")]
+    public async Task<IActionResult> ApproveApplicationAsync(Guid id)
+    {
+        var response = await _applicationService.ApproveLoanApplicationByIdAndCreateLoanAsync(id);
+
+        return Ok(response);
     }
 }
