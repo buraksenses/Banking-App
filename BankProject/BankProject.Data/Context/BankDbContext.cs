@@ -61,4 +61,6 @@ public class BankDbContext : IdentityDbContext<User>
     public DbSet<Loan> Loans { get; set; }
 
     public DbSet<LoanApplication> LoanApplications { get; set; }
+
+    public DbSet<Payment> Payments { get; set; }
 }

@@ -42,7 +42,7 @@ public class LoanApplicationService : ILoanApplicationService
         
         var loanApplication = _mapper.Map<LoanApplication>(requestDto);
 
-        await _applicationRepository.CreateLoanApplicationAsync(loanApplication);
+        await _applicationRepository.CreateAsync(loanApplication);
     }
 
     public async Task<GetLoanApplicationRequestDto> GetLoanApplicationByIdAsync(Guid applicationId)
@@ -107,7 +107,7 @@ public class LoanApplicationService : ILoanApplicationService
 
     private async Task<LoanApplication> GetLoanApplicationOrThrow(Guid id)
     {
-        var application = await _applicationRepository.GetLoanApplicationByIdAsync(id);
+        var application = await _applicationRepository.GetByIdAsync(id);
         
         if (application == null)
             throw new NotFoundException("Application not found");

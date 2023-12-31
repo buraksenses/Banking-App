@@ -6,7 +6,9 @@ using BankProject.Business.Validators.Account;
 using BankProject.Data.Context;
 using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Concretes;
+using BankProject.Data.Repositories.Concretes.Base;
 using BankProject.Data.Repositories.Interfaces;
+using BankProject.Data.Repositories.Interfaces.Base;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -74,6 +76,11 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ILoanRepository, LoanRepository>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        
+        services.AddScoped(typeof(ICreateRepository<,>), typeof(CreateRepository<,>));
+        services.AddScoped(typeof(IDeleteRepository<,>), typeof(DeleteRepository<,>));
+        services.AddScoped(typeof(IUpdateRepository<,>), typeof(UpdateRepository<,>));
+        services.AddScoped(typeof(IReadRepository<,>), typeof(ReadRepository<,>));
 
         services.AddFluentValidation(fv => 
             fv.RegisterValidatorsFromAssemblyContaining<CreateAccountValidator>());

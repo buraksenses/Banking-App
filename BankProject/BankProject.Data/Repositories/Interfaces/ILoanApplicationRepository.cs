@@ -1,13 +1,10 @@
 ﻿using BankProject.Core.Enums;
 using BankProject.Data.Entities;
+using BankProject.Data.Repositories.Interfaces.Base;
 
 namespace BankProject.Data.Repositories.Interfaces;
 
-public interface ILoanApplicationRepository
+public interface ILoanApplicationRepository : ICreateRepository<LoanApplication,Guid>,IReadRepository<LoanApplication,Guid>
 {
-    Task CreateLoanApplicationAsync(LoanApplication loanApplication);
-
-    Task<LoanApplication?> GetLoanApplicationByIdAsync(Guid id);
-
     Task UpdateLoanApplicationStatusAsync(LoanApplication application, LoanApplicationStatus status);
 }

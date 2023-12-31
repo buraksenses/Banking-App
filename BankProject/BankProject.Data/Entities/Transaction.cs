@@ -1,8 +1,9 @@
 ﻿using BankProject.Core.Enums;
+using BankProject.Data.Entities.Base;
 
 namespace BankProject.Data.Entities;
 
-public class Transaction
+public class Transaction : IEntity<Guid>
 {
     public Guid Id { get; set; }
 

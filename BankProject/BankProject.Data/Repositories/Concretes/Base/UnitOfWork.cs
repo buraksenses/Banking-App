@@ -1,11 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using BankProject.Data.Context;
 using BankProject.Data.Entities.Base;
-using BankProject.Data.Repositories.Interfaces;
+using BankProject.Data.Repositories.Interfaces.Base;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace BankProject.Data.Repositories.Concretes;
+namespace BankProject.Data.Repositories.Concretes.Base;
 
 public class UnitOfWork : IUnitOfWork
 {
@@ -18,30 +17,24 @@ public class UnitOfWork : IUnitOfWork
         _dbContext = dbContext;
         _repositories = new ConcurrentDictionary<string, object>();
     }
-    
-    public IGenericRepository<TEntity, TKey> Repository<TEntity, TKey>() where TEntity : class, IEntity<TKey>
+
+    public TRepository GetRepository<TRepository, TEntity, TKey>() 
+        where TRepository : GenericRepository<TEntity, TKey>
+        where TEntity : class, IEntity<TKey>
     {
-        var typeKey = $"{typeof(TEntity).FullName}-{typeof(TKey).FullName}";
+        var typeKey = typeof(TRepository).FullName ?? throw new InvalidOperationException("Repository type key cannot be null.");
 
         if (_repositories.TryGetValue(typeKey, out var repository))
-            return (IGenericRepository<TEntity, TKey>)repository;
-        try
         {
-            var repositoryType = typeof(GenericRepository<,>);
-            var repositoryInstance = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(TEntity), typeof(TKey)), _dbContext);
-
-            if (repositoryInstance is IGenericRepository<TEntity, TKey> typedRepository)
-            {
-                _repositories[typeKey] = typedRepository;
-                return typedRepository;
-            }
-
-            throw new InvalidOperationException($"Created repository type does not match the IGenericRepository<{typeof(TEntity).Name}, {typeof(TKey).Name}> interface.");
+            return (TRepository)repository;
         }
-        catch (Exception ex)
-        {
-            throw new InvalidOperationException($"Unable to create repository instance for {typeof(TEntity).Name}: {ex.Message}", ex);
-        }
+
+        var newRepository = Activator.CreateInstance(typeof(TRepository), _dbContext) as TRepository 
+                            ?? throw new InvalidOperationException($"Unable to create instance of type {typeof(TRepository).Name}.");
+
+        _repositories[typeKey] = newRepository;
+
+        return newRepository;
     }
 
     public async Task BeginTransactionAsync()

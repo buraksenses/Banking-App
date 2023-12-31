@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using BankProject.Core.Enums;
+using BankProject.Data.Entities.Base;
 
 namespace BankProject.Data.Entities;
 
-public class Loan
+public class Loan : IEntity<Guid>
 {
     public Guid Id { get; set; }
     

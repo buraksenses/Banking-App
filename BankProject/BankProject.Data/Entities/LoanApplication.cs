@@ -1,8 +1,9 @@
 ﻿using BankProject.Core.Enums;
+using BankProject.Data.Entities.Base;
 
 namespace BankProject.Data.Entities;
 
-public class LoanApplication
+public class LoanApplication : IEntity<Guid>
 {
     public Guid Id { get; set; }
     public LoanType LoanType { get; set; }

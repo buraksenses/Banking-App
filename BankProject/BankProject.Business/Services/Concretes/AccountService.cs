@@ -1,11 +1,11 @@
-﻿using System.Transactions;
-using AutoMapper;
+﻿using AutoMapper;
 using BankProject.Business.DTOs.Account;
 using BankProject.Business.Services.Interfaces;
 using BankProject.Core.Enums;
 using BankProject.Core.Exceptions;
 using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Interfaces;
+using BankProject.Data.Repositories.Interfaces.Base;
 using Microsoft.AspNetCore.Identity;
 using Transaction = BankProject.Data.Entities.Transaction;
 
@@ -56,7 +56,7 @@ public class AccountService : IAccountService
         if (user == null)
             throw new NotFoundException("User not found!");
 
-        await _accountRepository.AddAsync(account);
+        await _accountRepository.CreateAsync(account);
     }
 
     public async Task UpdateBalanceByAccountIdAsync(Guid id, float balance)
@@ -144,7 +144,7 @@ public class AccountService : IAccountService
     {
         var account = await GetAccountOrThrow(accountId);
     
-        bool isCredit = transactionType == TransactionType.Deposit;
+        var isCredit = transactionType == TransactionType.Deposit;
         
         await _unitOfWork.BeginTransactionAsync();
         await UpdateAccountBalance(account, amount, isCredit);
