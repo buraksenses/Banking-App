@@ -30,9 +30,19 @@ public class AccountRepository : IAccountRepository
         return await _readRepository.GetByIdAsync(id);
     }
 
+    public async Task<Account?> GetByIdAsync(Expression<Func<Account, bool>> predicate)
+    {
+        return await _readRepository.GetByIdAsync(predicate);
+    }
+
     public Task<List<Account>> GetAllAsync(Expression<Func<Account, bool>> predicate)
     {
         return _readRepository.GetAllAsync(predicate);
+    }
+
+    public async Task<List<Account>> GetAllAsync()
+    {
+        return await _readRepository.GetAllAsync();
     }
 
     public async Task<Account?> UpdateBalanceByAccountIdAsync(Guid id, float balance)

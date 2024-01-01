@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BankProject.Business.DTOs.Account;
 using BankProject.Business.DTOs.Loan;
+using BankProject.Business.DTOs.Payment;
 using BankProject.Business.DTOs.User;
 using BankProject.Data.Entities;
 
@@ -38,6 +39,16 @@ public class MappingProfiles : Profile
             .ReverseMap();
 
         CreateMap<Loan, CreateLoanRequestDto>().ReverseMap();
+
+        #endregion
+
+        #region Payment Mappings
+
+        CreateMap<Payment, CreatePaymentRequestDto>().ReverseMap();
+
+        CreateMap<Payment, GetPaymentRequestDto>().ReverseMap();
+
+        CreateMap<Payment, UpdatePaymentRequestDto>().ReverseMap();
 
         #endregion
     }

@@ -30,8 +30,18 @@ public class TransactionRepository : ITransactionRepository
         return await _readRepository.GetByIdAsync(id);
     }
 
+    public async Task<Transaction?> GetByIdAsync(Expression<Func<Transaction, bool>> predicate)
+    {
+        return await _readRepository.GetByIdAsync(predicate);
+    }
+
     public async Task<List<Transaction>> GetAllAsync(Expression<Func<Transaction, bool>> predicate)
     {
         return await _readRepository.GetAllAsync(predicate);
+    }
+
+    public async Task<List<Transaction>> GetAllAsync()
+    {
+        return await _readRepository.GetAllAsync();
     }
 }

@@ -37,8 +37,18 @@ public class LoanApplicationRepository : ILoanApplicationRepository
         return await _readRepository.GetByIdAsync(id);
     }
 
+    public async Task<LoanApplication?> GetByIdAsync(Expression<Func<LoanApplication, bool>> predicate)
+    {
+        return await _readRepository.GetByIdAsync(predicate);
+    }
+
     public async Task<List<LoanApplication>> GetAllAsync(Expression<Func<LoanApplication, bool>> predicate)
     {
         return await _readRepository.GetAllAsync(predicate);
+    }
+
+    public async Task<List<LoanApplication>> GetAllAsync()
+    {
+        return await _readRepository.GetAllAsync();
     }
 }

@@ -133,8 +133,21 @@ namespace BankProject.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("LastPaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("NextPaymentDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("PaymentFrequency")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TimePeriod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

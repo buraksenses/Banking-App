@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using BankProject.Business.DTOs.Account;
 using BankProject.Business.Services.Interfaces;
 using BankProject.Core.Enums;
@@ -68,28 +69,12 @@ public class AccountService : IAccountService
 
     public async Task DepositAsync(Guid accountId, float amount)
     {
-        await _semaphoreSlim.WaitAsync();
-        try
-        {
-            await UpdateAccountAndCreateAccountTransaction(accountId, amount, TransactionType.Deposit);
-        }
-        finally
-        {
-            _semaphoreSlim.Release();
-        }
+        await PerformTransactionAsync(accountId, amount, TransactionType.Deposit);
     }
 
     public async Task WithdrawAsync(Guid accountId, float amount)
     {
-        await _semaphoreSlim.WaitAsync();
-        try
-        {
-            await UpdateAccountAndCreateAccountTransaction(accountId, amount, TransactionType.Withdraw);
-        }
-        finally
-        {
-            _semaphoreSlim.Release();
-        }
+        await PerformTransactionAsync(accountId, amount, TransactionType.Withdraw);
     }
 
     public async Task InternalTransferAsync(Guid senderId, Guid receiverId, float amount)
@@ -118,15 +103,26 @@ public class AccountService : IAccountService
             _semaphoreSlim.Release();
         }
     }
+
+    public async Task MakePayment(Guid id,float amount)
+    {
+        var account = await GetAccountOrThrow(account => account.Balance > amount && account.Id == id);
+
+        await _semaphoreSlim.WaitAsync();
+        try
+        {
+            await UpdateAccountBalance(account, amount, false);
+        }
+        finally
+        {
+            _semaphoreSlim.Release();
+        }
+    }
     
     private async Task UpdateAccountsAndCreateTransferTransaction(Guid senderId, Guid receiverId, float amount,
         TransactionType transactionType)
     {
-        var senderAccount = await GetAccountOrThrow(senderId);
-        
-        //Where koy db yapsin
-        if (senderAccount.Balance < amount)
-            throw new Exception("Insufficient funds");
+        var senderAccount = await GetAccountOrThrow(account => account.Id == senderId && account.Balance > amount);
         
         var receiverAccount = await GetAccountOrThrow(receiverId);
 
@@ -140,26 +136,47 @@ public class AccountService : IAccountService
         await CreateTransactionRecord(senderId, amount, transactionType, receiverId);
     }
     
-    private async Task UpdateAccountAndCreateAccountTransaction(Guid accountId, float amount, TransactionType transactionType)
+    private async Task PerformTransactionAsync(Guid accountId, float amount, TransactionType transactionType)
     {
-        var account = await GetAccountOrThrow(accountId);
-    
-        var isCredit = transactionType == TransactionType.Deposit;
-        
-        await _unitOfWork.BeginTransactionAsync();
-        await UpdateAccountBalance(account, amount, isCredit);
-        await _unitOfWork.TransactionCommitAsync();
+        await _semaphoreSlim.WaitAsync();
+        try
+        {
+            var account = await GetAccountOrThrow(accountId);
+            
+            var isCredit = transactionType == TransactionType.Deposit;
+            var newBalance = isCredit ? account.Balance + amount : account.Balance - amount;
 
-        await CreateTransactionRecord(accountId, amount, transactionType);
+            if (newBalance < 0)
+                throw new InvalidOperationException("Insufficient funds");
+
+            await _unitOfWork.BeginTransactionAsync();
+            await UpdateAccountBalance(account, newBalance,isCredit);
+            await CreateTransactionRecord(accountId, amount, transactionType);
+            await _unitOfWork.TransactionCommitAsync();
+        }
+        finally
+        {
+            _semaphoreSlim.Release();
+        }
     }
-    
-    private async Task<Account> GetAccountOrThrow(Guid id)
+
+    public async Task<Account> GetAccountOrThrow(Guid id)
     {
         var account = await _accountRepository.GetByIdAsync(id);
         
         if (account == null)
             throw new NotFoundException("Account not found");
         
+        return account;
+    }
+
+    public async Task<Account> GetAccountOrThrow(Expression<Func<Account, bool>> predicate)
+    {
+        var account = await _accountRepository.GetByIdAsync(predicate);
+
+        if (account == null)
+            throw new NotFoundException("Account not found or Insufficient funds!");
+
         return account;
     }
     

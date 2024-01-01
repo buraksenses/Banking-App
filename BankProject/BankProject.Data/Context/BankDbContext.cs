@@ -54,10 +54,19 @@ public class BankDbContext : IdentityDbContext<User>
                     v => (LoanApplicationStatus)Enum.Parse(typeof(LoanApplicationStatus), v));
         });
         
+        modelBuilder.Entity<Payment>(entity =>
+        {
+            entity.Property(e => e.TimePeriod)
+                .HasConversion(v => v.ToString(), 
+                    v => (TimePeriod)Enum.Parse(typeof(TimePeriod), v));
+        });
+        
     }
 
     public DbSet<Account> Accounts { get; set; }
+    
     public DbSet<Transaction> Transactions { get; set; }
+    
     public DbSet<Loan> Loans { get; set; }
 
     public DbSet<LoanApplication> LoanApplications { get; set; }

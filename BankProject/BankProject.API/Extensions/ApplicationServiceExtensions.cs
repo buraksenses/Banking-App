@@ -10,6 +10,7 @@ using BankProject.Data.Repositories.Concretes.Base;
 using BankProject.Data.Repositories.Interfaces;
 using BankProject.Data.Repositories.Interfaces.Base;
 using FluentValidation.AspNetCore;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -53,6 +54,13 @@ public static class ApplicationServiceExtensions
             });
         });
 
+        services.AddHangfire((sp, globalConfiguration) =>
+        {
+            globalConfiguration.UseSqlServerStorage(sp.GetRequiredService<IConfiguration>()
+                .GetConnectionString("BankConnectionString"));
+        });
+        services.AddHangfireServer();
+
         services.AddDbContext<BankDbContext>(options =>
             options.UseSqlServer(config.GetConnectionString("BankConnectionString")));
 
@@ -76,6 +84,9 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ILoanRepository, LoanRepository>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        services.AddScoped<IPaymentService, PaymentService>();
+        services.AddScoped<IPaymentRepository, PaymentRepository>();
         
         services.AddScoped(typeof(ICreateRepository<,>), typeof(CreateRepository<,>));
         services.AddScoped(typeof(IDeleteRepository<,>), typeof(DeleteRepository<,>));

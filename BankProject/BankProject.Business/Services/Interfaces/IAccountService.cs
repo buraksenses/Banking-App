@@ -1,4 +1,6 @@
-﻿using BankProject.Business.DTOs.Account;
+﻿using System.Linq.Expressions;
+using BankProject.Business.DTOs.Account;
+using BankProject.Data.Entities;
 
 namespace BankProject.Business.Services.Interfaces;
 
@@ -17,4 +19,10 @@ public interface IAccountService
    Task InternalTransferAsync(Guid senderId, Guid receiverId, float amount);
 
    Task ExternalTransferAsync(Guid senderId, Guid receiverId, float amount);
+
+   Task MakePayment(Guid id, float amount);
+
+   Task<Account> GetAccountOrThrow(Guid id);
+   
+   Task<Account> GetAccountOrThrow(Expression<Func<Account, bool>> predicate);
 }

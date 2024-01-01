@@ -51,19 +51,18 @@ public class UnitOfWork : IUnitOfWork
     {
         if (_transaction == null)
             throw new InvalidOperationException("Transaction has not been started.");
-        
-        try
+
+        await using (_transaction)
         {
-            await _transaction.CommitAsync();
-        }
-        catch (Exception e)
-        {
-            await _transaction.RollbackAsync();
-            throw new Exception(e.Message);
-        }
-        finally
-        {
-            _transaction.Dispose();
+            try
+            {
+                await _transaction.CommitAsync();
+            }
+            catch (Exception e)
+            {
+                await _transaction.RollbackAsync();
+                throw;
+            }
         }
     }
 }

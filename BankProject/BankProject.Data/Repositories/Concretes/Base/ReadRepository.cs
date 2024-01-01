@@ -13,6 +13,11 @@ public class ReadRepository<TEntity,TKey> : GenericRepository<TEntity,TKey> ,IRe
     }
     
     public async Task<TEntity?> GetByIdAsync(TKey id) => await _entities.FindAsync(id);
+    public async Task<TEntity?> GetByIdAsync(Expression<Func<TEntity, bool>> predicate)
+    {
+        return await _entities.Where(predicate).SingleOrDefaultAsync();
+    }
 
-    public Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate) => _entities.Where(predicate).ToListAsync();
+    public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate) => await _entities.Where(predicate).ToListAsync();
+    public async Task<List<TEntity>> GetAllAsync() => await _entities.ToListAsync();
 }
