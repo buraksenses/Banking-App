@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BankProject.API.Controllers;
 
-public class PaymentController : CustomControllerBase
+public class PaymentsController : CustomControllerBase
 {
     private readonly IPaymentService _paymentService;
 
-    public PaymentController(IPaymentService paymentService)
+    public PaymentsController(IPaymentService paymentService)
     {
         _paymentService = paymentService;
     }

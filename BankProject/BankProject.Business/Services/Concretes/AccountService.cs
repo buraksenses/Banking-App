@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using AutoMapper;
 using BankProject.Business.DTOs.Account;
+using BankProject.Business.Helpers;
 using BankProject.Business.Services.Interfaces;
 using BankProject.Core.Enums;
 using BankProject.Core.Exceptions;
@@ -36,7 +37,7 @@ public class AccountService : IAccountService
     
     public async Task<float> GetBalanceByAccountIdAsync(Guid id)
     {
-        var account = await GetAccountOrThrow(id);
+        var account = await _accountRepository.GetOrThrowAsync(id);
 
         return account.Balance;
     }
@@ -62,7 +63,7 @@ public class AccountService : IAccountService
 
     public async Task UpdateBalanceByAccountIdAsync(Guid id, float balance)
     {
-        await GetAccountOrThrow(id);
+        await _accountRepository.GetOrThrowAsync(id);
 
         await _accountRepository.UpdateBalanceByAccountIdAsync(id, balance);
     }
@@ -106,7 +107,7 @@ public class AccountService : IAccountService
 
     public async Task MakePayment(Guid id,float amount)
     {
-        var account = await GetAccountOrThrow(account => account.Balance > amount && account.Id == id);
+        var account = await _accountRepository.GetOrThrowAsync(account => account.Balance > amount && account.Id == id);
 
         await _semaphoreSlim.WaitAsync();
         try
@@ -118,13 +119,13 @@ public class AccountService : IAccountService
             _semaphoreSlim.Release();
         }
     }
-    
+
     private async Task UpdateAccountsAndCreateTransferTransaction(Guid senderId, Guid receiverId, float amount,
         TransactionType transactionType)
     {
-        var senderAccount = await GetAccountOrThrow(account => account.Id == senderId && account.Balance > amount);
-        
-        var receiverAccount = await GetAccountOrThrow(receiverId);
+        var senderAccount = await _accountRepository.GetOrThrowAsync(account => account.Id == senderId && account.Balance > amount);
+
+        var receiverAccount = await _accountRepository.GetOrThrowAsync(senderId);
 
         await _unitOfWork.BeginTransactionAsync();
 
@@ -141,7 +142,7 @@ public class AccountService : IAccountService
         await _semaphoreSlim.WaitAsync();
         try
         {
-            var account = await GetAccountOrThrow(accountId);
+            var account = await _accountRepository.GetOrThrowAsync(accountId);
             
             var isCredit = transactionType == TransactionType.Deposit;
             var newBalance = isCredit ? account.Balance + amount : account.Balance - amount;
@@ -160,15 +161,15 @@ public class AccountService : IAccountService
         }
     }
 
-    public async Task<Account> GetAccountOrThrow(Guid id)
-    {
-        var account = await _accountRepository.GetByIdAsync(id);
-        
-        if (account == null)
-            throw new NotFoundException("Account not found");
-        
-        return account;
-    }
+    // public async Task<Account> GetAccountOrThrow(Guid id)
+    // {
+    //     var account = await _accountRepository.GetByIdAsync(id);
+    //     
+    //     if (account == null)
+    //         throw new NotFoundException("Account not found");
+    //     
+    //     return account;
+    // }
 
     public async Task<Account> GetAccountOrThrow(Expression<Func<Account, bool>> predicate)
     {

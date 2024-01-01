@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BankProject.Business.DTOs.Loan;
+using BankProject.Business.Helpers;
 using BankProject.Business.Services.Interfaces;
 using BankProject.Core.Constants;
 using BankProject.Core.Enums;
@@ -47,7 +48,7 @@ public class LoanApplicationService : ILoanApplicationService
 
     public async Task<GetLoanApplicationRequestDto> GetLoanApplicationByIdAsync(Guid applicationId)
     {
-        var application = await GetLoanApplicationOrThrow(applicationId);
+        var application = await _applicationRepository.GetOrThrowAsync(applicationId);
 
         var applicationDto = _mapper.Map<GetLoanApplicationRequestDto>(application);
 
@@ -56,7 +57,7 @@ public class LoanApplicationService : ILoanApplicationService
 
     public async Task<LoanApplicationResponseDto> GetRecommendationForApplicationByIdAsync(Guid applicationId)
     {
-        var application = await GetLoanApplicationOrThrow(applicationId);
+        var application = await _applicationRepository.GetOrThrowAsync(applicationId);
 
         var user = await _userManager.FindByIdAsync(application.UserId);
 
@@ -80,7 +81,7 @@ public class LoanApplicationService : ILoanApplicationService
 
     public async Task<CreateLoanRequestDto> ApproveLoanApplicationByIdAndCreateLoanAsync(Guid applicationId)
     {
-        var application = await GetLoanApplicationOrThrow(applicationId);
+        var application = await _applicationRepository.GetOrThrowAsync(applicationId);
 
         await _applicationRepository.UpdateLoanApplicationStatusAsync(application, LoanApplicationStatus.Approved);
 
@@ -95,23 +96,12 @@ public class LoanApplicationService : ILoanApplicationService
 
     public async Task<GetLoanApplicationRequestDto> RejectLoanApplicationByIdAsync(Guid applicationId)
     {
-        var application = await GetLoanApplicationOrThrow(applicationId);
+        var application = await _applicationRepository.GetOrThrowAsync(applicationId);
 
         await _applicationRepository.UpdateLoanApplicationStatusAsync(application, LoanApplicationStatus.Rejected);
 
         var applicationDto = _mapper.Map<GetLoanApplicationRequestDto>(application);
 
         return applicationDto;
-    }
-
-
-    private async Task<LoanApplication> GetLoanApplicationOrThrow(Guid id)
-    {
-        var application = await _applicationRepository.GetByIdAsync(id);
-        
-        if (application == null)
-            throw new NotFoundException("Application not found");
-        
-        return application;
     }
 }

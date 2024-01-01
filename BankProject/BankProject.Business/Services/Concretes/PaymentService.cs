@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using BankProject.Business.DTOs.Payment;
+using BankProject.Business.Helpers;
 using BankProject.Business.Services.Interfaces;
 using BankProject.Core.Enums;
-using BankProject.Core.Exceptions;
 using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Interfaces;
 using Hangfire;
@@ -13,19 +13,24 @@ public class PaymentService : IPaymentService
 {
     private readonly IPaymentRepository _paymentRepository;
     private readonly IMapper _mapper;
+    private readonly IAccountRepository _accountRepository;
     private readonly IAccountService _accountService;
 
 
-    public PaymentService(IPaymentRepository paymentRepository, IMapper mapper, IAccountRepository accountRepository,IAccountService accountService)
+    public PaymentService(IPaymentRepository paymentRepository,
+        IMapper mapper,
+        IAccountRepository accountRepository,
+        IAccountService accountService)
     {
         _paymentRepository = paymentRepository;
         _mapper = mapper;
+        _accountRepository = accountRepository;
         _accountService = accountService;
     }
     
     public async Task<GetPaymentRequestDto> GetPaymentByIdAsync(Guid id)
     {
-        var payment = await GetPaymentOrThrow(id);
+        var payment = await _paymentRepository.GetOrThrowAsync(id);
 
         var paymentDto = _mapper.Map<GetPaymentRequestDto>(payment);
 
@@ -52,7 +57,7 @@ public class PaymentService : IPaymentService
 
         var payment = _mapper.Map<Payment>(requestDto);
 
-        await _accountService.GetAccountOrThrow(account => account.Id == payment.AccountId && account.Balance > payment.Amount);
+        await _accountRepository.GetOrThrowAsync(account => account.Id == payment.AccountId && account.Balance > payment.Amount);
 
         var cronExpression = GenerateCronExpression(payment.TimePeriod, payment.PaymentFrequency);
         
@@ -76,12 +81,11 @@ public class PaymentService : IPaymentService
 
         requestDto.TimePeriod = timePeriod.ToString();
 
-        var existingPayment = await GetPaymentOrThrow(id);
-    
-        // 'existingPayment' nesnesinin özelliklerini 'requestDto' ile güncelle
+        var existingPayment = await _paymentRepository.GetOrThrowAsync(id);
+        
         _mapper.Map(requestDto, existingPayment);
     
-        await _accountService.GetAccountOrThrow(account => account.Id == existingPayment.AccountId && account.Balance > existingPayment.Amount);
+        await _accountRepository.GetOrThrowAsync(account => account.Id == existingPayment.AccountId && account.Balance > existingPayment.Amount);
 
         var cronExpression = GenerateCronExpression(existingPayment.TimePeriod, existingPayment.PaymentFrequency);
 
@@ -109,16 +113,6 @@ public class PaymentService : IPaymentService
             CalculateNextPaymentDate(payment.LastPaymentDate, payment.TimePeriod, payment.PaymentFrequency);
         await _accountService.MakePayment(payment.AccountId, amount);
         await _paymentRepository.UpdateAsync(payment.Id, payment);
-    }
-    
-    private async Task<Payment> GetPaymentOrThrow(Guid id)
-    {
-        var payment = await _paymentRepository.GetByIdAsync(id);
-        
-        if (payment == null)
-            throw new NotFoundException("Payment not found");
-        
-        return payment;
     }
     
     private static DateTime CalculateNextPaymentDate(DateTime lastPaymentDate, TimePeriod timePeriod, int paymentFrequency)
