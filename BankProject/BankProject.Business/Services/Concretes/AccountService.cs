@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using BankProject.Business.DTOs.Account;
 using BankProject.Business.Helpers;
 using BankProject.Business.Services.Interfaces;
@@ -131,10 +130,9 @@ public class AccountService : IAccountService
 
         await UpdateAccountBalance(senderAccount, amount, false);
         await UpdateAccountBalance(receiverAccount, amount, true);
+        await CreateTransactionRecord(senderId, amount, transactionType, receiverId);
         
         await _unitOfWork.TransactionCommitAsync();
-
-        await CreateTransactionRecord(senderId, amount, transactionType, receiverId);
     }
     
     private async Task PerformTransactionAsync(Guid accountId, float amount, TransactionType transactionType)
@@ -151,8 +149,10 @@ public class AccountService : IAccountService
                 throw new InvalidOperationException("Insufficient funds");
 
             await _unitOfWork.BeginTransactionAsync();
+            
             await UpdateAccountBalance(account, newBalance,isCredit);
             await CreateTransactionRecord(accountId, amount, transactionType);
+            
             await _unitOfWork.TransactionCommitAsync();
         }
         finally
@@ -161,26 +161,6 @@ public class AccountService : IAccountService
         }
     }
 
-    // public async Task<Account> GetAccountOrThrow(Guid id)
-    // {
-    //     var account = await _accountRepository.GetByIdAsync(id);
-    //     
-    //     if (account == null)
-    //         throw new NotFoundException("Account not found");
-    //     
-    //     return account;
-    // }
-
-    public async Task<Account> GetAccountOrThrow(Expression<Func<Account, bool>> predicate)
-    {
-        var account = await _accountRepository.GetByIdAsync(predicate);
-
-        if (account == null)
-            throw new NotFoundException("Account not found or Insufficient funds!");
-
-        return account;
-    }
-    
     private async Task UpdateAccountBalance(Account account, float amount, bool isCredit)
     {
         account.Balance += isCredit ? amount : -amount;

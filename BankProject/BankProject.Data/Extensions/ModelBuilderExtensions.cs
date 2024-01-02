@@ -3,7 +3,7 @@ using BankProject.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace BankProject.Data.Context;
+namespace BankProject.Data.Extensions;
 
 public static class ModelBuilderExtensions
 {
@@ -63,5 +63,65 @@ public static class ModelBuilderExtensions
         };
 
         modelBuilder.Entity<IdentityRole>().HasData(roles);
+    }
+
+    public static void ApplyEnumConversions(this ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Account>(entity =>
+        {
+            entity.Property(e => e.AccountType)
+                .HasConversion(
+                    v => v.ToString(),  
+                    v => (AccountType)Enum.Parse(typeof(AccountType), v));
+        });
+
+        modelBuilder.Entity<Transaction>(entity =>
+        {
+            entity.Property(e => e.TransactionType)
+                .HasConversion(v => v.ToString(), 
+                    v => (TransactionType)Enum.Parse(typeof(TransactionType), v));
+        });
+        
+        modelBuilder.Entity<Loan>(entity =>
+        {
+            entity.Property(e => e.LoanType)
+                .HasConversion(v => v.ToString(), 
+                    v => (LoanType)Enum.Parse(typeof(LoanType), v));
+        });
+        
+        modelBuilder.Entity<LoanApplication>(entity =>
+        {
+            entity.Property(e => e.LoanType)
+                .HasConversion(v => v.ToString(), 
+                    v => (LoanType)Enum.Parse(typeof(LoanType), v));
+        });
+        
+        modelBuilder.Entity<LoanApplication>(entity =>
+        {
+            entity.Property(e => e.LoanApplicationStatus)
+                .HasConversion(v => v.ToString(), 
+                    v => (LoanApplicationStatus)Enum.Parse(typeof(LoanApplicationStatus), v));
+        });
+        
+        modelBuilder.Entity<Payment>(entity =>
+        {
+            entity.Property(e => e.TimePeriod)
+                .HasConversion(v => v.ToString(), 
+                    v => (TimePeriod)Enum.Parse(typeof(TimePeriod), v));
+        });
+        
+        modelBuilder.Entity<SupportTicket>(entity =>
+        {
+            entity.Property(e => e.TicketPriority)
+                .HasConversion(v => v.ToString(), 
+                    v => (TicketPriority)Enum.Parse(typeof(TicketPriority), v));
+        });
+        
+        modelBuilder.Entity<SupportTicket>(entity =>
+        {
+            entity.Property(e => e.TicketStatus)
+                .HasConversion(v => v.ToString(), 
+                    v => (TicketStatus)Enum.Parse(typeof(TicketStatus), v));
+        });
     }
 }

@@ -1,5 +1,5 @@
-﻿using BankProject.Core.Enums;
-using BankProject.Data.Entities;
+﻿using BankProject.Data.Entities;
+using BankProject.Data.Extensions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,49 +18,7 @@ public class BankDbContext : IdentityDbContext<User>
         
         modelBuilder.Seed();
 
-        modelBuilder.Entity<Account>(entity =>
-        {
-            entity.Property(e => e.AccountType)
-                .HasConversion(
-                    v => v.ToString(),  
-                    v => (AccountType)Enum.Parse(typeof(AccountType), v));
-        });
-
-        modelBuilder.Entity<Transaction>(entity =>
-        {
-            entity.Property(e => e.TransactionType)
-                .HasConversion(v => v.ToString(), 
-                    v => (TransactionType)Enum.Parse(typeof(TransactionType), v));
-        });
-        
-        modelBuilder.Entity<Loan>(entity =>
-        {
-            entity.Property(e => e.LoanType)
-                .HasConversion(v => v.ToString(), 
-                    v => (LoanType)Enum.Parse(typeof(LoanType), v));
-        });
-        
-        modelBuilder.Entity<LoanApplication>(entity =>
-        {
-            entity.Property(e => e.LoanType)
-                .HasConversion(v => v.ToString(), 
-                    v => (LoanType)Enum.Parse(typeof(LoanType), v));
-        });
-        
-        modelBuilder.Entity<LoanApplication>(entity =>
-        {
-            entity.Property(e => e.LoanApplicationStatus)
-                .HasConversion(v => v.ToString(), 
-                    v => (LoanApplicationStatus)Enum.Parse(typeof(LoanApplicationStatus), v));
-        });
-        
-        modelBuilder.Entity<Payment>(entity =>
-        {
-            entity.Property(e => e.TimePeriod)
-                .HasConversion(v => v.ToString(), 
-                    v => (TimePeriod)Enum.Parse(typeof(TimePeriod), v));
-        });
-        
+        modelBuilder.ApplyEnumConversions();
     }
 
     public DbSet<Account> Accounts { get; set; }
@@ -72,4 +30,6 @@ public class BankDbContext : IdentityDbContext<User>
     public DbSet<LoanApplication> LoanApplications { get; set; }
 
     public DbSet<Payment> Payments { get; set; }
+
+    public DbSet<SupportTicket> SupportTickets { get; set; }
 }
