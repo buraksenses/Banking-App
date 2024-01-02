@@ -6,7 +6,9 @@ using BankProject.Core.Constants;
 using BankProject.Core.Enums;
 using BankProject.Core.Exceptions;
 using BankProject.Data.Entities;
+using BankProject.Data.Repositories.Concretes;
 using BankProject.Data.Repositories.Interfaces;
+using BankProject.Data.Repositories.Interfaces.Base;
 using Microsoft.AspNetCore.Identity;
 
 namespace BankProject.Business.Services.Concretes;
@@ -18,18 +20,21 @@ public class LoanApplicationService : ILoanApplicationService
     private readonly ICreditScoreService _creditScoreService;
     private readonly UserManager<User> _userManager;
     private readonly ILoanService _loanService;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public LoanApplicationService(ILoanApplicationRepository applicationRepository,
+    public LoanApplicationService(
         IMapper mapper,
         ICreditScoreService creditScoreService,
         UserManager<User> userManager,
-        ILoanService loanService)
+        ILoanService loanService,
+        IUnitOfWork unitOfWork)
     {
-        _applicationRepository = applicationRepository;
+        _applicationRepository = unitOfWork.GetRepository<LoanApplicationRepository, LoanApplication, Guid>();
         _mapper = mapper;
         _creditScoreService = creditScoreService;
         _userManager = userManager;
         _loanService = loanService;
+        _unitOfWork = unitOfWork;
     }
     
     public async Task CreateLoanApplicationAsync(CreateLoanApplicationRequestDto requestDto)
@@ -44,6 +49,8 @@ public class LoanApplicationService : ILoanApplicationService
         var loanApplication = _mapper.Map<LoanApplication>(requestDto);
 
         await _applicationRepository.CreateAsync(loanApplication);
+
+        await _unitOfWork.CommitAsync();
     }
 
     public async Task<GetLoanApplicationRequestDto> GetLoanApplicationByIdAsync(Guid applicationId)
@@ -91,6 +98,8 @@ public class LoanApplicationService : ILoanApplicationService
 
         var loanDto = _mapper.Map<CreateLoanRequestDto>(loan);
 
+        await _unitOfWork.CommitAsync();
+
         return loanDto;
     }
 
@@ -101,6 +110,8 @@ public class LoanApplicationService : ILoanApplicationService
         await _applicationRepository.UpdateLoanApplicationStatusAsync(application, LoanApplicationStatus.Rejected);
 
         var applicationDto = _mapper.Map<GetLoanApplicationRequestDto>(application);
+
+        await _unitOfWork.CommitAsync();
 
         return applicationDto;
     }

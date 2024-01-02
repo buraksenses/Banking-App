@@ -90,11 +90,6 @@ public static class ApplicationServiceExtensions
 
         services.AddScoped<ISupportTicketRepository, SupportTicketRepository>();
         services.AddScoped<ISupportTicketService, SupportTicketService>();
-        
-        services.AddScoped(typeof(ICreateRepository<,>), typeof(CreateRepository<,>));
-        services.AddScoped(typeof(IDeleteRepository<,>), typeof(DeleteRepository<,>));
-        services.AddScoped(typeof(IUpdateRepository<,>), typeof(UpdateRepository<,>));
-        services.AddScoped(typeof(IReadRepository<,>), typeof(ReadRepository<,>));
 
         services.AddFluentValidation(fv => 
             fv.RegisterValidatorsFromAssemblyContaining<CreateAccountValidator>());

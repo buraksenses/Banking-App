@@ -1,6 +1,4 @@
-﻿using BankProject.Core.Enums;
-
-namespace BankProject.Business.DTOs.Loan;
+﻿namespace BankProject.Business.DTOs.Loan;
 
 public class CreateLoanApplicationRequestDto
 {

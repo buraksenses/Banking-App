@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using BankProject.Data.Context;
 using BankProject.Data.Entities.Base;
+using BankProject.Data.Repositories.Interfaces;
 using BankProject.Data.Repositories.Interfaces.Base;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -37,6 +38,7 @@ public class UnitOfWork : IUnitOfWork
         return newRepository;
     }
 
+
     public async Task BeginTransactionAsync()
     {
         _transaction = await _dbContext.Database.BeginTransactionAsync();
@@ -62,6 +64,10 @@ public class UnitOfWork : IUnitOfWork
             {
                 await _transaction.RollbackAsync();
                 throw;
+            }
+            finally
+            {
+                await _transaction.DisposeAsync();
             }
         }
     }

@@ -1,10 +1,8 @@
-﻿using BankProject.Core.Enums;
-
-namespace BankProject.Business.DTOs.Loan;
+﻿namespace BankProject.Business.DTOs.Loan;
 
 public class CreateLoanRequestDto
 {
-    public LoanType LoanType { get; set; }
+    public string LoanType { get; set; }
     
     public float LoanAmount { get; set; }
     

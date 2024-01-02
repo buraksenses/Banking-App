@@ -5,6 +5,7 @@ using BankProject.Business.Services.Interfaces;
 using BankProject.Core.Enums;
 using BankProject.Core.Exceptions;
 using BankProject.Data.Entities;
+using BankProject.Data.Repositories.Concretes;
 using BankProject.Data.Repositories.Interfaces;
 using BankProject.Data.Repositories.Interfaces.Base;
 using Microsoft.AspNetCore.Identity;
@@ -21,17 +22,18 @@ public class AccountService : IAccountService
     private readonly IUnitOfWork _unitOfWork;
     private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
 
-    public AccountService(IAccountRepository accountRepository,
-        ITransactionRepository transactionRepository,
+    public AccountService(
         UserManager<User> userManager,
         IMapper mapper,
         IUnitOfWork unitOfWork)
     {
-        _accountRepository = accountRepository;
-        _transactionRepository = transactionRepository;
+        _accountRepository = unitOfWork.GetRepository<AccountRepository, Account, Guid>();
+        _transactionRepository = unitOfWork.GetRepository<TransactionRepository, Transaction, Guid>();
         _userManager = userManager;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
+        
+        
     }
     
     public async Task<float> GetBalanceByAccountIdAsync(Guid id)
@@ -58,6 +60,8 @@ public class AccountService : IAccountService
             throw new NotFoundException("User not found!");
 
         await _accountRepository.CreateAsync(account);
+
+        await _unitOfWork.CommitAsync();
     }
 
     public async Task UpdateBalanceByAccountIdAsync(Guid id, float balance)
@@ -65,6 +69,8 @@ public class AccountService : IAccountService
         await _accountRepository.GetOrThrowAsync(id);
 
         await _accountRepository.UpdateBalanceByAccountIdAsync(id, balance);
+
+        await _unitOfWork.CommitAsync();
     }
 
     public async Task DepositAsync(Guid accountId, float amount)
@@ -112,6 +118,7 @@ public class AccountService : IAccountService
         try
         {
             await UpdateAccountBalance(account, amount, false);
+            await _unitOfWork.CommitAsync();
         }
         finally
         {

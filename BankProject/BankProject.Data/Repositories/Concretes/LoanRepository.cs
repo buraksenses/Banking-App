@@ -1,24 +1,14 @@
-﻿using BankProject.Data.Entities;
+﻿using BankProject.Data.Context;
+using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Concretes.Base;
 using BankProject.Data.Repositories.Interfaces;
 using BankProject.Data.Repositories.Interfaces.Base;
 
 namespace BankProject.Data.Repositories.Concretes;
 
-public class LoanRepository : ILoanRepository
+public class LoanRepository : GenericRepository<Loan,Guid>,ILoanRepository
 {
-    private readonly CreateRepository<Loan, Guid> _createRepository;
-    private readonly IUnitOfWork _unitOfWork;
-
-    public LoanRepository(IUnitOfWork unitOfWork)
+    public LoanRepository(BankDbContext dbContext) : base(dbContext)
     {
-        _createRepository = unitOfWork.GetRepository<CreateRepository<Loan, Guid>, Loan, Guid>();
-        _unitOfWork = unitOfWork;
-    }
-
-    public async Task CreateAsync(Loan entity)
-    {
-        await _createRepository.CreateAsync(entity);
-        await _unitOfWork.CommitAsync();
     }
 }

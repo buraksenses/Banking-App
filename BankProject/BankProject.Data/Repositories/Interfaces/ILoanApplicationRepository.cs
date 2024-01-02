@@ -4,7 +4,7 @@ using BankProject.Data.Repositories.Interfaces.Base;
 
 namespace BankProject.Data.Repositories.Interfaces;
 
-public interface ILoanApplicationRepository : ICreateRepository<LoanApplication,Guid>,IReadRepository<LoanApplication,Guid>
+public interface ILoanApplicationRepository : IGenericRepository<LoanApplication,Guid>
 {
     Task UpdateLoanApplicationStatusAsync(LoanApplication application, LoanApplicationStatus status);
 }

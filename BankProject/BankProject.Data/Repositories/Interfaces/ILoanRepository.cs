@@ -3,6 +3,6 @@ using BankProject.Data.Repositories.Interfaces.Base;
 
 namespace BankProject.Data.Repositories.Interfaces;
 
-public interface ILoanRepository : ICreateRepository<Loan,Guid>
+public interface ILoanRepository : IGenericRepository<Loan,Guid>
 {
 }

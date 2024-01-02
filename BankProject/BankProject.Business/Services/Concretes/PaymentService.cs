@@ -4,7 +4,9 @@ using BankProject.Business.Helpers;
 using BankProject.Business.Services.Interfaces;
 using BankProject.Core.Enums;
 using BankProject.Data.Entities;
+using BankProject.Data.Repositories.Concretes;
 using BankProject.Data.Repositories.Interfaces;
+using BankProject.Data.Repositories.Interfaces.Base;
 using Hangfire;
 
 namespace BankProject.Business.Services.Concretes;
@@ -15,17 +17,19 @@ public class PaymentService : IPaymentService
     private readonly IMapper _mapper;
     private readonly IAccountRepository _accountRepository;
     private readonly IAccountService _accountService;
+    private readonly IUnitOfWork _unitOfWork;
 
 
-    public PaymentService(IPaymentRepository paymentRepository,
+    public PaymentService(
         IMapper mapper,
-        IAccountRepository accountRepository,
-        IAccountService accountService)
+        IAccountService accountService,
+        IUnitOfWork unitOfWork)
     {
-        _paymentRepository = paymentRepository;
+        _paymentRepository = unitOfWork.GetRepository<PaymentRepository, Payment, Guid>();
         _mapper = mapper;
-        _accountRepository = accountRepository;
+        _accountRepository = unitOfWork.GetRepository<AccountRepository, Account, Guid>();
         _accountService = accountService;
+        _unitOfWork = unitOfWork;
     }
     
     public async Task<GetPaymentRequestDto> GetPaymentByIdAsync(Guid id)
@@ -41,9 +45,9 @@ public class PaymentService : IPaymentService
     {
         var payments = await _paymentRepository.GetAllAsync();
 
-        var paymentDtos = _mapper.Map<List<GetPaymentRequestDto>>(payments);
+        var paymentListDto = _mapper.Map<List<GetPaymentRequestDto>>(payments);
 
-        return paymentDtos;
+        return paymentListDto;
     }
 
     public async Task<CreatePaymentRequestDto> CreatePaymentAsync(CreatePaymentRequestDto requestDto)
@@ -68,6 +72,7 @@ public class PaymentService : IPaymentService
             service => service.MakePayment(payment,payment.Amount),
             cronExpression);
 
+        await _unitOfWork.CommitAsync();
         
         return requestDto;
     }
@@ -96,6 +101,8 @@ public class PaymentService : IPaymentService
 
         await _paymentRepository.UpdateAsync(id, existingPayment);
 
+        await _unitOfWork.CommitAsync();
+
         return requestDto;
     }
 
@@ -104,6 +111,8 @@ public class PaymentService : IPaymentService
         await _paymentRepository.DeleteAsync(id);
         
         RecurringJob.RemoveIfExists($"payment-job-{id}");
+
+        await _unitOfWork.CommitAsync();
     }
 
     public async Task MakePayment(Payment payment, float amount)
@@ -111,8 +120,11 @@ public class PaymentService : IPaymentService
         payment.LastPaymentDate = DateTime.UtcNow;
         payment.NextPaymentDate =
             CalculateNextPaymentDate(payment.LastPaymentDate, payment.TimePeriod, payment.PaymentFrequency);
+        
+        await _unitOfWork.BeginTransactionAsync();
         await _accountService.MakePayment(payment.AccountId, amount);
         await _paymentRepository.UpdateAsync(payment.Id, payment);
+        await _unitOfWork.TransactionCommitAsync();
     }
     
     private static DateTime CalculateNextPaymentDate(DateTime lastPaymentDate, TimePeriod timePeriod, int paymentFrequency)

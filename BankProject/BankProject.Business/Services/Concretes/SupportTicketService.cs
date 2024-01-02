@@ -5,7 +5,9 @@ using BankProject.Business.Services.Interfaces;
 using BankProject.Core.Enums;
 using BankProject.Core.Exceptions;
 using BankProject.Data.Entities;
+using BankProject.Data.Repositories.Concretes;
 using BankProject.Data.Repositories.Interfaces;
+using BankProject.Data.Repositories.Interfaces.Base;
 using Microsoft.AspNetCore.Identity;
 
 namespace BankProject.Business.Services.Concretes;
@@ -15,14 +17,17 @@ public class SupportTicketService : ISupportTicketService
     private readonly ISupportTicketRepository _supportTicketRepository;
     private readonly IMapper _mapper;
     private readonly UserManager<User> _userManager;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public SupportTicketService(ISupportTicketRepository supportTicketRepository,
+    public SupportTicketService(
         IMapper mapper,
-        UserManager<User> userManager)
+        UserManager<User> userManager,
+        IUnitOfWork unitOfWork)
     {
-        _supportTicketRepository = supportTicketRepository;
+        _supportTicketRepository = unitOfWork.GetRepository<SupportTicketRepository, SupportTicket, Guid>();
         _mapper = mapper;
         _userManager = userManager;
+        _unitOfWork = unitOfWork;
     }
     
     public async Task<GetSupportTicketRequestDto> GetByIdAsync(Guid id)
@@ -63,6 +68,8 @@ public class SupportTicketService : ISupportTicketService
 
         await _supportTicketRepository.CreateAsync(ticket);
 
+        await _unitOfWork.CommitAsync();
+
         return requestDto;
     }
 
@@ -81,6 +88,8 @@ public class SupportTicketService : ISupportTicketService
 
         var ticketDto = _mapper.Map<GetSupportTicketRequestDto>(ticket);
 
+        await _unitOfWork.CommitAsync();
+
         return ticketDto;
     }
 
@@ -98,6 +107,8 @@ public class SupportTicketService : ISupportTicketService
         await _supportTicketRepository.UpdateAsync(id, ticket);
 
         var ticketDto = _mapper.Map<GetSupportTicketRequestDto>(ticket);
+
+        await _unitOfWork.CommitAsync();
 
         return ticketDto;
     }

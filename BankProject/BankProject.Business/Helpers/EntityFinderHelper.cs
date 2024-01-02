@@ -7,7 +7,7 @@ namespace BankProject.Business.Helpers;
 
 public static class EntityFinderHelper
 {
-    public static async Task<TEntity> GetOrThrowAsync<TEntity,TKey>(this IReadRepository<TEntity,TKey> repository, TKey id) where TEntity : class, IEntity<TKey>
+    public static async Task<TEntity> GetOrThrowAsync<TEntity,TKey>(this IGenericRepository<TEntity,TKey> repository, TKey id) where TEntity : class, IEntity<TKey>
     {
         var entity = await repository.GetByIdAsync(id);
         if (entity == null)
@@ -18,7 +18,7 @@ public static class EntityFinderHelper
         return entity;
     }
 
-    public static async Task<TEntity> GetOrThrowAsync<TEntity,TKey>(this IReadRepository<TEntity,TKey> repository, Expression<Func<TEntity, bool>> predicate) where TEntity : class, IEntity<TKey>
+    public static async Task<TEntity> GetOrThrowAsync<TEntity,TKey>(this IGenericRepository<TEntity,TKey> repository, Expression<Func<TEntity, bool>> predicate) where TEntity : class, IEntity<TKey>
     {
         var entity = await repository.GetByIdAsync(predicate);
         if (entity == null)
