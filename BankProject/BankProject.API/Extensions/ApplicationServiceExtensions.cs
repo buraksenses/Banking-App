@@ -87,6 +87,9 @@ public static class ApplicationServiceExtensions
 
         services.AddScoped<IPaymentService, PaymentService>();
         services.AddScoped<IPaymentRepository, PaymentRepository>();
+
+        services.AddScoped<ISupportTicketRepository, SupportTicketRepository>();
+        services.AddScoped<ISupportTicketService, SupportTicketService>();
         
         services.AddScoped(typeof(ICreateRepository<,>), typeof(CreateRepository<,>));
         services.AddScoped(typeof(IDeleteRepository<,>), typeof(DeleteRepository<,>));

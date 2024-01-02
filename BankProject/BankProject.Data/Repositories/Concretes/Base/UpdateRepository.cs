@@ -16,7 +16,7 @@ public class UpdateRepository<TEntity, TKey> : GenericRepository<TEntity,TKey> ,
     {
         var current = await _entities.FindAsync(id);
 
-        if(entity is null)  throw new NotFoundException("Entity not found");
+        if(current is null)  throw new NotFoundException("Entity not found");
 
         _dbContext.Entry(current).CurrentValues.SetValues(entity);
     }

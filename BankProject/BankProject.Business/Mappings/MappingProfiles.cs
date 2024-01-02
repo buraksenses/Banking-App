@@ -2,6 +2,7 @@
 using BankProject.Business.DTOs.Account;
 using BankProject.Business.DTOs.Loan;
 using BankProject.Business.DTOs.Payment;
+using BankProject.Business.DTOs.SupportTicket;
 using BankProject.Business.DTOs.User;
 using BankProject.Data.Entities;
 
@@ -49,6 +50,14 @@ public class MappingProfiles : Profile
         CreateMap<Payment, GetPaymentRequestDto>().ReverseMap();
 
         CreateMap<Payment, UpdatePaymentRequestDto>().ReverseMap();
+
+        #endregion
+
+        #region SupportTicket Mappings
+
+        CreateMap<SupportTicket, GetSupportTicketRequestDto>().ReverseMap();
+
+        CreateMap<SupportTicket, CreateSupportTicketRequestDto>().ReverseMap();
 
         #endregion
     }
