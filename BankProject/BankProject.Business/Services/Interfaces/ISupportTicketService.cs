@@ -1,5 +1,4 @@
 ﻿using BankProject.Business.DTOs.SupportTicket;
-using BankProject.Core.Enums;
 
 namespace BankProject.Business.Services.Interfaces;
 
@@ -9,11 +8,11 @@ public interface ISupportTicketService
 
     Task<List<GetSupportTicketRequestDto>> GetAllAsync();
 
-    Task<List<GetSupportTicketRequestDto>> GetAllSupportTicketsOfUserAsync(string userId);
+    Task<List<GetSupportTicketRequestDto>> GetAllByUserIdAsync(string userId);
 
     Task<CreateSupportTicketRequestDto> CreateAsync(CreateSupportTicketRequestDto requestDto);
 
-    Task<GetSupportTicketRequestDto> UpdateTicketStatusByIdAsync(Guid id, TicketStatus newStatus);
+    Task<GetSupportTicketRequestDto> UpdateTicketStatusByIdAsync(Guid id, string newStatus);
 
-    Task<GetSupportTicketRequestDto> UpdateTicketPriorityByIdAsync(Guid id, TicketPriority newPriority);
+    Task<GetSupportTicketRequestDto> UpdateTicketPriorityByIdAsync(Guid id, string newPriority);
 }

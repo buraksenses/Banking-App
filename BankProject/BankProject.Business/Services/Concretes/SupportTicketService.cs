@@ -3,8 +3,10 @@ using BankProject.Business.DTOs.SupportTicket;
 using BankProject.Business.Helpers;
 using BankProject.Business.Services.Interfaces;
 using BankProject.Core.Enums;
+using BankProject.Core.Exceptions;
 using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace BankProject.Business.Services.Concretes;
 
@@ -12,12 +14,15 @@ public class SupportTicketService : ISupportTicketService
 {
     private readonly ISupportTicketRepository _supportTicketRepository;
     private readonly IMapper _mapper;
+    private readonly UserManager<User> _userManager;
 
     public SupportTicketService(ISupportTicketRepository supportTicketRepository,
-        IMapper mapper)
+        IMapper mapper,
+        UserManager<User> userManager)
     {
         _supportTicketRepository = supportTicketRepository;
         _mapper = mapper;
+        _userManager = userManager;
     }
     
     public async Task<GetSupportTicketRequestDto> GetByIdAsync(Guid id)
@@ -38,7 +43,7 @@ public class SupportTicketService : ISupportTicketService
         return ticketListDto;
     }
 
-    public async Task<List<GetSupportTicketRequestDto>> GetAllSupportTicketsOfUserAsync(string userId)
+    public async Task<List<GetSupportTicketRequestDto>> GetAllByUserIdAsync(string userId)
     {
         var ticketList = await _supportTicketRepository.GetAllAsync(ticket => ticket.UserId == userId);
 
@@ -49,6 +54,11 @@ public class SupportTicketService : ISupportTicketService
 
     public async Task<CreateSupportTicketRequestDto> CreateAsync(CreateSupportTicketRequestDto requestDto)
     {
+        var user = await _userManager.FindByIdAsync(requestDto.UserId);
+
+        if (user == null)
+            throw new NotFoundException("User not found");
+        
         var ticket = _mapper.Map<SupportTicket>(requestDto);
 
         await _supportTicketRepository.CreateAsync(ticket);
@@ -56,11 +66,16 @@ public class SupportTicketService : ISupportTicketService
         return requestDto;
     }
 
-    public async Task<GetSupportTicketRequestDto> UpdateTicketStatusByIdAsync(Guid id, TicketStatus newStatus)
+    public async Task<GetSupportTicketRequestDto> UpdateTicketStatusByIdAsync(Guid id, string newStatus)
     {
+        if (!Enum.TryParse(newStatus, true, out TicketStatus ticketStatus))
+        {
+            throw new ArgumentException("Invalid account type.");
+        }
+        
         var ticket = await _supportTicketRepository.GetOrThrowAsync(id);
 
-        ticket.TicketStatus = newStatus;
+        ticket.TicketStatus = ticketStatus;
 
         await _supportTicketRepository.UpdateAsync(id, ticket);
 
@@ -69,11 +84,16 @@ public class SupportTicketService : ISupportTicketService
         return ticketDto;
     }
 
-    public async Task<GetSupportTicketRequestDto> UpdateTicketPriorityByIdAsync(Guid id, TicketPriority newPriority)
+    public async Task<GetSupportTicketRequestDto> UpdateTicketPriorityByIdAsync(Guid id, string newPriority)
     {
+        if (!Enum.TryParse(newPriority, true, out TicketPriority ticketPriority))
+        {
+            throw new ArgumentException("Invalid account type.");
+        }
+        
         var ticket = await _supportTicketRepository.GetOrThrowAsync(id);
 
-        ticket.TicketPriority = newPriority;
+        ticket.TicketPriority = ticketPriority;
         
         await _supportTicketRepository.UpdateAsync(id, ticket);
 
