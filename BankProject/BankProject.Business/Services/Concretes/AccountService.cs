@@ -20,20 +20,20 @@ public class AccountService : IAccountService
     private readonly UserManager<User> _userManager;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
+    private readonly SemaphoreSlim _semaphoreSlim;
 
     public AccountService(
         UserManager<User> userManager,
         IMapper mapper,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork, 
+        SemaphoreSlim semaphoreSlim)
     {
         _accountRepository = unitOfWork.GetRepository<AccountRepository, Account, Guid>();
         _transactionRepository = unitOfWork.GetRepository<TransactionRepository, Transaction, Guid>();
         _userManager = userManager;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
-        
-        
+        _semaphoreSlim = semaphoreSlim;
     }
     
     public async Task<float> GetBalanceByAccountIdAsync(Guid id)

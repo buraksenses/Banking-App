@@ -66,6 +66,8 @@ public static class ApplicationServiceExtensions
 
         services.AddAutoMapper(typeof(MappingProfiles));
 
+        services.AddSingleton(new SemaphoreSlim(1, 1));
+        
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IAccountService, AccountService>();
 
