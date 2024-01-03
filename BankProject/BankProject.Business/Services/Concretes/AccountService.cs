@@ -85,29 +85,12 @@ public class AccountService : IAccountService
 
     public async Task InternalTransferAsync(Guid senderId, Guid receiverId, float amount)
     {
-        await _semaphoreSlim.WaitAsync();
-        try
-        {
-            await UpdateAccountsAndCreateTransferTransaction(senderId, receiverId, amount, TransactionType.InternalTransfer);
-        }
-        finally
-        {
-            _semaphoreSlim.Release();
-        }
-        
+        await UpdateAccountsAndCreateTransferTransaction(senderId, receiverId, amount, TransactionType.InternalTransfer);
     }
 
     public async Task ExternalTransferAsync(Guid senderId, Guid receiverId, float amount)
     {
-        await _semaphoreSlim.WaitAsync();
-        try
-        {
-            await UpdateAccountsAndCreateTransferTransaction(senderId, receiverId, amount, TransactionType.ExternalTransfer);
-        }
-        finally
-        {
-            _semaphoreSlim.Release();
-        }
+        await UpdateAccountsAndCreateTransferTransaction(senderId, receiverId, amount, TransactionType.ExternalTransfer);
     }
 
     public async Task MakePayment(Guid id,float amount)
@@ -132,34 +115,41 @@ public class AccountService : IAccountService
         var senderAccount = await _accountRepository.GetOrThrowAsync(account => account.Id == senderId && account.Balance > amount);
 
         var receiverAccount = await _accountRepository.GetOrThrowAsync(senderId);
-
-        await _unitOfWork.BeginTransactionAsync();
-
-        await UpdateAccountBalance(senderAccount, amount, false);
-        await UpdateAccountBalance(receiverAccount, amount, true);
-        await CreateTransactionRecord(senderId, amount, transactionType, receiverId);
         
-        await _unitOfWork.TransactionCommitAsync();
+        await _semaphoreSlim.WaitAsync();
+        try
+        {
+            await _unitOfWork.BeginTransactionAsync();
+
+            await UpdateAccountBalance(senderAccount, amount, false);
+            await UpdateAccountBalance(receiverAccount, amount, true);
+            await CreateTransactionRecord(senderId, amount, transactionType, receiverId);
+        
+            await _unitOfWork.TransactionCommitAsync();
+        }
+        finally
+        {
+            _semaphoreSlim.Release();
+        }
+       
     }
     
     private async Task PerformTransactionAsync(Guid accountId, float amount, TransactionType transactionType)
     {
+        var account = await _accountRepository.GetOrThrowAsync(accountId);
+    
+        var isCredit = transactionType == TransactionType.Deposit;
+        var newBalance = isCredit ? account.Balance + amount : account.Balance - amount;
+
+        if (newBalance < 0)
+            throw new InvalidOperationException("Insufficient funds");
+        
         await _semaphoreSlim.WaitAsync();
         try
         {
-            var account = await _accountRepository.GetOrThrowAsync(accountId);
-            
-            var isCredit = transactionType == TransactionType.Deposit;
-            var newBalance = isCredit ? account.Balance + amount : account.Balance - amount;
-
-            if (newBalance < 0)
-                throw new InvalidOperationException("Insufficient funds");
-
             await _unitOfWork.BeginTransactionAsync();
-            
-            await UpdateAccountBalance(account, newBalance,isCredit);
+            await UpdateAccountBalance(account, newBalance, isCredit);
             await CreateTransactionRecord(accountId, amount, transactionType);
-            
             await _unitOfWork.TransactionCommitAsync();
         }
         finally
