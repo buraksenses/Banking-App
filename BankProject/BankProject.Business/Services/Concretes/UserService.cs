@@ -41,6 +41,6 @@ public class UserService : IUserService
             user.DailyTransferAmount = 0;
         }
 
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 }

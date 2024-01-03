@@ -9,5 +9,9 @@ public interface IUnitOfWork
         where TRepository : GenericRepository<TEntity, TKey>
         where TEntity : class, IEntity<TKey>;
 
-    Task CommitAsync();
+    Task SaveChangesAsync();
+
+    Task BeginTransactionAsync();
+
+    Task TransactionCommitAsync();
 }

@@ -72,7 +72,7 @@ public class PaymentService : IPaymentService
             service => service.MakePayment(payment,payment.Amount),
             cronExpression);
 
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
         
         return requestDto;
     }
@@ -101,7 +101,7 @@ public class PaymentService : IPaymentService
 
         await _paymentRepository.UpdateAsync(id, existingPayment);
 
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return requestDto;
     }
@@ -112,7 +112,7 @@ public class PaymentService : IPaymentService
         
         RecurringJob.RemoveIfExists($"payment-job-{id}");
 
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task MakePayment(Payment payment, float amount)
@@ -123,7 +123,7 @@ public class PaymentService : IPaymentService
 
         await _accountService.MakePayment(payment.AccountId, amount);
         await _paymentRepository.UpdateAsync(payment.Id, payment);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
     
     private static DateTime CalculateNextPaymentDate(DateTime lastPaymentDate, TimePeriod timePeriod, int paymentFrequency)

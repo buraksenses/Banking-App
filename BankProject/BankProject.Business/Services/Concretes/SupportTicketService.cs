@@ -68,7 +68,7 @@ public class SupportTicketService : ISupportTicketService
 
         await _supportTicketRepository.CreateAsync(ticket);
 
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return requestDto;
     }
@@ -88,7 +88,7 @@ public class SupportTicketService : ISupportTicketService
 
         var ticketDto = _mapper.Map<GetSupportTicketRequestDto>(ticket);
 
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return ticketDto;
     }
@@ -108,7 +108,7 @@ public class SupportTicketService : ISupportTicketService
 
         var ticketDto = _mapper.Map<GetSupportTicketRequestDto>(ticket);
 
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return ticketDto;
     }

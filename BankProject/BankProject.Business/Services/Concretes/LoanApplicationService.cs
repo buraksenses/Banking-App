@@ -50,7 +50,7 @@ public class LoanApplicationService : ILoanApplicationService
 
         await _applicationRepository.CreateAsync(loanApplication);
 
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task<GetLoanApplicationRequestDto> GetLoanApplicationByIdAsync(Guid applicationId)
@@ -98,7 +98,7 @@ public class LoanApplicationService : ILoanApplicationService
 
         var loanDto = _mapper.Map<CreateLoanRequestDto>(loan);
 
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return loanDto;
     }
@@ -111,7 +111,7 @@ public class LoanApplicationService : ILoanApplicationService
 
         var applicationDto = _mapper.Map<GetLoanApplicationRequestDto>(application);
 
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return applicationDto;
     }

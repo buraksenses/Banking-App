@@ -61,7 +61,7 @@ public class AccountService : IAccountService
 
         await _accountRepository.CreateAsync(account);
 
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task UpdateBalanceByAccountIdAsync(Guid id, float balance)
@@ -70,7 +70,7 @@ public class AccountService : IAccountService
 
         await _accountRepository.UpdateBalanceByAccountIdAsync(account, balance);
 
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task DepositAsync(Guid accountId, float amount)
@@ -100,8 +100,9 @@ public class AccountService : IAccountService
         await _semaphoreSlim.WaitAsync();
         try
         {
+            await _unitOfWork.BeginTransactionAsync();
             await _accountRepository.UpdateBalanceByAccountIdAsync(account, account.Balance - amount);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.TransactionCommitAsync();
         }
         finally
         {
@@ -115,30 +116,28 @@ public class AccountService : IAccountService
         var senderAccount = await _accountRepository.GetOrThrowAsync(account => account.Id == senderId && account.Balance > amount);
 
         var user = await _userManager.FindByIdAsync(senderAccount.UserId);
-
         if (user == null)
             throw new NotFoundException("Sender user not found!");
+        
         if (user.DailyTransferLimit < user.DailyTransferAmount + (decimal)amount)
             throw new InvalidOperationException("Operation exceeds your daily transfer limit!");
         
         var receiverAccount = await _accountRepository.GetOrThrowAsync(receiverId);
-
         
         await _semaphoreSlim.WaitAsync();
         try
         {
+            await _unitOfWork.BeginTransactionAsync();
             await _accountRepository.UpdateBalanceByAccountIdAsync(senderAccount, senderAccount.Balance - amount);
             await _accountRepository.UpdateBalanceByAccountIdAsync(receiverAccount, receiverAccount.Balance + amount);
             await CreateTransactionRecord(senderId, amount, transactionType, receiverId);
             user.DailyTransferAmount += (decimal)amount;
-
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.TransactionCommitAsync();
         }
         finally
         {
             _semaphoreSlim.Release();
         }
-       
     }
     
     private async Task PerformTransactionAsync(Guid accountId, float amount, TransactionType transactionType)
@@ -154,9 +153,10 @@ public class AccountService : IAccountService
         await _semaphoreSlim.WaitAsync();
         try
         {
+            await _unitOfWork.BeginTransactionAsync();
             await _accountRepository.UpdateBalanceByAccountIdAsync(account, newBalance);
             await CreateTransactionRecord(accountId, amount, transactionType);
-            await _unitOfWork.CommitAsync();
+            await _unitOfWork.TransactionCommitAsync();
         }
         finally
         {
