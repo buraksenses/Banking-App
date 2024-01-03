@@ -26,5 +26,7 @@ public class CreateUserRequestDto
     public string EmploymentPosition { get; set; }
     
     public string PhoneNumber { get; set; }
+
+    public float DailyTransferLimit { get; set; }
     public ICollection<string> Roles { get; set; }
 }

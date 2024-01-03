@@ -24,6 +24,10 @@ public class User : IdentityUser
     
     public string PhoneNumber { get; set; }
 
+    public decimal DailyTransferLimit { get; set; }
+
+    public decimal DailyTransferAmount { get; set; }
+
     public ICollection<Loan> Loans { get; set; }
 
     public User()

@@ -11,7 +11,6 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly BankDbContext _dbContext;
     private readonly ConcurrentDictionary<string, object> _repositories;
-    private IDbContextTransaction _transaction;
 
     public UnitOfWork(BankDbContext dbContext)
     {
@@ -38,37 +37,8 @@ public class UnitOfWork : IUnitOfWork
         return newRepository;
     }
 
-
-    public async Task BeginTransactionAsync()
-    {
-        _transaction = await _dbContext.Database.BeginTransactionAsync();
-    }
-    
     public async Task CommitAsync()
     {
         await _dbContext.SaveChangesAsync();
-    }
-
-    public async Task TransactionCommitAsync()
-    {
-        if (_transaction == null)
-            throw new InvalidOperationException("Transaction has not been started.");
-
-        await using (_transaction)
-        {
-            try
-            {
-                await _transaction.CommitAsync();
-            }
-            catch (Exception e)
-            {
-                await _transaction.RollbackAsync();
-                throw;
-            }
-            finally
-            {
-                await _transaction.DisposeAsync();
-            }
-        }
     }
 }

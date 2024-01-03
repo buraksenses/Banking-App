@@ -120,11 +120,10 @@ public class PaymentService : IPaymentService
         payment.LastPaymentDate = DateTime.UtcNow;
         payment.NextPaymentDate =
             CalculateNextPaymentDate(payment.LastPaymentDate, payment.TimePeriod, payment.PaymentFrequency);
-        
-        await _unitOfWork.BeginTransactionAsync();
+
         await _accountService.MakePayment(payment.AccountId, amount);
         await _paymentRepository.UpdateAsync(payment.Id, payment);
-        await _unitOfWork.TransactionCommitAsync();
+        await _unitOfWork.CommitAsync();
     }
     
     private static DateTime CalculateNextPaymentDate(DateTime lastPaymentDate, TimePeriod timePeriod, int paymentFrequency)

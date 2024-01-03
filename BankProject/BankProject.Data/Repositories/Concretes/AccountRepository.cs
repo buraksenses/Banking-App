@@ -11,13 +11,10 @@ public class AccountRepository : GenericRepository<Account,Guid>, IAccountReposi
     {
     }
     
-    public async Task<Account?> UpdateBalanceByAccountIdAsync(Guid id, float balance)
+    public async Task<Account?> UpdateBalanceByAccountIdAsync(Account account, float balance)
     {
-        var account = await GetByIdAsync(id);
-        if (account == null)
-            return null;
-        
         account.Balance = balance;
+        await UpdateAsync(account.Id, account);
 
         return account;
     }

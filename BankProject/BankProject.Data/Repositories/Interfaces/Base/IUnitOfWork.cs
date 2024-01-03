@@ -10,8 +10,4 @@ public interface IUnitOfWork
         where TEntity : class, IEntity<TKey>;
 
     Task CommitAsync();
-
-    Task TransactionCommitAsync();
-
-    Task BeginTransactionAsync();
 }

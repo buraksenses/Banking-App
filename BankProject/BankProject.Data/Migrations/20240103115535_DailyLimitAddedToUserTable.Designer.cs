@@ -4,6 +4,7 @@ using BankProject.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankProject.Data.Migrations
 {
     [DbContext(typeof(BankDbContext))]
-    partial class BankDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240103115535_DailyLimitAddedToUserTable")]
+    partial class DailyLimitAddedToUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -243,11 +246,8 @@ namespace BankProject.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("DailyTransferAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("DailyTransferLimit")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<float>("DailyTransferLimit")
+                        .HasColumnType("real");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
