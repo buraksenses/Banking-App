@@ -23,7 +23,7 @@ public class BankDbContext : IdentityDbContext<User>
 
     public DbSet<Account> Accounts { get; set; }
     
-    public DbSet<Transaction> Transactions { get; set; }
+    public DbSet<TransactionRecord> Transactions { get; set; }
     
     public DbSet<Loan> Loans { get; set; }
 

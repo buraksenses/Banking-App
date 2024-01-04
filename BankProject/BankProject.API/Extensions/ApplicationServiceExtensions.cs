@@ -71,7 +71,7 @@ public static class ApplicationServiceExtensions
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IAccountService, AccountService>();
 
-        services.AddScoped<ITransactionRepository, TransactionRepository>();
+        services.AddScoped<ITransactionRecordRepository, TransactionRecordRecordRepository>();
 
         services.AddScoped<ITokenRepository, TokenRepository>();
 

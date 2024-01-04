@@ -75,7 +75,7 @@ public static class ModelBuilderExtensions
                     v => (AccountType)Enum.Parse(typeof(AccountType), v));
         });
 
-        modelBuilder.Entity<Transaction>(entity =>
+        modelBuilder.Entity<TransactionRecord>(entity =>
         {
             entity.Property(e => e.TransactionType)
                 .HasConversion(v => v.ToString(), 

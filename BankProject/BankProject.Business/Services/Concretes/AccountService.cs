@@ -9,7 +9,6 @@ using BankProject.Data.Repositories.Concretes;
 using BankProject.Data.Repositories.Interfaces;
 using BankProject.Data.Repositories.Interfaces.Base;
 using Microsoft.AspNetCore.Identity;
-using Transaction = BankProject.Data.Entities.Transaction;
 
 namespace BankProject.Business.Services.Concretes;
 
@@ -22,7 +21,7 @@ public class AccountService : IAccountService
     private const decimal LimitPerDepositAndWithdraw = 20000;
 
     private readonly IAccountRepository _accountRepository;
-    private readonly ITransactionRepository _transactionRepository;
+    private readonly ITransactionRecordRepository _transactionRecordRepository;
     private readonly ILoanRepository _loanRepository;
     private readonly UserManager<User> _userManager;
     private readonly IMapper _mapper;
@@ -36,7 +35,7 @@ public class AccountService : IAccountService
         SemaphoreSlim semaphoreSlim)
     {
         _accountRepository = unitOfWork.GetRepository<AccountRepository, Account, Guid>();
-        _transactionRepository = unitOfWork.GetRepository<TransactionRepository, Transaction, Guid>();
+        _transactionRecordRepository = unitOfWork.GetRepository<TransactionRecordRecordRepository, TransactionRecord, Guid>();
         _loanRepository = unitOfWork.GetRepository<LoanRepository, Loan, Guid>();
         _userManager = userManager;
         _mapper = mapper;
@@ -235,13 +234,13 @@ public class AccountService : IAccountService
 
     private async Task CreateTransactionRecord(Guid accountId, float amount, TransactionType transactionType, Guid? receiverAccountId = null)
     {
-        var transactionRecord = new Transaction
+        var transactionRecord = new TransactionRecord
         {
             Amount = amount,
             TransactionType = transactionType,
             AccountId = accountId,
             ReceiverAccountId = receiverAccountId
         };
-        await _transactionRepository.CreateAsync(transactionRecord);
+        await _transactionRecordRepository.CreateAsync(transactionRecord);
     }
 }

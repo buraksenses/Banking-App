@@ -3,7 +3,7 @@ using BankProject.Data.Entities.Base;
 
 namespace BankProject.Data.Entities;
 
-public class Transaction : IEntity<Guid>
+public class TransactionRecord : IEntity<Guid>
 {
     public Guid Id { get; set; }
 
