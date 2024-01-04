@@ -93,6 +93,9 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ISupportTicketRepository, SupportTicketRepository>();
         services.AddScoped<ISupportTicketService, SupportTicketService>();
 
+        services.AddScoped<ITransactionApplicationRepository, TransactionApplicationRepository>();
+        services.AddScoped<ITransactionApplicationService, TransactionApplicationService>();
+
         services.AddFluentValidation(fv => 
             fv.RegisterValidatorsFromAssemblyContaining<CreateAccountValidator>());
         

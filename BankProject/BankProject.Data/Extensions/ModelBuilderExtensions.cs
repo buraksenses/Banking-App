@@ -123,5 +123,19 @@ public static class ModelBuilderExtensions
                 .HasConversion(v => v.ToString(), 
                     v => (TicketStatus)Enum.Parse(typeof(TicketStatus), v));
         });
+        
+        modelBuilder.Entity<TransactionApplication>(entity =>
+        {
+            entity.Property(e => e.Status)
+                .HasConversion(v => v.ToString(), 
+                    v => (TransactionApplicationStatus)Enum.Parse(typeof(TransactionApplicationStatus), v));
+        });
+        
+        modelBuilder.Entity<TransactionApplication>(entity =>
+        {
+            entity.Property(e => e.TransactionType)
+                .HasConversion(v => v.ToString(), 
+                    v => (TransactionType)Enum.Parse(typeof(TransactionType), v));
+        });
     }
 }

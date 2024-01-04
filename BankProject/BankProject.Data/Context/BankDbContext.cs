@@ -32,4 +32,6 @@ public class BankDbContext : IdentityDbContext<User>
     public DbSet<Payment> Payments { get; set; }
 
     public DbSet<SupportTicket> SupportTickets { get; set; }
+
+    public DbSet<TransactionApplication> TransactionApplications { get; set; }
 }

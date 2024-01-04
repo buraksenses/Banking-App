@@ -23,6 +23,7 @@ public class AccountService : IAccountService
     private readonly IAccountRepository _accountRepository;
     private readonly ITransactionRecordRepository _transactionRecordRepository;
     private readonly ILoanRepository _loanRepository;
+    private readonly ITransactionApplicationRepository _transactionApplicationRepository;
     private readonly UserManager<User> _userManager;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
@@ -37,6 +38,8 @@ public class AccountService : IAccountService
         _accountRepository = unitOfWork.GetRepository<AccountRepository, Account, Guid>();
         _transactionRecordRepository = unitOfWork.GetRepository<TransactionRecordRecordRepository, TransactionRecord, Guid>();
         _loanRepository = unitOfWork.GetRepository<LoanRepository, Loan, Guid>();
+        _transactionApplicationRepository =
+            unitOfWork.GetRepository<TransactionApplicationRepository, TransactionApplication, Guid>();
         _userManager = userManager;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
@@ -210,6 +213,22 @@ public class AccountService : IAccountService
     
     private async Task PerformTransactionAsync(Guid accountId, float amount, TransactionType transactionType)
     {
+        if ((decimal)amount > LimitPerDepositAndWithdraw)
+        {
+            var transactionApplication = new TransactionApplication
+            {
+                AccountId = accountId,
+                Amount = amount,
+                CreatedDate = DateTime.UtcNow,
+                TransactionType = transactionType
+            };
+
+            await _transactionApplicationRepository.CreateAsync(transactionApplication);
+            await _unitOfWork.SaveChangesAsync();
+            
+            throw new InvalidOperationException($"this operation exceeds the daily transaction transfer limit of ${LimitPerDepositAndWithdraw}");
+        }
+        
         var account = await _accountRepository.GetOrThrowAsync(accountId);
         
         var isCredit = transactionType == TransactionType.Deposit;
