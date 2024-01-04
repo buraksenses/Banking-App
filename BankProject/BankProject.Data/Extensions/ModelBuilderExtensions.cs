@@ -23,7 +23,7 @@ public static class ModelBuilderExtensions
                 Id = adminRoleId,
                 ConcurrencyStamp = adminRoleId,
                 Name = "Admin",
-                NormalizedName = "Admin".ToUpper()
+                NormalizedName = "ADMIN"
             },
             new IdentityRole
             {
@@ -37,28 +37,28 @@ public static class ModelBuilderExtensions
                 Id = bankOfficerRoleId,
                 ConcurrencyStamp = bankOfficerRoleId,
                 Name = "Bank_Officer",
-                NormalizedName = "Bank_Officer".ToUpper()
+                NormalizedName = "BANK_OFFICER"
             },
             new IdentityRole
             {
                 Id = advisorRoleId,
                 ConcurrencyStamp = advisorRoleId,
                 Name = "Advisor",
-                NormalizedName = "Advisor".ToUpper()
+                NormalizedName = "ADVISOR"
             },
             new IdentityRole
             {
                 Id = loanOfficerRoleId,
                 ConcurrencyStamp = loanOfficerRoleId,
                 Name = "Loan_Officer",
-                NormalizedName = "Loan_Officer".ToUpper()
+                NormalizedName = "LOAN_OFFICER"
             },
             new IdentityRole
             {
                 Id = auditorRoleId,
                 ConcurrencyStamp = auditorRoleId,
                 Name = "Auditor",
-                NormalizedName = "Auditor".ToUpper()
+                NormalizedName = "AUDITOR"
             }
         };
 

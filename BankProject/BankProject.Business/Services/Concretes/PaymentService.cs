@@ -121,7 +121,7 @@ public class PaymentService : IPaymentService
         payment.NextPaymentDate =
             CalculateNextPaymentDate(payment.LastPaymentDate, payment.TimePeriod, payment.PaymentFrequency);
 
-        await _accountService.MakePayment(payment.AccountId, amount);
+        await _accountService.MakeBillPayment(payment.AccountId, amount);
         await _paymentRepository.UpdateAsync(payment.Id, payment);
         await _unitOfWork.SaveChangesAsync();
     }

@@ -32,10 +32,20 @@ public class AccountsController : CustomControllerBase
     }
 
     [HttpPut]
+    [Route("{id:guid}/balance")]
     public async Task<IActionResult> UpdateBalanceByAccountIdAsync(Guid id, float balance)
     {
         await _service.UpdateBalanceByAccountIdAsync(id, balance);
 
         return Ok(balance);
+    }
+
+    [HttpPut]
+    [Route("{accountId:guid}/loan-payment")]
+    public async Task<IActionResult> MakeLoanPaymentAsync(Guid accountId, Guid loanId, float paymentAmount)
+    {
+        await _service.MakeLoanPaymentAsync(accountId, loanId, paymentAmount);
+
+        return Ok();
     }
 }

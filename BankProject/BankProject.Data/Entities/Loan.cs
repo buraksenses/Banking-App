@@ -23,6 +23,10 @@ public class Loan : IEntity<Guid>
     public bool IsPaid => RemainingDebt == 0;
     
     public int NumberOfTimelyPayments { get; set; }
+
+    public DateTime LastPaymentDate { get; set; }
+
+    public DateTime NextPaymentDueDate { get; set; }
     
     public string UserId { get; set; }
     
@@ -32,5 +36,6 @@ public class Loan : IEntity<Guid>
     public Loan()
     {
         LoanDate = DateTime.UtcNow;
+        NextPaymentDueDate = LoanDate.AddMonths(1);
     }
 }

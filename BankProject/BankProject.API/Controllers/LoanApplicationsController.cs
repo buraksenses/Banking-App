@@ -1,5 +1,6 @@
 ﻿using BankProject.Business.DTOs.Loan;
 using BankProject.Business.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BankProject.API.Controllers;

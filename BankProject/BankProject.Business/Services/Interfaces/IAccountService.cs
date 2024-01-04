@@ -18,5 +18,7 @@ public interface IAccountService
 
    Task ExternalTransferAsync(Guid senderId, Guid receiverId, float amount);
 
-   Task MakePayment(Guid id, float amount);
+   Task MakeBillPayment(Guid id, float amount);
+
+   Task MakeLoanPaymentAsync(Guid accountId, Guid loanId, float paymentAmount);
 }
