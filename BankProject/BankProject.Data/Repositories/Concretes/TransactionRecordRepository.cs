@@ -5,9 +5,9 @@ using BankProject.Data.Repositories.Interfaces;
 
 namespace BankProject.Data.Repositories.Concretes;
 
-public class TransactionRecordRecordRepository : GenericRepository<TransactionRecord,Guid>, ITransactionRecordRepository
+public class TransactionRecordRepository : GenericRepository<TransactionRecord,Guid>, ITransactionRecordRepository
 {
-    public TransactionRecordRecordRepository(BankDbContext dbContext) : base(dbContext)
+    public TransactionRecordRepository(BankDbContext dbContext) : base(dbContext)
     {
     }
 }

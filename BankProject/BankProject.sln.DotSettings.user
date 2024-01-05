@@ -1,4 +1,31 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\Program Files\dotnet\packs\Microsoft.AspNetCore.App.Ref\7.0.14\ref\net7.0\Microsoft.AspNetCore.dll" /&gt;&#xD;
-&lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>
+&lt;/AssemblyExplorer&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=937ac30a_002D9792_002D4b34_002D96de_002Dc13f21779332/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="DepositAsync_ValidAmount_UpdatesBalance" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.AccountUnitTests.Deposit_ShouldUpdateBalanceAndCreateTransactionRecord&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.AccountUnitTests.CreateAccount_ShouldAddNewAccount&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.AccountUnitTests.Withdraw_ShouldUpdateBalanceCorrectly&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.AccountUnitTests.Transfer_ShouldUpdateBothAccountsCorrectly&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.AccountUnitTests.WithdrawAsync_InsufficientBalance_ThrowsException&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.AccountUnitTests.UpdateBalanceByAccountIdAsync_NegativeBalance_ThrowsException&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.AccountUnitTests.GetBalanceByAccountIdAsync_ValidId_ReturnsCorrectBalance&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.AccountUnitTests.InternalTransfer_ExceedsLimit_ThrowsInvalidOperationException&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.DenemeTests.DepositAsync_UpdatesBalanceCorrectly&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.DenemeTests.CreateAccountAsync_CreatesAccountSuccessfully&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.DenemeTests.GetBalanceByAccountIdAsync_ReturnsCorrectBalance_WhenAccountExists&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.DenemeTests.GetBalanceByAccountIdAsync_ThrowsNotFoundException_WhenAccountDoesNotExist&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.DenemeTests.CreateAccountAsync_CreatesAccountWithCorrectInformation&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.DenemeTests.CreateAccountAsync_ThrowsArgumentException_WhenAccountTypeIsInvalid&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.DenemeTests.CreateAccountAsync_ThrowsNotFoundException_WhenUserDoesNotExist&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.DenemeTests.UpdateBalanceByAccountIdAsync_UpdatesBalanceCorrectly_WhenAccountExists&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.DenemeTests.UpdateBalanceByAccountIdAsync_ThrowsInvalidOperationException_WhenBalanceIsNegative&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.DenemeTests.UpdateBalanceByAccountIdAsync_ThrowsNotFoundException_WhenAccountDoesNotExist&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.DenemeTests.DepositAsync_UpdatesBalanceCorrectly_WhenDepositIsSuccessful&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.DenemeTests.WithdrawAsync_UpdatesBalanceCorrectly_WhenWithdrawalIsSuccessful&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.DenemeTests.WithdrawAsync_ThrowsInvalidOperationException_WhenBalanceIsInsufficient&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.DenemeTests.DepositAsync_ThrowsInvalidOperationException_WhenAmountExceedsDailyLimit&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::BEBBFFC5-1FC3-49BF-83F2-572F659C96EB::net7.0::BankProject.Tests.Unit_Tests.Account.DenemeTests.WithdrawAsync_ThrowsInvalidOperationException_WhenAmountExceedsDailyLimit&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

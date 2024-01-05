@@ -14,11 +14,11 @@ namespace BankProject.Business.Services.Concretes;
 
 public class AccountService : IAccountService
 {
-    private const decimal LimitPerInternalTransfer = 10000;
-    private const decimal LimitPerExternalTransfer = 8000;
-    private const decimal DailyInternalTransferLimit = 30000;
-    private const decimal DailyExternalTransferLimit = 24000;
-    private const decimal LimitPerDepositAndWithdraw = 20000;
+    public const decimal LimitPerInternalTransfer = 10000;
+    public const decimal LimitPerExternalTransfer = 8000;
+    public const decimal DailyInternalTransferLimit = 30000;
+    public const decimal DailyExternalTransferLimit = 24000;
+    public const decimal LimitPerDepositAndWithdraw = 20000;
 
     private readonly IAccountRepository _accountRepository;
     private readonly ITransactionRecordRepository _transactionRecordRepository;
@@ -33,13 +33,16 @@ public class AccountService : IAccountService
         UserManager<User> userManager,
         IMapper mapper,
         IUnitOfWork unitOfWork, 
-        SemaphoreSlim semaphoreSlim)
+        SemaphoreSlim semaphoreSlim,
+        IAccountRepository accountRepository,
+        ITransactionRecordRepository transactionRecordRepository,
+        ITransactionApplicationRepository transactionApplicationRepository)
     {
-        _accountRepository = unitOfWork.GetRepository<AccountRepository, Account, Guid>();
-        _transactionRecordRepository = unitOfWork.GetRepository<TransactionRecordRecordRepository, TransactionRecord, Guid>();
+        _accountRepository = accountRepository;
+        _transactionRecordRepository = transactionRecordRepository;
         _loanRepository = unitOfWork.GetRepository<LoanRepository, Loan, Guid>();
-        _transactionApplicationRepository =
-            unitOfWork.GetRepository<TransactionApplicationRepository, TransactionApplication, Guid>();
+        _transactionApplicationRepository = transactionApplicationRepository;
+            
         _userManager = userManager;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
@@ -48,7 +51,7 @@ public class AccountService : IAccountService
     
     public async Task<float> GetBalanceByAccountIdAsync(Guid id)
     {
-        var account = await _accountRepository.GetOrThrowAsync(id);
+        var account = await ValidateAndGetAccount(id);
 
         return account.Balance;
     }
@@ -76,7 +79,10 @@ public class AccountService : IAccountService
 
     public async Task UpdateBalanceByAccountIdAsync(Guid id, float balance)
     {
-        var account =  await _accountRepository.GetOrThrowAsync(id);
+        if (balance < 0)
+            throw new InvalidOperationException("Balance must be greater than zero");
+        
+        var account = await ValidateAndGetAccount(id);
 
         await _accountRepository.UpdateBalanceByAccountIdAsync(account, balance);
 
@@ -182,7 +188,7 @@ public class AccountService : IAccountService
 
        var senderAccount = await GetAndValidateSenderAccount(senderId, amount);
 
-        var receiverAccount = await _accountRepository.GetOrThrowAsync(receiverId);
+       var receiverAccount = await ValidateAndGetAccount(receiverId);
 
         await ProcessTransfer(senderAccount, receiverAccount, amount, transactionType);
     }
@@ -199,7 +205,7 @@ public class AccountService : IAccountService
     
     private async Task<Account> GetAndValidateSenderAccount(Guid senderId, float amount)
     {
-        var account = await _accountRepository.GetOrThrowAsync(senderId);
+        var account = await ValidateAndGetAccount(senderId);
 
         ValidateAccountBalance(account,amount);
         
@@ -270,8 +276,10 @@ public class AccountService : IAccountService
             
             throw new InvalidOperationException($"this operation exceeds the daily transaction transfer limit of ${LimitPerDepositAndWithdraw}");
         }
-        
-        var account = await _accountRepository.GetOrThrowAsync(accountId);
+
+        var account = await _accountRepository.GetByIdAsync(accountId);
+        if (account == null)
+            throw new NotFoundException("Account not found!");
         
         var isCredit = transactionType == TransactionType.Deposit;
         var newBalance = isCredit ? account.Balance + amount : account.Balance - amount;
@@ -291,6 +299,16 @@ public class AccountService : IAccountService
         {
             _semaphoreSlim.Release();
         }
+    }
+
+    private async Task<Account> ValidateAndGetAccount(Guid accountId)
+    {
+        var account = await _accountRepository.GetByIdAsync(accountId);
+
+        if (account == null)
+            throw new NotFoundException("Account not found!");
+
+        return account;
     }
 
     private async Task CreateTransactionRecord(Guid accountId, float amount, TransactionType transactionType, Guid? receiverAccountId = null)
