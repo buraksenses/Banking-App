@@ -5,11 +5,6 @@ namespace BankProject.Business.Validators.Auth;
 
 public class RegisterValidator : AbstractValidator<RegisterRequestDto>
 {
-    private readonly List<string> _validRoles = new()
-    {
-        "Admin", "Customer", "Bank_Officer", "Advisor", "Loan_Officer", "Auditor"
-    };
-
     public RegisterValidator()
     {
         RuleFor(x => x.Username)
@@ -19,12 +14,5 @@ public class RegisterValidator : AbstractValidator<RegisterRequestDto>
         RuleFor(x => x.Password)
             .NotEmpty().WithMessage("Password is required.")
             .MinimumLength(8).WithMessage("Password must be at least 8 characters long.");
-
-        When(x => x.Roles.Any(), () =>
-        {
-            RuleForEach(x => x.Roles)
-                .Must(role => _validRoles.Contains(role))
-                .WithMessage("Invalid role.");
-        });
     }
 }
