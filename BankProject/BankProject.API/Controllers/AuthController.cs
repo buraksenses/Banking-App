@@ -19,7 +19,7 @@ public class AuthController : ControllerBase
         _tokenRepository = tokenRepository;
     }
    
-    //POST: /api/Auth/Register
+
     [HttpPost]
     [Route("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequestDto registerRequestDto)
@@ -32,17 +32,13 @@ public class AuthController : ControllerBase
 
         var identityResult = await _userManager.CreateAsync(identityUser, registerRequestDto.Password);
 
-        if (!identityResult.Succeeded) return BadRequest("Something went wrong!");
-        
-        //Add roles to this user
-        if (!registerRequestDto.Roles.Any()) return BadRequest("Something went wrong!");
-        identityResult = await _userManager.AddToRolesAsync(identityUser, registerRequestDto.Roles);
-
-        if (identityResult.Succeeded)
-            return Ok("User was registered! Please login!");
-        
-
-        return BadRequest("Something went wrong!");
+        switch (identityResult.Succeeded)
+        {
+            case false:
+                return BadRequest("Something went wrong!");
+            case true:
+                return Ok("User was registered! Please login!");
+        }
     }
     
     [HttpPost]
@@ -55,11 +51,11 @@ public class AuthController : ControllerBase
         var checkPasswordResult = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
 
         if (!checkPasswordResult) return BadRequest("Username or password incorrect!");
-        //Get Roles for this user
+        
         var roles = await _userManager.GetRolesAsync(user);
 
         if (!roles.Any()) return BadRequest("Username or password incorrect!");
-        //Create Token
+        
         var jwtToken = _tokenRepository.CreateJwtToken(user, roles.ToList());
         var response = new LoginResponseDto
         {

@@ -105,7 +105,9 @@ public class AccountService : IAccountService
 
     public async Task MakeBillPayment(Guid id,float amount)
     {
-        var account = await _accountRepository.GetOrThrowAsync(account => account.Balance > amount && account.Id == id);
+        var account = await _accountRepository.GetOrThrowAsync(id);
+
+        ValidateAccountBalance(account,amount);
 
         await _semaphoreSlim.WaitAsync();
         try
@@ -197,7 +199,10 @@ public class AccountService : IAccountService
     
     private async Task<Account> GetAndValidateSenderAccount(Guid senderId, float amount)
     {
-        var account = await _accountRepository.GetOrThrowAsync(a => a.Id == senderId && a.Balance > amount);
+        var account = await _accountRepository.GetOrThrowAsync(senderId);
+
+        ValidateAccountBalance(account,amount);
+        
         var user = await _userManager.FindByIdAsync(account.UserId);
         if (user == null)
             throw new NotFoundException("Sender user not found!");
@@ -205,6 +210,12 @@ public class AccountService : IAccountService
             throw new InvalidOperationException("Operation exceeds your daily transfer limit!");
 
         return account;
+    }
+
+    private static void ValidateAccountBalance(Account account,float amount)
+    {
+        if (account.Balance < amount)
+            throw new InvalidOperationException("Insufficient funds!");
     }
     
     private async Task ProcessTransfer(Account senderAccount, Account receiverAccount, float amount, TransactionType transactionType)

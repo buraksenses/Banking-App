@@ -61,7 +61,9 @@ public class PaymentService : IPaymentService
 
         var payment = _mapper.Map<Payment>(requestDto);
 
-        await _accountRepository.GetOrThrowAsync(account => account.Id == payment.AccountId && account.Balance > payment.Amount);
+        var account = await _accountRepository.GetOrThrowAsync(payment.AccountId);
+        
+        ValidateAccountBalance(account,requestDto.Amount);
 
         var cronExpression = GenerateCronExpression(payment.TimePeriod, payment.PaymentFrequency);
         
@@ -90,7 +92,9 @@ public class PaymentService : IPaymentService
         
         _mapper.Map(requestDto, existingPayment);
     
-        await _accountRepository.GetOrThrowAsync(account => account.Id == existingPayment.AccountId && account.Balance > existingPayment.Amount);
+        var account = await _accountRepository.GetOrThrowAsync(existingPayment.AccountId);
+        
+        ValidateAccountBalance(account,requestDto.Amount);
 
         var cronExpression = GenerateCronExpression(existingPayment.TimePeriod, existingPayment.PaymentFrequency);
 
@@ -148,5 +152,11 @@ public class PaymentService : IPaymentService
             TimePeriod.Months => $"0 0 1 */{frequency} *",
             _ => throw new ArgumentException("Invalid time period")
         };
+    }
+
+    private void ValidateAccountBalance(Account account, float amount)
+    {
+        if (account.Balance < amount)
+            throw new InvalidOperationException("Insufficient funds!");
     }
 }
