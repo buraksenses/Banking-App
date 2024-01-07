@@ -6,9 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BankProject.API.Controllers;
 
-[ApiController]
-[Route("api/auth")]
-public class AuthController : ControllerBase
+public class AuthController : CustomControllerBase
 {
     private readonly UserManager<User> _userManager;
     private readonly ITokenRepository _tokenRepository;
@@ -18,29 +16,7 @@ public class AuthController : ControllerBase
         _userManager = userManager;
         _tokenRepository = tokenRepository;
     }
-   
 
-    [HttpPost]
-    [Route("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterRequestDto registerRequestDto)
-    {
-        var identityUser = new User
-        {
-            UserName = registerRequestDto.Username,
-            Email = registerRequestDto.Username
-        };
-
-        var identityResult = await _userManager.CreateAsync(identityUser, registerRequestDto.Password);
-
-        switch (identityResult.Succeeded)
-        {
-            case false:
-                return BadRequest("Something went wrong!");
-            case true:
-                return Ok("User was registered! Please login!");
-        }
-    }
-    
     [HttpPost]
     [Route("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)

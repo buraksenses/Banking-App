@@ -7,5 +7,7 @@ public interface IUserService
 {
     Task<IdentityResult> CreateUserAsync(CreateUserRequestDto requestDto);
 
+    Task UpdateUserAsync(string id, UpdateUserRequestDto requestDto);
+
     Task ResetDailyLimits();
 }

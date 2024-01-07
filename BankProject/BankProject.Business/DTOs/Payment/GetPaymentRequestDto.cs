@@ -4,7 +4,7 @@ namespace BankProject.Business.DTOs.Payment;
 
 public class GetPaymentRequestDto
 {
-    public float Amount { get; set; }
+    public decimal Amount { get; set; }
     
     public string TimePeriod { get; set; }
 

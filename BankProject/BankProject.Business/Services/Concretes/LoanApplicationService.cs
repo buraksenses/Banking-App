@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BankProject.Business.DTOs.Loan;
-using BankProject.Business.Helpers;
 using BankProject.Business.Services.Interfaces;
 using BankProject.Core.Constants;
 using BankProject.Core.Enums;
@@ -27,14 +26,15 @@ public class LoanApplicationService : ILoanApplicationService
         ICreditScoreService creditScoreService,
         UserManager<User> userManager,
         ILoanService loanService,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork, 
+        ILoanApplicationRepository applicationRepository)
     {
-        _applicationRepository = unitOfWork.GetRepository<LoanApplicationRepository, LoanApplication, Guid>();
         _mapper = mapper;
         _creditScoreService = creditScoreService;
         _userManager = userManager;
         _loanService = loanService;
         _unitOfWork = unitOfWork;
+        _applicationRepository = applicationRepository;
     }
     
     public async Task CreateLoanApplicationAsync(CreateLoanApplicationRequestDto requestDto)
@@ -55,7 +55,7 @@ public class LoanApplicationService : ILoanApplicationService
 
     public async Task<GetLoanApplicationRequestDto> GetLoanApplicationByIdAsync(Guid applicationId)
     {
-        var application = await _applicationRepository.GetOrThrowAsync(applicationId);
+        var application = await _applicationRepository.GetOrThrowNotFoundByIdAsync(applicationId);
 
         var applicationDto = _mapper.Map<GetLoanApplicationRequestDto>(application);
 
@@ -64,7 +64,7 @@ public class LoanApplicationService : ILoanApplicationService
 
     public async Task<LoanApplicationResponseDto> GetRecommendationForApplicationByIdAsync(Guid applicationId)
     {
-        var application = await _applicationRepository.GetOrThrowAsync(applicationId);
+        var application = await _applicationRepository.GetOrThrowNotFoundByIdAsync(applicationId);
 
         var user = await _userManager.FindByIdAsync(application.UserId);
 
@@ -88,7 +88,7 @@ public class LoanApplicationService : ILoanApplicationService
 
     public async Task<CreateLoanRequestDto> ApproveLoanApplicationByIdAndCreateLoanAsync(Guid applicationId)
     {
-        var application = await _applicationRepository.GetOrThrowAsync(applicationId);
+        var application = await _applicationRepository.GetOrThrowNotFoundByIdAsync(applicationId);
 
         await _applicationRepository.UpdateLoanApplicationStatusAsync(application, LoanApplicationStatus.Approved);
 
@@ -105,7 +105,7 @@ public class LoanApplicationService : ILoanApplicationService
 
     public async Task<GetLoanApplicationRequestDto> RejectLoanApplicationByIdAsync(Guid applicationId)
     {
-        var application = await _applicationRepository.GetOrThrowAsync(applicationId);
+        var application = await _applicationRepository.GetOrThrowNotFoundByIdAsync(applicationId);
 
         await _applicationRepository.UpdateLoanApplicationStatusAsync(application, LoanApplicationStatus.Rejected);
 

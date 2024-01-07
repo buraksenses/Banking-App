@@ -15,21 +15,21 @@ namespace BankProject.Tests.Unit_Tests.Account;
 
 public class AccountUnitTests
 {
-     private readonly Mock<IAccountRepository> _mockAccountRepo;
+    private readonly Mock<IAccountRepository> _mockAccountRepo;
     private readonly Mock<ITransactionRecordRepository> _mockTransactionRepo;
-    private readonly Mock<ILoanRepository> _mockLoanRepo;
     private readonly Mock<ITransactionApplicationRepository> _mockTransactionAppRepo;
+    private readonly Mock<ILoanRepository> _mockLoanRepo;
     private readonly Mock<UserManager<User>> _mockUserManager;
     private readonly Mock<IMapper> _mockMapper;
     private readonly Mock<IUnitOfWork> _mockUnitOfWork;
     private readonly AccountService _accountService;
-    private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
+    private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
 
     public AccountUnitTests()
     {
+        _mockLoanRepo = new Mock<ILoanRepository>();
         _mockAccountRepo = new Mock<IAccountRepository>();
         _mockTransactionRepo = new Mock<ITransactionRecordRepository>();
-        _mockLoanRepo = new Mock<ILoanRepository>();
         _mockTransactionAppRepo = new Mock<ITransactionApplicationRepository>();
 
         _mockUserManager = MockUserManager();
@@ -44,7 +44,8 @@ public class AccountUnitTests
             _semaphoreSlim,
             _mockAccountRepo.Object,
             _mockTransactionRepo.Object,
-            _mockTransactionAppRepo.Object
+            _mockTransactionAppRepo.Object,
+            _mockLoanRepo.Object
         );
     }
     
@@ -72,14 +73,14 @@ public class AccountUnitTests
     {
         // Arrange
         var accountId = Guid.NewGuid();
-        var amount = 100.0f;
-        var initialBalance = 200.0f;
+        var amount = 100;
+        var initialBalance = 200;
         var expectedBalance = initialBalance + amount;
         var account = new Data.Entities.Account { Id = accountId, Balance = initialBalance };
 
         _mockAccountRepo.Setup(repo => repo.GetByIdAsync(accountId)).ReturnsAsync(account);
-        _mockAccountRepo.Setup(repo => repo.UpdateBalanceByAccountIdAsync(It.IsAny<Data.Entities.Account>(), It.IsAny<float>()))
-            .Callback<Data.Entities.Account, float>((acc, amt) => acc.Balance = amt);
+        _mockAccountRepo.Setup(repo => repo.UpdateBalanceByAccountIdAsync(It.IsAny<Data.Entities.Account>(), It.IsAny<decimal>()))
+            .Callback<Data.Entities.Account, decimal>((acc, amt) => acc.Balance = amt);
 
         // Act
         await _accountService.DepositAsync(accountId, amount);
@@ -124,7 +125,7 @@ public class AccountUnitTests
     {
         // Arrange
         var accountId = Guid.NewGuid();
-        var expectedBalance = 1000.0f;
+        var expectedBalance = 1000;
         var account = new Data.Entities.Account { Id = accountId, Balance = expectedBalance };
 
         _mockAccountRepo.Setup(repo => repo.GetByIdAsync(accountId)).ReturnsAsync(account);
@@ -204,12 +205,12 @@ public class AccountUnitTests
     {
         // Arrange
         var accountId = Guid.NewGuid();
-        const float newBalance = 1000.0f;
-        var account = new Data.Entities.Account { Id = accountId, Balance = 500.0f };
+        const decimal newBalance = 1000;
+        var account = new Data.Entities.Account { Id = accountId, Balance = 500 };
 
         _mockAccountRepo.Setup(repo => repo.GetByIdAsync(accountId)).ReturnsAsync(account);
         _mockAccountRepo.Setup(repo => repo.UpdateBalanceByAccountIdAsync(account, newBalance))
-            .Callback<Data.Entities.Account, float>((acc, bal) => acc.Balance = bal);
+            .Callback<Data.Entities.Account, decimal>((acc, bal) => acc.Balance = bal);
 
         // Act
         await _accountService.UpdateBalanceByAccountIdAsync(accountId, newBalance);
@@ -223,7 +224,7 @@ public class AccountUnitTests
     {
         // Arrange
         var accountId = Guid.NewGuid();
-        const float negativeBalance = -100.0f;
+        const decimal negativeBalance = -100;
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(
@@ -235,7 +236,7 @@ public class AccountUnitTests
     {
         // Arrange
         var accountId = Guid.NewGuid();
-        const float newBalance = 1000.0f;
+        const decimal newBalance = 1000;
         _mockAccountRepo.Setup(repo => repo.GetByIdAsync(accountId)).ReturnsAsync((Data.Entities.Account)null);
 
         // Act & Assert
@@ -249,13 +250,13 @@ public class AccountUnitTests
     {
         // Arrange
         var accountId = Guid.NewGuid();
-        const float depositAmount = 500.0f;
-        const float initialBalance = 1000.0f;
+        const decimal depositAmount = 500;
+        const decimal initialBalance = 1000;
         var account = new Data.Entities.Account { Id = accountId, Balance = initialBalance };
 
         _mockAccountRepo.Setup(repo => repo.GetByIdAsync(accountId)).ReturnsAsync(account);
         _mockAccountRepo.Setup(repo => repo.UpdateBalanceByAccountIdAsync(account, initialBalance + depositAmount))
-            .Callback<Data.Entities.Account, float>((acc, bal) => acc.Balance = bal);
+            .Callback<Data.Entities.Account, decimal>((acc, bal) => acc.Balance = bal);
 
         // Act
         await _accountService.DepositAsync(accountId, depositAmount);
@@ -269,13 +270,13 @@ public class AccountUnitTests
     {
         // Arrange
         var accountId = Guid.NewGuid();
-        const float withdrawalAmount = 500.0f;
-        const float initialBalance = 1000.0f;
+        const decimal withdrawalAmount = 500;
+        const decimal initialBalance = 1000;
         var account = new Data.Entities.Account { Id = accountId, Balance = initialBalance };
 
         _mockAccountRepo.Setup(repo => repo.GetByIdAsync(accountId)).ReturnsAsync(account);
         _mockAccountRepo.Setup(repo => repo.UpdateBalanceByAccountIdAsync(account, initialBalance - withdrawalAmount))
-            .Callback<Data.Entities.Account, float>((acc, bal) => acc.Balance = bal);
+            .Callback<Data.Entities.Account, decimal>((acc, bal) => acc.Balance = bal);
 
         // Act
         await _accountService.WithdrawAsync(accountId, withdrawalAmount);
@@ -290,14 +291,14 @@ public class AccountUnitTests
         // Arrange
         var accountId = Guid.NewGuid();
         const decimal amountExceedingLimit = AccountService.LimitPerDepositAndWithdraw + 1;
-        var account = new Data.Entities.Account { Id = accountId, Balance = 1000.0f, AccountType = AccountType.Deposit};
+        var account = new Data.Entities.Account { Id = accountId, Balance = 1000, AccountType = AccountType.Deposit};
 
         _mockAccountRepo.Setup(repo => repo.GetByIdAsync(accountId)).ReturnsAsync(account);
 
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _accountService.DepositAsync(accountId, (float)amountExceedingLimit));
+            async () => await _accountService.DepositAsync(accountId, amountExceedingLimit));
     }
     
     [Fact]
@@ -306,13 +307,13 @@ public class AccountUnitTests
         // Arrange
         var accountId = Guid.NewGuid();
         const decimal amountExceedingLimit = AccountService.LimitPerDepositAndWithdraw + 1;
-        var account = new Data.Entities.Account { Id = accountId, Balance = 10000.0f };
+        var account = new Data.Entities.Account { Id = accountId, Balance = 10000 };
 
         _mockAccountRepo.Setup(repo => repo.GetByIdAsync(accountId)).ReturnsAsync(account);
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _accountService.WithdrawAsync(accountId, (float)amountExceedingLimit));
+            async () => await _accountService.WithdrawAsync(accountId, amountExceedingLimit));
     }
     
     [Fact]
@@ -320,8 +321,8 @@ public class AccountUnitTests
     {
         // Arrange
         var accountId = Guid.NewGuid();
-        const float withdrawalAmount = 1500.0f; // Withdrawal amount is more than balance
-        const float initialBalance = 1000.0f;
+        const decimal withdrawalAmount = 1500;
+        const decimal initialBalance = 1000;
         var account = new Data.Entities.Account { Id = accountId, Balance = initialBalance };
 
         _mockAccountRepo.Setup(repo => repo.GetByIdAsync(accountId)).ReturnsAsync(account);

@@ -11,7 +11,7 @@ public class AccountRepository : GenericRepository<Account,Guid>, IAccountReposi
     {
     }
     
-    public async Task<Account?> UpdateBalanceByAccountIdAsync(Account account, float balance)
+    public async Task<Account?> UpdateBalanceByAccountIdAsync(Account account, decimal balance)
     {
         account.Balance = balance;
         await UpdateAsync(account.Id, account);

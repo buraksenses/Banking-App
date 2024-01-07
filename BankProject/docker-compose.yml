@@ -1,0 +1,13 @@
+version: '3.4'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+  bankproject.api:
+    image: buraksenses/bankprojectapi:${version}
+    container_name: bankprojectapi-container
+    build:
+      context: .
+      dockerfile: BankProject.API/Dockerfile
+volumes:
+  sqlserver_volume :

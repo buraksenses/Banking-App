@@ -32,8 +32,8 @@ namespace BankProject.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Balance")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -56,8 +56,8 @@ namespace BankProject.Data.Migrations
                     b.Property<DateTime>("LastPaymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<float>("LoanAmount")
-                        .HasColumnType("real");
+                    b.Property<decimal>("LoanAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("LoanDate")
                         .HasColumnType("datetime2");
@@ -78,8 +78,8 @@ namespace BankProject.Data.Migrations
                     b.Property<int>("NumberOfTotalPayments")
                         .HasColumnType("int");
 
-                    b.Property<float>("RemainingDebt")
-                        .HasColumnType("real");
+                    b.Property<decimal>("RemainingDebt")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -98,8 +98,8 @@ namespace BankProject.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<float>("LoanAmount")
-                        .HasColumnType("real");
+                    b.Property<decimal>("LoanAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("LoanApplicationStatus")
                         .IsRequired()
@@ -132,8 +132,8 @@ namespace BankProject.Data.Migrations
                     b.Property<Guid>("AccountId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<float>("Amount")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -204,8 +204,8 @@ namespace BankProject.Data.Migrations
                     b.Property<Guid>("AccountId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<float>("Amount")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -234,14 +234,14 @@ namespace BankProject.Data.Migrations
                     b.Property<Guid>("AccountId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<float>("Amount")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid?>("ReceiverAccountId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("TransactionType")
                         .IsRequired()
@@ -268,8 +268,8 @@ namespace BankProject.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("AnnualIncome")
-                        .HasColumnType("real");
+                    b.Property<decimal>("AnnualIncome")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -279,10 +279,10 @@ namespace BankProject.Data.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("DailyTransferAmount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<decimal>("DailyTransferLimit")
+                    b.Property<decimal>("DailyTransferAmount")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("DateOfBirth")
@@ -338,8 +338,8 @@ namespace BankProject.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("TotalAssets")
-                        .HasColumnType("real");
+                    b.Property<decimal>("TotalAssets")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -401,27 +401,6 @@ namespace BankProject.Data.Migrations
                             ConcurrencyStamp = "ab24b60e-d36f-4662-ab2c-0faefdb86d3e",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
-                        },
-                        new
-                        {
-                            Id = "8ab640f3-91db-417b-a3dd-024b14837f96",
-                            ConcurrencyStamp = "8ab640f3-91db-417b-a3dd-024b14837f96",
-                            Name = "Bank_Officer",
-                            NormalizedName = "BANK_OFFICER"
-                        },
-                        new
-                        {
-                            Id = "efd72960-b554-48b5-88c6-370fca080035",
-                            ConcurrencyStamp = "efd72960-b554-48b5-88c6-370fca080035",
-                            Name = "Advisor",
-                            NormalizedName = "ADVISOR"
-                        },
-                        new
-                        {
-                            Id = "df167571-d103-4488-b398-52f81c2f2fbd",
-                            ConcurrencyStamp = "df167571-d103-4488-b398-52f81c2f2fbd",
-                            Name = "Loan_Officer",
-                            NormalizedName = "LOAN_OFFICER"
                         },
                         new
                         {

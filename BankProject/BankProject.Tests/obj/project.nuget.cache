@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "MccxfCFLJpOPZMlPMSrVRZMalLJe6EFJkKEIVYnoURaGxA4GNbSk1hLYcEnZIQYLo5TZ9YA12qGmL25KGp75Qw==",
+  "dgSpecHash": "eHnrHjMI0wkLXHK1U6NDeMenEUrkO8jpWlyp6aKiTqoArhh9AmyvG1syj9DU7IvgV9oh86CBf8kJEUZcakH8zQ==",
   "success": true,
   "projectFilePath": "Z:\\Fimple\\Final Case\\Fimple-.Net-Bootcamp-Final-Case\\BankProject\\BankProject.Tests\\BankProject.Tests.csproj",
   "expectedPackageFiles": [
@@ -83,6 +83,7 @@
     "C:\\Users\\Burak\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
     "C:\\Users\\Burak\\.nuget\\packages\\microsoft.testplatform.objectmodel\\17.7.1\\microsoft.testplatform.objectmodel.17.7.1.nupkg.sha512",
     "C:\\Users\\Burak\\.nuget\\packages\\microsoft.testplatform.testhost\\17.7.1\\microsoft.testplatform.testhost.17.7.1.nupkg.sha512",
+    "C:\\Users\\Burak\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.19.5\\microsoft.visualstudio.azure.containers.tools.targets.1.19.5.nupkg.sha512",
     "C:\\Users\\Burak\\.nuget\\packages\\microsoft.win32.primitives\\4.3.0\\microsoft.win32.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\Burak\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\Burak\\.nuget\\packages\\moq\\4.20.70\\moq.4.20.70.nupkg.sha512",

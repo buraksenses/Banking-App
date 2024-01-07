@@ -9,12 +9,10 @@ namespace BankProject.Business.Services.Concretes;
 public class LoanService : ILoanService
 {
     private readonly ILoanRepository _repository;
-    private readonly IUnitOfWork _unitOfWork;
 
-    public LoanService(IUnitOfWork unitOfWork)
+    public LoanService(ILoanRepository repository)
     {
-        _repository = unitOfWork.GetRepository<LoanRepository, Loan, Guid>();
-        _unitOfWork = unitOfWork;
+        _repository = repository;
     }
     
     public async Task CreateLoanAsync(Loan loan)

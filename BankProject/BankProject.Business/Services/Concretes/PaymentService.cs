@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using BankProject.Business.DTOs.Payment;
-using BankProject.Business.Helpers;
 using BankProject.Business.Services.Interfaces;
 using BankProject.Core.Enums;
+using BankProject.Core.Exceptions;
 using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Concretes;
 using BankProject.Data.Repositories.Interfaces;
@@ -19,22 +19,23 @@ public class PaymentService : IPaymentService
     private readonly IAccountService _accountService;
     private readonly IUnitOfWork _unitOfWork;
 
-
     public PaymentService(
         IMapper mapper,
         IAccountService accountService,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork, 
+        IPaymentRepository paymentRepository, 
+        IAccountRepository accountRepository)
     {
-        _paymentRepository = unitOfWork.GetRepository<PaymentRepository, Payment, Guid>();
         _mapper = mapper;
-        _accountRepository = unitOfWork.GetRepository<AccountRepository, Account, Guid>();
         _accountService = accountService;
         _unitOfWork = unitOfWork;
+        _paymentRepository = paymentRepository;
+        _accountRepository = accountRepository;
     }
     
     public async Task<GetPaymentRequestDto> GetPaymentByIdAsync(Guid id)
     {
-        var payment = await _paymentRepository.GetOrThrowAsync(id);
+        var payment = await _paymentRepository.GetOrThrowNotFoundByIdAsync(id);
 
         var paymentDto = _mapper.Map<GetPaymentRequestDto>(payment);
 
@@ -61,7 +62,7 @@ public class PaymentService : IPaymentService
 
         var payment = _mapper.Map<Payment>(requestDto);
 
-        var account = await _accountRepository.GetOrThrowAsync(payment.AccountId);
+        var account = await _accountRepository.GetOrThrowNotFoundByIdAsync(payment.AccountId);
         
         ValidateAccountBalance(account,requestDto.Amount);
 
@@ -88,11 +89,11 @@ public class PaymentService : IPaymentService
 
         requestDto.TimePeriod = timePeriod.ToString();
 
-        var existingPayment = await _paymentRepository.GetOrThrowAsync(id);
+        var existingPayment = await _paymentRepository.GetOrThrowNotFoundByIdAsync(id);
         
         _mapper.Map(requestDto, existingPayment);
     
-        var account = await _accountRepository.GetOrThrowAsync(existingPayment.AccountId);
+        var account = await _accountRepository.GetOrThrowNotFoundByIdAsync(existingPayment.AccountId);
         
         ValidateAccountBalance(account,requestDto.Amount);
 
@@ -119,7 +120,7 @@ public class PaymentService : IPaymentService
         await _unitOfWork.SaveChangesAsync();
     }
 
-    public async Task MakePayment(Payment payment, float amount)
+    public async Task MakePayment(Payment payment, decimal amount)
     {
         payment.LastPaymentDate = DateTime.UtcNow;
         payment.NextPaymentDate =
@@ -154,9 +155,9 @@ public class PaymentService : IPaymentService
         };
     }
 
-    private void ValidateAccountBalance(Account account, float amount)
+    private static void ValidateAccountBalance(Account account, decimal amount)
     {
         if (account.Balance < amount)
-            throw new InvalidOperationException("Insufficient funds!");
+            throw new InsufficientFundsException("Insufficient funds!");
     }
 }

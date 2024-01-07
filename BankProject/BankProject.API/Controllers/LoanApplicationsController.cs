@@ -35,6 +35,7 @@ public class LoanApplicationsController : ControllerBase
 
     [HttpGet]
     [Route("{id:guid}/recommendation")]
+    [Authorize(Roles = "Admin,Auditor")]
     public async Task<IActionResult> ProcessApplicationAsync(Guid id)
     { 
         var response = await _applicationService.GetRecommendationForApplicationByIdAsync(id);
@@ -44,6 +45,7 @@ public class LoanApplicationsController : ControllerBase
 
     [HttpPut]
     [Route("{id:guid}/reject")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> RejectApplicationAsync(Guid id)
     {
         var response = await _applicationService.RejectLoanApplicationByIdAsync(id);
@@ -53,6 +55,7 @@ public class LoanApplicationsController : ControllerBase
     
     [HttpPost]
     [Route("{id:guid}/approve")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> ApproveApplicationAsync(Guid id)
     {
         var response = await _applicationService.ApproveLoanApplicationByIdAndCreateLoanAsync(id);

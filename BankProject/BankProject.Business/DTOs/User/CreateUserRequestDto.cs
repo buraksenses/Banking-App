@@ -7,9 +7,9 @@ public class CreateUserRequestDto
     public string Email { get; set; }
     public string Password { get; set; }
 
-    public float AnnualIncome { get; set; }
+    public decimal AnnualIncome { get; set; }
     
-    public float TotalAssets { get; set; }
+    public decimal TotalAssets { get; set; }
 
     public string Address { get; set; }
     
@@ -27,6 +27,5 @@ public class CreateUserRequestDto
     
     public string PhoneNumber { get; set; }
 
-    public float DailyTransferLimit { get; set; }
     public ICollection<string> Roles { get; set; }
 }

@@ -112,3 +112,4 @@ Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.API
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.API\bin\Debug\net7.0\tr-TR\Hangfire.Core.resources.dll
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.API\bin\Debug\net7.0\zh-TW\Hangfire.Core.resources.dll
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.API\bin\Debug\net7.0\zh\Hangfire.Core.resources.dll
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.API\bin\Debug\net7.0\appsettings.Production.json

@@ -5,5 +5,5 @@ namespace BankProject.Data.Repositories.Interfaces;
 
 public interface IAccountRepository : IGenericRepository<Account,Guid>
 {
-    public Task<Account?> UpdateBalanceByAccountIdAsync(Account account, float balance);
+    public Task<Account?> UpdateBalanceByAccountIdAsync(Account account, decimal balance);
 }

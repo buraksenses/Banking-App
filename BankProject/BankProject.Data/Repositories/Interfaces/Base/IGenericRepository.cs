@@ -11,7 +11,7 @@ public interface IGenericRepository<TEntity, TKey> where TEntity : class, IEntit
     
     Task<TEntity?> GetByIdAsync(TKey id);
 
-    Task<TEntity?> GetByIdAsync(Expression<Func<TEntity, bool>> predicate);
+    Task<TEntity> GetOrThrowNotFoundByIdAsync(TKey id);
 
     Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity,bool>> predicate);
 

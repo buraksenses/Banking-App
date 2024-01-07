@@ -17,12 +17,6 @@ public abstract class GenericRepository<TEntity, TKey> : IGenericRepository<TEnt
         _dbContext = dbContext;
         _entities = _dbContext.Set<TEntity>();
     }
-
-    protected GenericRepository()
-    {
-        
-    }
-
     public async Task CreateAsync(TEntity entity) => await _entities.AddAsync(entity);
     
     public async Task DeleteAsync(TKey id)
@@ -35,9 +29,14 @@ public abstract class GenericRepository<TEntity, TKey> : IGenericRepository<TEnt
     }
     
     public async Task<TEntity?> GetByIdAsync(TKey id) => await _entities.FindAsync(id);
-    public async Task<TEntity?> GetByIdAsync(Expression<Func<TEntity, bool>> predicate)
+    public async Task<TEntity> GetOrThrowNotFoundByIdAsync(TKey id)
     {
-        return await _entities.Where(predicate).SingleOrDefaultAsync();
+        var entity = await GetByIdAsync(id);
+        if (entity == null)
+        {
+            throw new NotFoundException($"{typeof(TEntity).Name} not found");
+        }
+        return entity;
     }
 
     public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> predicate) => await _entities.Where(predicate).ToListAsync();
