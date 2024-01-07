@@ -149,3 +149,25 @@ Bu mimari, projenin genişleyebilir, sürdürülebilir ve test edilebilir olmas�
 
 - `POST /{id}/approve`: Belirli bir işlem başvurusunu onaylar (Yalnızca Admin).
 - `POST /{id}/reject`: Belirli bir işlem başvurusunu reddeder (Yalnızca Admin).
+
+## Screenshots
+
+### Code
+
+![image](https://github.com/buraksenses/Fimple-.Net-Bootcamp-Final-Case/assets/45733615/f142241f-fb41-4241-b2d5-45ff1a4b3cc7)
+
+### Swagger
+
+![image](https://github.com/buraksenses/Fimple-.Net-Bootcamp-Final-Case/assets/45733615/6ac879fd-e3c9-4795-b963-434fe26a2bf6)
+
+### Database
+
+![image](https://github.com/buraksenses/Fimple-.Net-Bootcamp-Final-Case/assets/45733615/8580b8a9-a63f-4b40-9af4-0c372928f931)
+
+### Database Diagram
+
+![image](https://github.com/buraksenses/Fimple-.Net-Bootcamp-Final-Case/assets/45733615/11857e0a-c114-44e5-a79f-ecff62498220)
+
+
+
+
