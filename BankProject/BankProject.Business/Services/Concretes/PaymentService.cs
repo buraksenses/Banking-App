@@ -2,6 +2,7 @@
 using BankProject.Business.DTOs.Payment;
 using BankProject.Business.Services.Interfaces;
 using BankProject.Core.Enums;
+using BankProject.Core.Exceptions;
 using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Concretes;
 using BankProject.Data.Repositories.Interfaces;
@@ -157,6 +158,6 @@ public class PaymentService : IPaymentService
     private static void ValidateAccountBalance(Account account, decimal amount)
     {
         if (account.Balance < amount)
-            throw new InvalidOperationException("Insufficient funds!");
+            throw new InsufficientFundsException("Insufficient funds!");
     }
 }

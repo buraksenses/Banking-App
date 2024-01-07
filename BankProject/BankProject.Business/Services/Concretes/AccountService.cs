@@ -168,7 +168,7 @@ public class AccountService : IAccountService
         if (account.UserId != loan.UserId)
             throw new InvalidOperationException("User Id and Loan Id did not match!");
         if (account.Balance < paymentAmount)
-            throw new InvalidOperationException("Insufficient funds!");
+            throw new InsufficientFundsException("Insufficient funds!");
     }
     
     private static void UpdateLoanInformation(Loan loan, decimal paymentAmount)
@@ -289,7 +289,7 @@ public class AccountService : IAccountService
         var newBalance = isCredit ? account.Balance + amount : account.Balance - amount;
         
         if (newBalance < 0)
-            throw new InvalidOperationException("Insufficient funds");
+            throw new InsufficientFundsException("Insufficient funds");
         
         await _semaphoreSlim.WaitAsync();
         try
