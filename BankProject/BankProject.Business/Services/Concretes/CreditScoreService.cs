@@ -6,9 +6,9 @@ namespace BankProject.Business.Services.Concretes;
 
 public class CreditScoreService : ICreditScoreService
 {
-    public float CalculateCreditScore(User user)
+    public decimal CalculateCreditScore(User user)
     {
-        float score;
+        decimal score;
 
         //This gives 20 points for every $1000 of annual income.
         var incomeScore = user.AnnualIncome / 1000 * 20;
@@ -16,9 +16,9 @@ public class CreditScoreService : ICreditScoreService
         //Assigns 15 points for every $1000 in total assets.
         var totalAssetsScore = user.TotalAssets / 1000 * 15;
         
-        var loanTypeScore = 0;
-        var remainingDebtBurdenScore = 0f;
-        var paymentPerformanceScore = 0;
+        decimal loanTypeScore = 0;
+        decimal remainingDebtBurdenScore = 0;
+        decimal paymentPerformanceScore = 0;
 
         if (user.Loans.Any())
         {
@@ -57,12 +57,12 @@ public class CreditScoreService : ICreditScoreService
 
         score = incomeScore + totalAssetsScore + paymentPerformanceScore + remainingDebtBurdenScore + loanTypeScore;
 
-        return Math.Clamp(score, 0, 100);
+        return score;
     }
 
-    public int CalculateMinimumRequiredCreditScoreForLoanApplication(LoanApplication loanApplication)
+    public decimal CalculateMinimumRequiredCreditScoreForLoanApplication(LoanApplication loanApplication)
     {
-        var score = 0;
+        decimal score = 0;
 
         switch (loanApplication.LoanType)
         {
@@ -84,7 +84,7 @@ public class CreditScoreService : ICreditScoreService
         }
 
         //5 points added for each $10.000
-        score += (int)loanApplication.LoanAmount / 10000 * 5;
+        score += loanApplication.LoanAmount / 10000 * 5;
 
         //10 points added for each 12 month term
         score += loanApplication.LoanTerm / 12 * 10;

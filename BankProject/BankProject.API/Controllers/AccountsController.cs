@@ -35,7 +35,7 @@ public class AccountsController : CustomControllerBase
     [HttpPut]
     [Route("{id:guid}/balance")]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> UpdateBalanceByAccountIdAsync(Guid id, float balance)
+    public async Task<IActionResult> UpdateBalanceByAccountIdAsync(Guid id, decimal balance)
     {
         await _service.UpdateBalanceByAccountIdAsync(id, balance);
 
@@ -44,7 +44,7 @@ public class AccountsController : CustomControllerBase
 
     [HttpPut]
     [Route("{accountId:guid}/loan-payment")]
-    public async Task<IActionResult> MakeLoanPaymentAsync(Guid accountId, Guid loanId, float paymentAmount)
+    public async Task<IActionResult> MakeLoanPaymentAsync(Guid accountId, Guid loanId, decimal paymentAmount)
     {
         await _service.MakeLoanPaymentAsync(accountId, loanId, paymentAmount);
 

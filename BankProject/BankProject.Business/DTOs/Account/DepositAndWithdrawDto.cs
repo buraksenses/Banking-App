@@ -4,5 +4,5 @@ public class DepositAndWithdrawDto
 {
     public Guid AccountId { get; set; }
 
-    public float Amount { get; set; }
+    public decimal Amount { get; set; }
 }

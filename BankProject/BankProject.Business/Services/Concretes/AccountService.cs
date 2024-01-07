@@ -49,7 +49,7 @@ public class AccountService : IAccountService
         _semaphoreSlim = semaphoreSlim;
     }
     
-    public async Task<float> GetBalanceByAccountIdAsync(Guid id)
+    public async Task<decimal> GetBalanceByAccountIdAsync(Guid id)
     {
         var account = await ValidateAndGetAccount(id);
 
@@ -77,7 +77,7 @@ public class AccountService : IAccountService
         await _unitOfWork.SaveChangesAsync();
     }
 
-    public async Task UpdateBalanceByAccountIdAsync(Guid id, float balance)
+    public async Task UpdateBalanceByAccountIdAsync(Guid id, decimal balance)
     {
         if (balance < 0)
             throw new InvalidOperationException("Balance must be greater than zero");
@@ -89,27 +89,27 @@ public class AccountService : IAccountService
         await _unitOfWork.SaveChangesAsync();
     }
 
-    public async Task DepositAsync(Guid accountId, float amount)
+    public async Task DepositAsync(Guid accountId, decimal amount)
     {
         await PerformTransactionAsync(accountId, amount, TransactionType.Deposit);
     }
 
-    public async Task WithdrawAsync(Guid accountId, float amount)
+    public async Task WithdrawAsync(Guid accountId, decimal amount)
     {
         await PerformTransactionAsync(accountId, amount, TransactionType.Withdraw);
     }
 
-    public async Task InternalTransferAsync(Guid senderId, Guid receiverId, float amount)
+    public async Task InternalTransferAsync(Guid senderId, Guid receiverId, decimal amount)
     {
         await UpdateAccountsAndCreateTransferTransaction(senderId, receiverId, amount, TransactionType.InternalTransfer);
     }
 
-    public async Task ExternalTransferAsync(Guid senderId, Guid receiverId, float amount)
+    public async Task ExternalTransferAsync(Guid senderId, Guid receiverId, decimal amount)
     {
         await UpdateAccountsAndCreateTransferTransaction(senderId, receiverId, amount, TransactionType.ExternalTransfer);
     }
 
-    public async Task MakeBillPayment(Guid id,float amount)
+    public async Task MakeBillPayment(Guid id,decimal amount)
     {
         var account = await _accountRepository.GetOrThrowAsync(id);
 
@@ -128,7 +128,7 @@ public class AccountService : IAccountService
         }
     }
 
-    public async Task MakeLoanPaymentAsync(Guid accountId, Guid loanId, float paymentAmount)
+    public async Task MakeLoanPaymentAsync(Guid accountId, Guid loanId, decimal paymentAmount)
     {
         var loan = await _loanRepository.GetOrThrowAsync(loanId);
         ValidateLoanPayment(loan,paymentAmount);
@@ -154,7 +154,7 @@ public class AccountService : IAccountService
             _semaphoreSlim.Release();
         }
     }
-    private static void ValidateLoanPayment(Loan loan, float paymentAmount)
+    private static void ValidateLoanPayment(Loan loan, decimal paymentAmount)
     {
         if (loan.MonthlyPayment > paymentAmount)
             throw new Exception($"Payment amount is less than the scheduled payment amount of {loan.MonthlyPayment}");
@@ -162,7 +162,7 @@ public class AccountService : IAccountService
             throw new Exception($"Payment amount is greater than the remaining debt of {loan.RemainingDebt}");
     }
     
-    private static void ValidateAccountForPayment(Account account, Loan loan, float paymentAmount)
+    private static void ValidateAccountForPayment(Account account, Loan loan, decimal paymentAmount)
     {
         if (account.UserId != loan.UserId)
             throw new InvalidOperationException("User Id and Loan Id did not match!");
@@ -170,7 +170,7 @@ public class AccountService : IAccountService
             throw new InvalidOperationException("Insufficient funds!");
     }
     
-    private static void UpdateLoanInformation(Loan loan, float paymentAmount)
+    private static void UpdateLoanInformation(Loan loan, decimal paymentAmount)
     {
         loan.RemainingDebt -= paymentAmount;
         if (DateTime.UtcNow <= loan.NextPaymentDueDate)
@@ -181,29 +181,29 @@ public class AccountService : IAccountService
     }
     
 
-    private async Task UpdateAccountsAndCreateTransferTransaction(Guid senderId, Guid receiverId, float amount,
+    private async Task UpdateAccountsAndCreateTransferTransaction(Guid senderId, Guid receiverId, decimal amount,
         TransactionType transactionType)
     {
        ValidateTransferAmount(amount,transactionType);
 
-       var senderAccount = await GetAndValidateSenderAccount(senderId, amount);
+       var senderAccount = await GetAndValidateSenderAccount(senderId, amount,transactionType);
 
        var receiverAccount = await ValidateAndGetAccount(receiverId);
 
         await ProcessTransfer(senderAccount, receiverAccount, amount, transactionType);
     }
-    private static void ValidateTransferAmount(float amount, TransactionType transactionType)
+    private static void ValidateTransferAmount(decimal amount, TransactionType transactionType)
     {
         var limit = transactionType == TransactionType.InternalTransfer ? LimitPerInternalTransfer : LimitPerExternalTransfer;
         var dailyLimit = transactionType == TransactionType.InternalTransfer ? DailyInternalTransferLimit : DailyExternalTransferLimit;
 
-        if ((decimal)amount > limit)
+        if (amount > limit)
             throw new InvalidOperationException($"This operation exceeds the transfer limit of ${limit} per transfer.");
-        if ((decimal)amount > dailyLimit)
+        if (amount > dailyLimit)
             throw new InvalidOperationException($"This operation exceeds the daily transfer limit of {dailyLimit}.");
     }
     
-    private async Task<Account> GetAndValidateSenderAccount(Guid senderId, float amount)
+    private async Task<Account> GetAndValidateSenderAccount(Guid senderId, decimal amount, TransactionType transactionType)
     {
         var account = await ValidateAndGetAccount(senderId);
 
@@ -212,19 +212,22 @@ public class AccountService : IAccountService
         var user = await _userManager.FindByIdAsync(account.UserId);
         if (user == null)
             throw new NotFoundException("Sender user not found!");
-        if (user.DailyTransferLimit < user.DailyTransferAmount + (decimal)amount)
+        var limit = transactionType == TransactionType.InternalTransfer
+            ? DailyInternalTransferLimit
+            : DailyExternalTransferLimit;
+        if (limit < user.DailyTransferAmount + amount)
             throw new InvalidOperationException("Operation exceeds your daily transfer limit!");
 
         return account;
     }
 
-    private static void ValidateAccountBalance(Account account,float amount)
+    private static void ValidateAccountBalance(Account account,decimal amount)
     {
         if (account.Balance < amount)
             throw new InvalidOperationException("Insufficient funds!");
     }
     
-    private async Task ProcessTransfer(Account senderAccount, Account receiverAccount, float amount, TransactionType transactionType)
+    private async Task ProcessTransfer(Account senderAccount, Account receiverAccount, decimal amount, TransactionType transactionType)
     {
         await _semaphoreSlim.WaitAsync();
         try
@@ -241,7 +244,7 @@ public class AccountService : IAccountService
         }
     }
     
-    private async Task PerformAccountUpdate(Account sender, Account receiver, float amount)
+    private async Task PerformAccountUpdate(Account sender, Account receiver, decimal amount)
     {
         sender.Balance -= amount;
         receiver.Balance += amount;
@@ -249,19 +252,19 @@ public class AccountService : IAccountService
         await _accountRepository.UpdateAsync(receiver.Id, receiver);
     }
     
-    private async Task UpdateUserDailyTransferAmount(string userId, float amount)
+    private async Task UpdateUserDailyTransferAmount(string userId, decimal amount)
     {
         var user = await _userManager.FindByIdAsync(userId);
         if (user == null)
             throw new NotFoundException("User not found!");
-        user.DailyTransferAmount += (decimal)amount;
+        user.DailyTransferAmount += amount;
         await _userManager.UpdateAsync(user);
     }
     
     
-    private async Task PerformTransactionAsync(Guid accountId, float amount, TransactionType transactionType)
+    private async Task PerformTransactionAsync(Guid accountId, decimal amount, TransactionType transactionType)
     {
-        if ((decimal)amount > LimitPerDepositAndWithdraw)
+        if (amount > LimitPerDepositAndWithdraw)
         {
             var transactionApplication = new TransactionApplication
             {
@@ -311,7 +314,7 @@ public class AccountService : IAccountService
         return account;
     }
 
-    private async Task CreateTransactionRecord(Guid accountId, float amount, TransactionType transactionType, Guid? receiverAccountId = null)
+    private async Task CreateTransactionRecord(Guid accountId, decimal amount, TransactionType transactionType, Guid? receiverAccountId = null)
     {
         var transactionRecord = new TransactionRecord
         {

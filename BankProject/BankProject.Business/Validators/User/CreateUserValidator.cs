@@ -57,9 +57,6 @@ public class CreateUserValidator : AbstractValidator<CreateUserRequestDto>
             .NotEmpty().WithMessage("Phone number is required.")
             .Matches(new Regex("^[0-9]{10}$")).WithMessage("Invalid phone number format.");
 
-        RuleFor(x => x.DailyTransferLimit)
-            .GreaterThanOrEqualTo(0).WithMessage("Daily transfer limit must be a positive number.");
-
         RuleFor(x => x.Roles)
             .NotNull().WithMessage("Roles must not be null.")
             .Must(r => r.All(IsValidRole)).WithMessage("Invalid role."); 

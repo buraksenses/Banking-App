@@ -7,7 +7,7 @@ public class TransactionApplication : IEntity<Guid>
 {
     public Guid Id { get; set; }
 
-    public float Amount { get; set; }
+    public decimal Amount { get; set; }
     
     public DateTime CreatedDate { get; set; }
     
@@ -18,4 +18,9 @@ public class TransactionApplication : IEntity<Guid>
     public Guid AccountId { get; set; }
     //Navigation Properties
     public Account Account { get; set; }
+
+    public TransactionApplication()
+    {
+        CreatedDate = DateTime.UtcNow;
+    }
 }

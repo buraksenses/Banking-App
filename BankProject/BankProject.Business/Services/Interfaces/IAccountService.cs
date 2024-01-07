@@ -4,21 +4,21 @@ namespace BankProject.Business.Services.Interfaces;
 
 public interface IAccountService
 {
-   Task<float> GetBalanceByAccountIdAsync(Guid id);
+   Task<decimal> GetBalanceByAccountIdAsync(Guid id);
 
    Task CreateAccountAsync(CreateAccountRequestDto requestDto);
 
-   Task UpdateBalanceByAccountIdAsync(Guid id, float balance);
+   Task UpdateBalanceByAccountIdAsync(Guid id, decimal balance);
 
-   Task DepositAsync(Guid accountId, float amount);
+   Task DepositAsync(Guid accountId, decimal amount);
 
-   Task WithdrawAsync(Guid accountId, float amount);
+   Task WithdrawAsync(Guid accountId, decimal amount);
 
-   Task InternalTransferAsync(Guid senderId, Guid receiverId, float amount);
+   Task InternalTransferAsync(Guid senderId, Guid receiverId, decimal amount);
 
-   Task ExternalTransferAsync(Guid senderId, Guid receiverId, float amount);
+   Task ExternalTransferAsync(Guid senderId, Guid receiverId, decimal amount);
 
-   Task MakeBillPayment(Guid id, float amount);
+   Task MakeBillPayment(Guid id, decimal amount);
 
-   Task MakeLoanPaymentAsync(Guid accountId, Guid loanId, float paymentAmount);
+   Task MakeLoanPaymentAsync(Guid accountId, Guid loanId, decimal paymentAmount);
 }

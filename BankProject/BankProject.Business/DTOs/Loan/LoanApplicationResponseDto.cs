@@ -2,9 +2,9 @@
 
 public class LoanApplicationResponseDto
 {
-    public float UserCreditScore { get; set; }
+    public decimal UserCreditScore { get; set; }
 
-    public int MinimumRequiredCreditScoreForApplication { get; set; }
+    public decimal MinimumRequiredCreditScoreForApplication { get; set; }
 
     public string Recommendation { get; set; }
 }

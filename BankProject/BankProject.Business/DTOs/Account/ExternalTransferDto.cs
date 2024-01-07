@@ -6,5 +6,5 @@ public class ExternalTransferDto
 
     public Guid ReceiverId { get; set; }
 
-    public float Amount { get; set; }
+    public decimal Amount { get; set; }
 }

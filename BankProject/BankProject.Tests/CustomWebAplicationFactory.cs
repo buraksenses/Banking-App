@@ -86,7 +86,6 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
                 EmployerName = "amazon",
                 EmploymentPosition = "software developer",
                 PhoneNumber = "5632548795",
-                DailyTransferLimit = 2000,
                 DailyTransferAmount = 0,
                 Loans = new List<Loan>()
             });

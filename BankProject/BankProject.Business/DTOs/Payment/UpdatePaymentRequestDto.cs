@@ -2,7 +2,7 @@
 
 public class UpdatePaymentRequestDto
 {
-    public float Amount { get; set; }
+    public decimal Amount { get; set; }
     
     public string TimePeriod { get; set; }
 

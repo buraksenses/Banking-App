@@ -11,13 +11,13 @@ public class Loan : IEntity<Guid>
     public DateTime LoanDate { get; set; }
     public LoanType LoanType { get; set; }
     
-    public float LoanAmount { get; set; }
+    public decimal LoanAmount { get; set; }
 
     public int NumberOfTotalPayments { get; set; }
 
-    public float MonthlyPayment => RemainingDebt / LoanTerm;
+    public decimal MonthlyPayment => RemainingDebt / LoanTerm;
     public int LoanTerm { get; set; }
-    public float RemainingDebt { get; set; }
+    public decimal RemainingDebt { get; set; }
 
     [NotMapped]
     public bool IsPaid => RemainingDebt == 0;
@@ -37,5 +37,6 @@ public class Loan : IEntity<Guid>
     {
         LoanDate = DateTime.UtcNow;
         NextPaymentDueDate = LoanDate.AddMonths(1);
+        LastPaymentDate = new DateTime();
     }
 }

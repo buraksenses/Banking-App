@@ -4,9 +4,9 @@ namespace BankProject.Data.Entities;
 
 public class User : IdentityUser
 {
-    public float AnnualIncome { get; set; }
+    public decimal AnnualIncome { get; set; }
     
-    public float TotalAssets { get; set; }
+    public decimal TotalAssets { get; set; }
 
     public string Address { get; set; }
     
@@ -17,14 +17,14 @@ public class User : IdentityUser
     public string PostalCode { get; set; }
     
     public DateTime DateOfBirth { get; set; }
+
+    public DateTime CreatedDate { get; set; }
     
     public string EmployerName { get; set; }
     
     public string EmploymentPosition { get; set; }
     
     public string PhoneNumber { get; set; }
-
-    public decimal DailyTransferLimit { get; set; }
 
     public decimal DailyTransferAmount { get; set; }
 
@@ -33,5 +33,6 @@ public class User : IdentityUser
     public User()
     {
         Loans = new List<Loan>();
+        CreatedDate = DateTime.UtcNow;
     }
 }

@@ -119,7 +119,7 @@ public class PaymentService : IPaymentService
         await _unitOfWork.SaveChangesAsync();
     }
 
-    public async Task MakePayment(Payment payment, float amount)
+    public async Task MakePayment(Payment payment, decimal amount)
     {
         payment.LastPaymentDate = DateTime.UtcNow;
         payment.NextPaymentDate =
@@ -154,7 +154,7 @@ public class PaymentService : IPaymentService
         };
     }
 
-    private void ValidateAccountBalance(Account account, float amount)
+    private static void ValidateAccountBalance(Account account, decimal amount)
     {
         if (account.Balance < amount)
             throw new InvalidOperationException("Insufficient funds!");
