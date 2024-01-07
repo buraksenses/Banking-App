@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BankProject.Business.DTOs.SupportTicket;
-using BankProject.Business.Helpers;
 using BankProject.Business.Services.Interfaces;
 using BankProject.Core.Enums;
 using BankProject.Core.Exceptions;
@@ -22,17 +21,18 @@ public class SupportTicketService : ISupportTicketService
     public SupportTicketService(
         IMapper mapper,
         UserManager<User> userManager,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork, 
+        ISupportTicketRepository supportTicketRepository)
     {
-        _supportTicketRepository = unitOfWork.GetRepository<SupportTicketRepository, SupportTicket, Guid>();
         _mapper = mapper;
         _userManager = userManager;
         _unitOfWork = unitOfWork;
+        _supportTicketRepository = supportTicketRepository;
     }
     
     public async Task<GetSupportTicketRequestDto> GetByIdAsync(Guid id)
     {
-        var ticket = await _supportTicketRepository.GetOrThrowAsync(id);
+        var ticket = await _supportTicketRepository.GetOrThrowNotFoundByIdAsync(id);
 
         var ticketDto = _mapper.Map<GetSupportTicketRequestDto>(ticket);
 
@@ -80,7 +80,7 @@ public class SupportTicketService : ISupportTicketService
             throw new ArgumentException("Invalid account type.");
         }
         
-        var ticket = await _supportTicketRepository.GetOrThrowAsync(id);
+        var ticket = await _supportTicketRepository.GetOrThrowNotFoundByIdAsync(id);
 
         ticket.TicketStatus = ticketStatus;
 
@@ -100,7 +100,7 @@ public class SupportTicketService : ISupportTicketService
             throw new ArgumentException("Invalid account type.");
         }
         
-        var ticket = await _supportTicketRepository.GetOrThrowAsync(id);
+        var ticket = await _supportTicketRepository.GetOrThrowNotFoundByIdAsync(id);
 
         ticket.TicketPriority = ticketPriority;
         

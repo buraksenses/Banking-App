@@ -15,9 +15,10 @@ namespace BankProject.Tests.Unit_Tests.Account;
 
 public class AccountUnitTests
 {
-     private readonly Mock<IAccountRepository> _mockAccountRepo;
+    private readonly Mock<IAccountRepository> _mockAccountRepo;
     private readonly Mock<ITransactionRecordRepository> _mockTransactionRepo;
     private readonly Mock<ITransactionApplicationRepository> _mockTransactionAppRepo;
+    private readonly Mock<ILoanRepository> _mockLoanRepo;
     private readonly Mock<UserManager<User>> _mockUserManager;
     private readonly Mock<IMapper> _mockMapper;
     private readonly Mock<IUnitOfWork> _mockUnitOfWork;
@@ -26,6 +27,7 @@ public class AccountUnitTests
 
     public AccountUnitTests()
     {
+        _mockLoanRepo = new Mock<ILoanRepository>();
         _mockAccountRepo = new Mock<IAccountRepository>();
         _mockTransactionRepo = new Mock<ITransactionRecordRepository>();
         _mockTransactionAppRepo = new Mock<ITransactionApplicationRepository>();
@@ -42,7 +44,8 @@ public class AccountUnitTests
             _semaphoreSlim,
             _mockAccountRepo.Object,
             _mockTransactionRepo.Object,
-            _mockTransactionAppRepo.Object
+            _mockTransactionAppRepo.Object,
+            _mockLoanRepo.Object
         );
     }
     

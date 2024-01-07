@@ -1,8 +1,5 @@
-﻿using BankProject.Business.Helpers;
-using BankProject.Business.Services.Interfaces;
+﻿using BankProject.Business.Services.Interfaces;
 using BankProject.Core.Enums;
-using BankProject.Data.Entities;
-using BankProject.Data.Repositories.Concretes;
 using BankProject.Data.Repositories.Interfaces;
 using BankProject.Data.Repositories.Interfaces.Base;
 
@@ -17,18 +14,19 @@ public class TransactionApplicationService : ITransactionApplicationService
 
     public TransactionApplicationService(
         SemaphoreSlim semaphoreSlim,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork, 
+        ITransactionApplicationRepository applicationRepository, 
+        IAccountRepository accountRepository)
     {
-        _applicationRepository =
-            unitOfWork.GetRepository<TransactionApplicationRepository, TransactionApplication, Guid>();
-        _accountRepository = unitOfWork.GetRepository<AccountRepository, Account, Guid>();
         _semaphoreSlim = semaphoreSlim;
         _unitOfWork = unitOfWork;
+        _applicationRepository = applicationRepository;
+        _accountRepository = accountRepository;
     }
     
     public async Task ApproveApplicationAsync(Guid id)
     {
-        var application = await _applicationRepository.GetOrThrowAsync(id);
+        var application = await _applicationRepository.GetOrThrowNotFoundByIdAsync(id);
         if (application.Status != TransactionApplicationStatus.Pending)
             throw new InvalidOperationException("Application is not in pending status.");
 
@@ -36,7 +34,7 @@ public class TransactionApplicationService : ITransactionApplicationService
         try
         {
             await _unitOfWork.BeginTransactionAsync();
-            var account = await _accountRepository.GetOrThrowAsync(application.AccountId);
+            var account = await _accountRepository.GetOrThrowNotFoundByIdAsync(application.AccountId);
             await _accountRepository.UpdateBalanceByAccountIdAsync(account,account.Balance - application.Amount);
             application.Status = TransactionApplicationStatus.Approved;
             await _applicationRepository.UpdateAsync(id, application);
@@ -50,7 +48,7 @@ public class TransactionApplicationService : ITransactionApplicationService
 
     public async Task RejectApplicationAsync(Guid id)
     {
-        var application = await _applicationRepository.GetOrThrowAsync(id);
+        var application = await _applicationRepository.GetOrThrowNotFoundByIdAsync(id);
         if (application.Status != TransactionApplicationStatus.Pending)
             throw new InvalidOperationException("Application is not in pending status.");
 

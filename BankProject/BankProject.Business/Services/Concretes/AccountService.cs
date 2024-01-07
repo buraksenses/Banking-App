@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BankProject.Business.DTOs.Account;
-using BankProject.Business.Helpers;
 using BankProject.Business.Services.Interfaces;
 using BankProject.Core.Enums;
 using BankProject.Core.Exceptions;
@@ -36,13 +35,15 @@ public class AccountService : IAccountService
         SemaphoreSlim semaphoreSlim,
         IAccountRepository accountRepository,
         ITransactionRecordRepository transactionRecordRepository,
-        ITransactionApplicationRepository transactionApplicationRepository)
+        ITransactionApplicationRepository transactionApplicationRepository, 
+        ILoanRepository loanRepository)
     {
         _accountRepository = accountRepository;
         _transactionRecordRepository = transactionRecordRepository;
-        _loanRepository = unitOfWork.GetRepository<LoanRepository, Loan, Guid>();
+        
         _transactionApplicationRepository = transactionApplicationRepository;
-            
+        _loanRepository = loanRepository;
+
         _userManager = userManager;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
@@ -111,7 +112,7 @@ public class AccountService : IAccountService
 
     public async Task MakeBillPayment(Guid id,decimal amount)
     {
-        var account = await _accountRepository.GetOrThrowAsync(id);
+        var account = await _accountRepository.GetOrThrowNotFoundByIdAsync(id);
 
         ValidateAccountBalance(account,amount);
 
@@ -130,10 +131,10 @@ public class AccountService : IAccountService
 
     public async Task MakeLoanPaymentAsync(Guid accountId, Guid loanId, decimal paymentAmount)
     {
-        var loan = await _loanRepository.GetOrThrowAsync(loanId);
+        var loan = await _loanRepository.GetOrThrowNotFoundByIdAsync(loanId);
         ValidateLoanPayment(loan,paymentAmount);
 
-        var account = await _accountRepository.GetOrThrowAsync(accountId);
+        var account = await _accountRepository.GetOrThrowNotFoundByIdAsync(accountId);
         ValidateAccountForPayment(account,loan,paymentAmount);
 
         await _semaphoreSlim.WaitAsync();
