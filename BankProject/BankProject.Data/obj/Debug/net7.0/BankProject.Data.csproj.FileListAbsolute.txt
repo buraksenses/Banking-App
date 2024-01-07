@@ -15,3 +15,4 @@ Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Dat
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\bin\Debug\net7.0\BankProject.Core.dll
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\bin\Debug\net7.0\BankProject.Core.pdb
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\obj\Debug\net7.0\BankProject.Data.csproj.CopyComplete
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Data\obj\Debug\net7.0\BankProject.Data.sourcelink.json

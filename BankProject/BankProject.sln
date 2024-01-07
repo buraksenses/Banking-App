@@ -1,14 +1,24 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankProject.API", "BankProject.API\BankProject.API.csproj", "{19CFF42E-39E2-4186-94AC-647DAC581C32}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankProject.API", "BankProject.API\BankProject.API.csproj", "{19CFF42E-39E2-4186-94AC-647DAC581C32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankProject.Business", "BankProject.Business\BankProject.Business.csproj", "{148FCC7B-0BC5-4321-8B3A-A143AB68BB6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankProject.Business", "BankProject.Business\BankProject.Business.csproj", "{148FCC7B-0BC5-4321-8B3A-A143AB68BB6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankProject.Core", "BankProject.Core\BankProject.Core.csproj", "{58323586-12CA-40A3-AD48-9E91EEA1A2D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankProject.Core", "BankProject.Core\BankProject.Core.csproj", "{58323586-12CA-40A3-AD48-9E91EEA1A2D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankProject.Data", "BankProject.Data\BankProject.Data.csproj", "{F87E268C-2E08-402F-98B8-2F7D5C8E3317}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankProject.Data", "BankProject.Data\BankProject.Data.csproj", "{F87E268C-2E08-402F-98B8-2F7D5C8E3317}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankProject.Tests", "BankProject.Tests\BankProject.Tests.csproj", "{BEBBFFC5-1FC3-49BF-83F2-572F659C96EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankProject.Tests", "BankProject.Tests\BankProject.Tests.csproj", "{BEBBFFC5-1FC3-49BF-83F2-572F659C96EB}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{75DD3B87-E74D-434A-9732-3EA7F14AA8FE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Çözüm Öğeleri", "Çözüm Öğeleri", "{5AE29025-B809-40A7-800D-96B2C88FBE74}"
+	ProjectSection(SolutionItems) = preProject
+		.env = .env
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,5 +46,15 @@ Global
 		{BEBBFFC5-1FC3-49BF-83F2-572F659C96EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEBBFFC5-1FC3-49BF-83F2-572F659C96EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEBBFFC5-1FC3-49BF-83F2-572F659C96EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75DD3B87-E74D-434A-9732-3EA7F14AA8FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75DD3B87-E74D-434A-9732-3EA7F14AA8FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75DD3B87-E74D-434A-9732-3EA7F14AA8FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75DD3B87-E74D-434A-9732-3EA7F14AA8FE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {48C45E10-DFB9-460A-B76B-81D896B91D17}
 	EndGlobalSection
 EndGlobal

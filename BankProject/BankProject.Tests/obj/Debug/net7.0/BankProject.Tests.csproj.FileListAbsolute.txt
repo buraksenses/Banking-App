@@ -491,3 +491,5 @@ Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Tes
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Tests\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Tests\bin\Debug\net7.0\BankProject.API.dll
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Tests\bin\Debug\net7.0\BankProject.API.pdb
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Tests\bin\Debug\net7.0\appsettings.Production.json
+Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Tests\obj\Debug\net7.0\BankProject.Tests.sourcelink.json
