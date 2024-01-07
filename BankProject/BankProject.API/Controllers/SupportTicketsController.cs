@@ -1,5 +1,6 @@
 ﻿using BankProject.Business.DTOs.SupportTicket;
 using BankProject.Business.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BankProject.API.Controllers;
@@ -40,6 +41,7 @@ public class SupportTicketsController : CustomControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "Admin,Auditor")]
     public async Task<IActionResult> GetAllAsync()
     {
         var tickets = await _supportTicketService.GetAllAsync();
@@ -49,6 +51,7 @@ public class SupportTicketsController : CustomControllerBase
 
     [HttpPut]
     [Route("{id:guid}/status")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateTicketStatusAsync(Guid id, string ticketStatus)
     {
         var ticketDto = await _supportTicketService.UpdateTicketStatusByIdAsync(id, ticketStatus);
@@ -58,6 +61,7 @@ public class SupportTicketsController : CustomControllerBase
     
     [HttpPut]
     [Route("{id:guid}/priority")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateTicketPriorityAsync(Guid id, string ticketPriority)
     {
         var ticketDto = await _supportTicketService.UpdateTicketPriorityByIdAsync(id, ticketPriority);

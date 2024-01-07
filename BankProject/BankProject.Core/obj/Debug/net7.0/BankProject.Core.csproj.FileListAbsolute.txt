@@ -9,4 +9,3 @@ Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Cor
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Core\obj\Debug\net7.0\refint\BankProject.Core.dll
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Core\obj\Debug\net7.0\BankProject.Core.pdb
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Core\obj\Debug\net7.0\ref\BankProject.Core.dll
-Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Core\obj\Debug\net7.0\BankProject.Core.sourcelink.json

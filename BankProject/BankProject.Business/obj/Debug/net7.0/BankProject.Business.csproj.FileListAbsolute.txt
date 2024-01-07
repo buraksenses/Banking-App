@@ -15,4 +15,3 @@ Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Bus
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\obj\Debug\net7.0\refint\BankProject.Business.dll
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\obj\Debug\net7.0\BankProject.Business.pdb
 Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\obj\Debug\net7.0\ref\BankProject.Business.dll
-Z:\Fimple\Final Case\Fimple-.Net-Bootcamp-Final-Case\BankProject\BankProject.Business\obj\Debug\net7.0\BankProject.Business.sourcelink.json

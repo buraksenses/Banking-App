@@ -24,6 +24,7 @@ public class AccountsController : CustomControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateAccountAsync(CreateAccountRequestDto requestDto)
     {
         await _service.CreateAccountAsync(requestDto);
@@ -33,6 +34,7 @@ public class AccountsController : CustomControllerBase
 
     [HttpPut]
     [Route("{id:guid}/balance")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> UpdateBalanceByAccountIdAsync(Guid id, float balance)
     {
         await _service.UpdateBalanceByAccountIdAsync(id, balance);
