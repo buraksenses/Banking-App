@@ -3,6 +3,47 @@
 ## Giriş
 Bu proje, günümüz bankacılık ihtiyaçlarına uygun olarak geliştirilmiş, .NET 7 ve Entity Framework Core kullanılarak inşa edilmiş bir RESTful API'dir. Modern web teknolojileri ve uygulama güvenliğine odaklanan bu API, gerçek dünya bankacılık işlevlerini simüle eder.
 
+## Kurulum
+### Önkoşullar
+- .NET 7 SDK
+- Docker ve Docker Compose
+- SQL Server (Docker üzerinde veya yerel)
+
+### Yerel Kurulum
+1. Projeyi GitHub'dan klonlayın: `git clone [repo-link]`
+2. Proje dizinine gidin: `cd [proje-adı]`
+3. Uygulamayı başlatın: `dotnet run`
+
+### Docker ile Kurulum
+Bu proje Docker kullanılarak kolayca kurulup çalıştırılabilir. Projeyi Docker ile çalıştırmak için aşağıdaki adımları izleyin:
+
+1. Docker ve Docker Compose yüklü olduğundan emin olun.
+2. Bu komutu çalıştırarak uygulamayı başlatın: `docker-compose up`
+
+#### Docker Compose Yapılandırması
+Projenin Docker Compose yapılandırması aşağıdaki gibidir:
+
+```yaml
+version: '3.4'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    volumes:
+      - sqlserver_volume:/var/opt/mssql
+  bankproject.api:
+    image: buraksenses/bankprojectapi:${version}
+    container_name: bankprojectapi-container
+    build:
+      context: .
+      dockerfile: BankProject.API/Dockerfile
+
+volumes:
+  sqlserver_volume:
+```
+
+---
+
 ## Özellikler
 - Kullanıcı Yönetimi: Kayıt, giriş, bilgi güncelleme, rollerle erişim kontrolü.
 - Hesap Yönetimi: Yeni hesap açma, bakiye sorgulama ve güncelleme.
@@ -11,12 +52,16 @@ Bu proje, günümüz bankacılık ihtiyaçlarına uygun olarak geliştirilmiş, 
 - Otomatik Ödemeler: Ayarlar ve yönetim.
 - Destek Talepleri: Müşteri desteği ve durum takibi.
 
+---
+
 ## Teknolojiler
 - .NET 7
 - Entity Framework Core
 - SQL Server
 - Docker / Docker Compose
 - JWT (JSON Web Tokens) için kimlik doğrulama
+
+---
 
 ## Mimari
 
@@ -49,6 +94,8 @@ Projede, .NET Core tabanlı clean architecture yaklaşımı benimsenmiştir. Aş
 - **FluentValidation**: Gelen verilerin doğruluğunu ve tutarlılığını kontrol etmek için kullanılır. Bu, API katmanında veri validasyonu için etkin bir yol sağlar ve iş mantığı katmanına geçmeden önce girdilerin uygunluğunu garanti eder.
 
 Bu mimari, projenin genişleyebilir, sürdürülebilir ve test edilebilir olmasını sağlar. Ayrıca, farklı katmanların ayrılması, projenin daha kolay yönetilmesine ve geliştirilmesine olanak tanır.
+
+---
 
 ## API Dokümantasyonu
 
@@ -102,42 +149,3 @@ Bu mimari, projenin genişleyebilir, sürdürülebilir ve test edilebilir olmas�
 
 - `POST /{id}/approve`: Belirli bir işlem başvurusunu onaylar (Yalnızca Admin).
 - `POST /{id}/reject`: Belirli bir işlem başvurusunu reddeder (Yalnızca Admin).
-
-## Kurulum
-### Önkoşullar
-- .NET 7 SDK
-- Docker ve Docker Compose
-- SQL Server (Docker üzerinde veya yerel)
-
-### Yerel Kurulum
-1. Projeyi GitHub'dan klonlayın: `git clone [repo-link]`
-2. Proje dizinine gidin: `cd [proje-adı]`
-3. Uygulamayı başlatın: `dotnet run`
-
-### Docker ile Kurulum
-Bu proje Docker kullanılarak kolayca kurulup çalıştırılabilir. Projeyi Docker ile çalıştırmak için aşağıdaki adımları izleyin:
-
-1. Docker ve Docker Compose yüklü olduğundan emin olun.
-2. Bu komutu çalıştırarak uygulamayı başlatın: `docker-compose up`
-
-#### Docker Compose Yapılandırması
-Projenin Docker Compose yapılandırması aşağıdaki gibidir:
-
-```yaml
-version: '3.4'
-
-services:
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    volumes:
-      - sqlserver_volume:/var/opt/mssql
-  bankproject.api:
-    image: buraksenses/bankprojectapi:${version}
-    container_name: bankprojectapi-container
-    build:
-      context: .
-      dockerfile: BankProject.API/Dockerfile
-
-volumes:
-  sqlserver_volume:
-```
