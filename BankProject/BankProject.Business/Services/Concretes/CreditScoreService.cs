@@ -6,16 +6,27 @@ namespace BankProject.Business.Services.Concretes;
 
 public class CreditScoreService : ICreditScoreService
 {
+    private const decimal IncomeScoreMultiplier = 20m;
+    private const decimal AssetScoreMultiplier = 15m;
+    private const decimal DebtBurdenScoreMultiplier = 25m;
+    private const decimal PaymentPerformanceScoreMultiplier = 30m;
+    private const decimal LoanAmountScoreMultiplier = 5m;
+    private const decimal LoanTermScoreMultiplier = 10m;
+    private const int ThousandDollars = 1000;
+    private const int TenThousandDollars = 10000;
+    private const int TwelveMonths = 12;
+
+    private const int MortgageScore = 30;
+    private const int EducationLoanScore = 25;
+    private const int PersonalLoanScore = 15;
+    private const int VehicleLoanScore = 20;
+    private const int SmallBusinessLoanScore = 35;
+
     public decimal CalculateCreditScore(User user)
     {
-        decimal score;
+        var incomeScore = user.AnnualIncome / ThousandDollars * IncomeScoreMultiplier;
+        var totalAssetsScore = user.TotalAssets / ThousandDollars * AssetScoreMultiplier;
 
-        //This gives 20 points for every $1000 of annual income.
-        var incomeScore = user.AnnualIncome / 1000 * 20;
-
-        //Assigns 15 points for every $1000 in total assets.
-        var totalAssetsScore = user.TotalAssets / 1000 * 15;
-        
         decimal loanTypeScore = 0;
         decimal remainingDebtBurdenScore = 0;
         decimal paymentPerformanceScore = 0;
@@ -27,37 +38,35 @@ public class CreditScoreService : ICreditScoreService
                 switch (userLoan.LoanType)
                 {
                     case LoanType.Mortgage:
-                        loanTypeScore += 30;
+                        loanTypeScore += MortgageScore;
                         break;
                     case LoanType.Education:
-                        loanTypeScore += 25;
+                        loanTypeScore += EducationLoanScore;
                         break;
                     case LoanType.Personal:
-                        loanTypeScore += 15;
+                        loanTypeScore += PersonalLoanScore;
                         break;
                     case LoanType.Vehicle:
-                        loanTypeScore += 20;
+                        loanTypeScore += VehicleLoanScore;
                         break;
                     case LoanType.SmallBusiness:
-                        loanTypeScore += 35;
+                        loanTypeScore += SmallBusinessLoanScore;
                         break;
                 }
 
-                remainingDebtBurdenScore = (1 - userLoan.RemainingDebt / userLoan.LoanAmount) * 25;
+                remainingDebtBurdenScore = (1 - userLoan.RemainingDebt / userLoan.LoanAmount) * DebtBurdenScoreMultiplier;
             }
         }
 
         var loansStartedToBePaid = user.Loans.Where(loan => loan.NumberOfTotalPayments > 0).ToList();
-        
+
         if (loansStartedToBePaid.Any())
         {
             paymentPerformanceScore = loansStartedToBePaid
-                .Sum(loan => loan.NumberOfTimelyPayments / loan.NumberOfTotalPayments * 30);
+                .Sum(loan => loan.NumberOfTimelyPayments / loan.NumberOfTotalPayments * PaymentPerformanceScoreMultiplier);
         }
 
-        score = incomeScore + totalAssetsScore + paymentPerformanceScore + remainingDebtBurdenScore + loanTypeScore;
-
-        return score;
+        return incomeScore + totalAssetsScore + paymentPerformanceScore + remainingDebtBurdenScore + loanTypeScore;
     }
 
     public decimal CalculateMinimumRequiredCreditScoreForLoanApplication(LoanApplication loanApplication)
@@ -67,29 +76,25 @@ public class CreditScoreService : ICreditScoreService
         switch (loanApplication.LoanType)
         {
             case LoanType.Mortgage:
-                score += 30;
+                score += MortgageScore;
                 break;
             case LoanType.Education:
-                score += 25;
+                score += EducationLoanScore;
                 break;
             case LoanType.Personal:
-                score += 15;
+                score += PersonalLoanScore;
                 break;
             case LoanType.Vehicle:
-                score += 20;
+                score += VehicleLoanScore;
                 break;
             case LoanType.SmallBusiness:
-                score += 35;
+                score += SmallBusinessLoanScore;
                 break;
         }
 
-        //5 points added for each $10.000
-        score += loanApplication.LoanAmount / 10000 * 5;
-
-        //10 points added for each 12 month term
-        score += loanApplication.LoanTerm / 12 * 10;
+        score += loanApplication.LoanAmount / TenThousandDollars * LoanAmountScoreMultiplier;
+        score += loanApplication.LoanTerm / TwelveMonths * LoanTermScoreMultiplier;
 
         return score;
     }
-
 }
