@@ -64,7 +64,7 @@ public class CreateUserValidator : AbstractValidator<CreateUserRequestDto>
 
     private static bool IsValidRole(string role)
     {
-        var validRoles = new[] { "Admin", "Customer", "Bank_Officer", "Advisor", "Loan_Officer", "Auditor" };
+        var validRoles = new[] { "Admin", "Customer", "Auditor" };
         return validRoles.Contains(role);
     }
 }

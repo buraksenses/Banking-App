@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BankProject.Business.DTOs.User;
 using BankProject.Business.Services.Interfaces;
+using BankProject.Core.Exceptions;
 using BankProject.Data.Entities;
 using BankProject.Data.Repositories.Interfaces.Base;
 using Microsoft.AspNetCore.Identity;
@@ -30,6 +31,18 @@ public class UserService : IUserService
             await _userManager.AddToRolesAsync(user, requestDto.Roles);
         
         return result;
+    }
+
+    public async Task UpdateUserAsync(string id, UpdateUserRequestDto requestDto)
+    {
+        var user = await _userManager.FindByIdAsync(id);
+
+        if (user == null)
+            throw new NotFoundException("User not found");
+
+        var userRoles = await _userManager.GetRolesAsync(user);
+        await _userManager.RemoveFromRolesAsync(user, userRoles);
+        await _userManager.AddToRolesAsync(user, requestDto.Roles);
     }
 
     public async Task ResetDailyLimits()

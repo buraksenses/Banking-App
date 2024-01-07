@@ -16,7 +16,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateUser([FromBody] CreateUserRequestDto requestDto)
+    public async Task<IActionResult> CreateUser(CreateUserRequestDto requestDto)
     {
         var result = await _userService.CreateUserAsync(requestDto);
 
@@ -24,5 +24,14 @@ public class UsersController : ControllerBase
             return Ok();
         
         return BadRequest(result.Errors);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}")]
+    public async Task<IActionResult> UpdateUser(string id, UpdateUserRequestDto requestDto)
+    {
+        await _userService.UpdateUserAsync(id, requestDto);
+
+        return Ok();
     }
 }
