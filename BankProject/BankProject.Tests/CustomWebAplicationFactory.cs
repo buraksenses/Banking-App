@@ -1,6 +1,8 @@
 ﻿using BankProject.Core.Enums;
 using BankProject.Data.Context;
 using BankProject.Data.Entities;
+using BankProject.Data.Repositories.Concretes.Base;
+using BankProject.Data.Repositories.Interfaces.Base;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -64,13 +66,13 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
             {
                 Id = i.ToString(),
                 UserName = "user" + i,
-                NormalizedUserName = null,
-                Email = null,
-                NormalizedEmail = null,
-                EmailConfirmed = false,
-                PasswordHash = null,
-                SecurityStamp = null,
-                ConcurrencyStamp = null,
+                NormalizedUserName = "USER" + i,
+                Email = $"user{i}@email.com",
+                NormalizedEmail = $"user{i}@email.com",
+                EmailConfirmed = true,
+                PasswordHash = "null",
+                SecurityStamp = "null",
+                ConcurrencyStamp = "null",
                 PhoneNumberConfirmed = false,
                 TwoFactorEnabled = false,
                 LockoutEnd = null,
@@ -82,7 +84,7 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
                 City = "Ankara",
                 State = "Turkiye",
                 PostalCode = "06582",
-                DateOfBirth = default,
+                DateOfBirth = DateTime.UtcNow.AddYears(-5 * i),
                 EmployerName = "amazon",
                 EmploymentPosition = "software developer",
                 PhoneNumber = "5632548795",

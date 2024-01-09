@@ -7,10 +7,6 @@ public class DepositAndWithdrawValidator : AbstractValidator<DepositAndWithdrawD
 {
     public DepositAndWithdrawValidator()
     {
-        RuleFor(x => x.AccountId)
-            .NotEmpty().WithMessage("Account ID is required.")
-            .Must(BeAValidGuid).WithMessage("Invalid Account ID.");
-        
         RuleFor(x => x.Amount)
             .GreaterThan(0).WithMessage("Amount must be greater than zero.");
     }

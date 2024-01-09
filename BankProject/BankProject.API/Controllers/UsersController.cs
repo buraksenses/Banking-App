@@ -21,7 +21,7 @@ public class UsersController : ControllerBase
         var result = await _userService.CreateUserAsync(requestDto);
 
         if (result.Succeeded)
-            return Ok();
+            return Ok(requestDto);
         
         return BadRequest(result.Errors);
     }

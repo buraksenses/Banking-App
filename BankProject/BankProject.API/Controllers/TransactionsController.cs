@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BankProject.API.Controllers;
 
-[ApiController]
-[Route("api/transactions")]
-public class TransactionsController : ControllerBase
+public class TransactionsController : CustomControllerBase
 {
     private readonly IAccountService _accountService;
 

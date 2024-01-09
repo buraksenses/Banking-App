@@ -4,7 +4,6 @@ using BankProject.Business.Services.Interfaces;
 using BankProject.Core.Enums;
 using BankProject.Core.Exceptions;
 using BankProject.Data.Entities;
-using BankProject.Data.Repositories.Concretes;
 using BankProject.Data.Repositories.Interfaces;
 using BankProject.Data.Repositories.Interfaces.Base;
 using Microsoft.AspNetCore.Identity;

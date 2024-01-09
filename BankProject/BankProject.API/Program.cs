@@ -1,4 +1,5 @@
 using BankProject.API.Extensions;
+using BankProject.API.Middlewares;
 using BankProject.Business.Services.Interfaces;
 using Hangfire;
 
@@ -10,13 +11,12 @@ builder.Services.AddControllers();
 
 builder.Services.AddApplicationServices(builder.Configuration);
 
-
-
 var app = builder.Build();
 
+app.UseSwagger();
+app.UseSwaggerUI();
 
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 

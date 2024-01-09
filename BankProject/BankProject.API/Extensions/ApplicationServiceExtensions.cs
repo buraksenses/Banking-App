@@ -85,7 +85,13 @@ public static class ApplicationServiceExtensions
         services.AddScoped<ILoanService, LoanService>();
         services.AddScoped<ILoanRepository, LoanRepository>();
 
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        //services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>(serviceProvider =>
+        {
+            var dbContext = serviceProvider.GetRequiredService<BankDbContext>();
+            var isInMemory = dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+            return new UnitOfWork(dbContext, isInMemory);
+        });
 
         services.AddScoped<IPaymentService, PaymentService>();
         services.AddScoped<IPaymentRepository, PaymentRepository>();

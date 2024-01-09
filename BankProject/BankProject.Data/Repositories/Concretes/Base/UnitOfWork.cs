@@ -10,10 +10,12 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly BankDbContext _dbContext;
     private IDbContextTransaction _transaction;
+    private readonly bool isInMemory;
 
-    public UnitOfWork(BankDbContext dbContext)
+    public UnitOfWork(BankDbContext dbContext, bool isInMemory)
     {
         _dbContext = dbContext;
+        this.isInMemory = isInMemory;
     }
 
     public async Task SaveChangesAsync()
@@ -23,11 +25,18 @@ public class UnitOfWork : IUnitOfWork
 
     public async Task BeginTransactionAsync()
     {
+        if(isInMemory)
+            return;
         _transaction = await _dbContext.Database.BeginTransactionAsync();
     }
 
     public async Task TransactionCommitAsync()
     {
+        if (isInMemory)
+        {
+            await SaveChangesAsync();
+            return;
+        }
         if (_transaction == null)
             throw new InvalidOperationException("transaction has not been started!");
 
