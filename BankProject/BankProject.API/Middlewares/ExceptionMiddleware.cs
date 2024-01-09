@@ -33,7 +33,7 @@ public class ExceptionMiddleware
         context.Response.StatusCode = exception switch
         {
             NotFoundException => StatusCodes.Status404NotFound,
-            // Ekleme yapabileceğiniz diğer özel exception türleri
+            InsufficientFundsException => StatusCodes.Status400BadRequest,
             _ => StatusCodes.Status500InternalServerError
         };
 
