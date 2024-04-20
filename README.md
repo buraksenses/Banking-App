@@ -1,4 +1,4 @@
-# [Proje Adı]: .NET 7 ile Geliştirilmiş Bankacılık API'si
+# Banking App: .NET 7 ile Geliştirilmiş Bankacılık API'si
 
 ## Giriş
 Bu proje, günümüz bankacılık ihtiyaçlarına uygun olarak geliştirilmiş, .NET 7 ve Entity Framework Core kullanılarak inşa edilmiş bir RESTful API'dir. Modern web teknolojileri ve uygulama güvenliğine odaklanan bu API, gerçek dünya bankacılık işlevlerini simüle eder.
